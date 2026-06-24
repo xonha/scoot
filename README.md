@@ -1,8 +1,8 @@
 # Scoot
 
-A wired, low-latency, 42-key split ergonomic keyboard where **the entire right half is a physical desk mouse**.
+A wired, low-latency, 36–42-key split ergonomic keyboard where **the entire right half is a physical desk mouse**.
 
-A Corne-style 3×6+3 layout, driven by a **single** controller. There's no second microcontroller — the right half carries only its keys plus pointing/scroll hardware, all wired back to the left half over a tether. Electrically it behaves like one unibody board that happens to be physically split.
+A Corne 3×6+3 layout — with a **detachable outer column**, so it runs as 5 or 6 columns per hand (36 or 42 keys) — driven by a **single** controller. There's no second microcontroller — the right half carries only its keys plus pointing/scroll hardware, all wired back to the left half over a tether. Electrically it behaves like one unibody board that happens to be physically split.
 
 > **Status: concept.** This repo is currently just the idea and its open questions — no firmware, no PCB, no case. Implementation comes after the concept is settled.
 
@@ -12,6 +12,13 @@ A Corne-style 3×6+3 layout, driven by a **single** controller. There's no secon
 - **The right half *is* the mouse.** An optical sensor mounts face-down on the bottom plate; you pick up the right half and move it on the desk to drive the cursor — instead of a trackball or trackpad.
 - **Dedicated scroll + media.** A roller wheel on the right half is a pure scroll wheel; a rotary encoder on the left handles volume / play-pause.
 - **Wired and fast.** Targets 1000 Hz polling — favoring latency and simplicity over wireless.
+
+## Prior art
+
+Scoot stands on two open-source keyboards:
+
+- **[Corne / crkbd](https://github.com/foostan/crkbd)** — the 3×6 + 3-thumb split layout Scoot adopts. Following the Corne's column options, Scoot's **outer (6th) column is detachable**, so each half runs as **5 or 6 columns** plus the thumb cluster (36 or 42 keys total).
+- **[Cheapino](https://github.com/tompi/cheapino)** — the single-controller idea: one MCU reads both halves, with no second brain. The Cheapino carries its inter-half matrix over an **Ethernet cable**; Scoot uses a **full USB-C tether** instead — it has to carry the mouse-sensor SPI and roller lines too, not just the matrix.
 
 ## Hardware sketch
 
@@ -27,7 +34,7 @@ A Corne-style 3×6+3 layout, driven by a **single** controller. There's no secon
 
 Two constraints decide whether the single-controller idea actually works:
 
-- **Matrix size.** 42 keys + the encoder click need a grid of at least that many nodes (`rows × cols ≥ 43`). A **6×8 = 48-node** matrix covers it with headroom — left finger keys on rows 0–2, right on rows 3–5, thumbs sharing a column.
+- **Matrix size.** 42 keys + the encoder click need a grid of at least that many nodes (`rows × cols ≥ 43`). A **6×8 = 48-node** matrix covers it with headroom — left finger keys on rows 0–2, right on rows 3–5, thumbs sharing a column. Dropping the detachable outer column just leaves those nodes unpopulated (down to 36 keys); the matrix is unchanged.
 - **GPIO budget.** Everything has to land on the RP2040-Zero's pins:
 
   | Subsystem | Pins |
@@ -45,6 +52,7 @@ Two constraints decide whether the single-controller idea actually works:
 - **Pointing method: the desk-mouse.** Committed. The right half moving on the desk *is* the cursor — we accept the engineering that makes it usable (see below) as the price of the concept, rather than retreating to a trackball or trackpad.
 - **Not a true split.** One controller means the right half is passive wiring, not a second smart half. Simpler and lower-latency, at the cost of more conductors in the tether.
 - **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
+- **Detachable outer column** (after Corne). The 6th column unplugs, so Scoot can be a 42-key (6-col) or 36-key (5-col) board. The matrix and pin budget are sized for the 42-key max.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
 - **Fingerprint pass-through: integrated USB hub.** Committed. A USB 2.0 hub IC on the left half puts the keyboard and the dongle behind one cable (see *USB architecture*). The original "tap the spare D+/D-" idea can't work — the RP2040 has a single USB PHY.
 
