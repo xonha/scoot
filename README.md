@@ -43,9 +43,15 @@ QMK, in [`keyboards/scoot/`](keyboards/scoot/). Data-driven where possible: matr
 
 ### Build
 
+This repo is a self-contained QMK [external userspace](https://docs.qmk.fm/newbs_external_userspace) (`qmk.json` at the root), so no symlinking into the QMK tree is needed:
+
 ```sh
-# from a qmk_firmware checkout
-ln -s /path/to/this/repo/keyboards/scoot keyboards/scoot
+# point QMK at this repo once
+qmk config user.overlay_dir="$(realpath .)"
+
+# then build the registered target(s) from qmk.json
+qmk userspace-compile
+# ...or build directly
 qmk compile -kb scoot -km default
 ```
 
