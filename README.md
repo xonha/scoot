@@ -107,9 +107,10 @@ The pointing method is committed, so these are the problems that decide whether 
 
 1. **Concept** — core architecture settled (this README).
 2. **Block diagram + tether/conductor plan** — done.
-3. **Schematic + PCB** — net-level design capture underway in [docs/schematic.md](docs/schematic.md) ← we are here.
-4. Case / bottom-plate design (sensor window, glide surface).
-5. Firmware.
+3. **Breadboard prototype** — prove the core on dev modules, no PCB ([docs/breadboard.md](docs/breadboard.md)) ← we are here.
+4. **Schematic + PCB** — net-level capture drafted ([docs/schematic.md](docs/schematic.md)); lay out once the breadboard validates it.
+5. Case / bottom-plate design (sensor window, glide surface).
+6. Firmware.
 
 ## License
 
