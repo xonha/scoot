@@ -95,8 +95,12 @@ The pointing method is committed, so these are the problems that decide whether 
 
 ## Roadmap (rough)
 
-1. **Concept** ← we are here: settle the questions above.
-2. Block diagram + tether/conductor plan.
+1. **Concept** — core architecture settled (this README).
+2. **Block diagram + tether/conductor plan** ← we are here.
 3. Schematic + PCB (per half).
 4. Case / bottom-plate design (sensor window, glide surface).
 5. Firmware.
+
+## License
+
+Documentation and design materials: [CC BY 4.0](LICENSE). Hardware design files (when added) will carry a hardware-appropriate license such as CERN-OHL.

@@ -1,17 +1,27 @@
-Scoot keyboard firmware
-Copyright (C) 2026 xonha
+Creative Commons Attribution 4.0 International (CC BY 4.0)
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
+Copyright (c) 2026 xonha
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+The Scoot documentation and design materials in this repository are
+licensed under the Creative Commons Attribution 4.0 International
+License (CC BY 4.0).
 
-This project builds on and links against QMK Firmware, which is
-licensed under GPL-2.0-or-later; the same license applies here.
+You are free to:
+  - Share — copy and redistribute the material in any medium or format.
+  - Adapt — remix, transform, and build upon the material for any
+    purpose, even commercially.
 
-Full license text: https://www.gnu.org/licenses/gpl-2.0.txt
+Under the following terms:
+  - Attribution — You must give appropriate credit, provide a link to
+    the license, and indicate if changes were made. You may do so in
+    any reasonable manner, but not in any way that suggests the
+    licensor endorses you or your use.
+  - No additional restrictions — You may not apply legal terms or
+    technological measures that legally restrict others from doing
+    anything the license permits.
+
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Note: hardware design files (schematics, PCB layouts) added later will
+carry a hardware-appropriate license such as CERN-OHL. This CC BY 4.0
+covers the documentation and design write-ups.
