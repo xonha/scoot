@@ -9,7 +9,7 @@ Net-level design capture — the spec a KiCad schematic transcribes. The archite
 - **Right half is near-passive:** it carries one *dumb* chip — an **MCP23017 I²C IO expander (U6)** — that scans the right matrix locally. No firmware on the right. This resolves the tether shortfall (below).
 - **Tether:** **USB-C**, full-featured cable. Only ~10 conductors cross, so it fits comfortably.
 - **Hub:** FE1.1s on the left (host + RP2040 + USB-A dongle behind one cable).
-- **Assembly:** JLCPCB PCBA places all SMD parts (RP2040, hub, expander, flash, passives, hotswap sockets); you hand-finish the sensor module, switches, and encoders. See the split BOM at the end.
+- **Assembly:** JLCPCB PCBA places all SMD parts — RP2040, hub, expander, flash, **the PMW3360 sensor (it's a cataloged LCSC part)**, passives, hotswap sockets; you hand-finish only the **sensor lens**, switches, and the two encoders. See the split BOM at the end.
 
 ## Tether conductor budget (resolved)
 
@@ -73,21 +73,23 @@ Both are `COL2ROW` with one diode per key.
 
 ---
 
-## Sheet 5 — Pointing sensor (U3, PMW3360) *(locked)*
+## Sheet 5 — Pointing sensor (U3, PMW3360) *(locked, embedded)*
 
-On a breakout (lens fitted), wired via J4 — physically on the right half, so the 4 SPI nets cross J3 to the RP2040.
+The sensor is **embedded directly on the right-half PCB — no breakout.** The sub-circuit is adapted from [siderakb/pmw3360-pcb](https://github.com/siderakb/pmw3360-pcb) (CERN-OHL-P) in its **3.3 V-direct** mode, so the breakout's LDO and level-shifter are dropped. JLCPCB places U3 (cataloged LCSC part); you hand-mount only the lens. SPI still crosses J3 to the RP2040 on the left.
 
-| Breakout pin | Net | RP2040 |
+| U3 pin | Net | RP2040 |
 | --- | --- | --- |
 | SCLK | SPI1_SCK | GP14 |
 | MOSI | SPI1_TX | GP15 |
 | MISO | SPI1_RX | GP8 |
 | NCS | PMW3360_CS | GP9 |
-| VCC | 3V3 | — (breakout accepts 3.3–5 V; SPI logic 3.3 V) |
+| VDD / VDDIO | 3V3 | direct — no LDO/level-shifter (board is 3.3 V) |
 | GND | GND | — |
-| MOT | — | NC (QMK polls; wire to a spare GPIO only for motion interrupts) |
+| MOTION | — | NC (QMK polls; wire to a spare GPIO only for motion interrupts) |
 
-SPI clock stays ≤ ~2 MHz in QMK, so running it over the tether is fine.
+Support: 4.7 µF + 1 µF + 100 nF decoupling per the PMW3360 datasheet. SPI clock stays ≤ ~2 MHz in QMK, fine over the tether.
+
+**Lens (LM19-LSI):** hand-mounted onto U3 — add the lens alignment holes and the sensor-to-surface standoff per the lens datasheet. This optical geometry is the one thing the breakout repos under-document; get it right or it won't track.
 
 ---
 
@@ -159,21 +161,21 @@ Power is sent as **3V3** (regulated on the left), so the right half needs no reg
 
 | Ref | Part | Package |
 | --- | --- | --- |
+| U3 | PMW3360 sensor (LCSC C20612443) | embedded; lens added by hand |
 | U6 | MCP23017 IO expander | SOIC-28 |
 | D… | 1N4148W right matrix diodes | SOD-123 |
 | J3 | USB-C receptacle (tether) | SMD |
-| J4 | PMW3360 breakout header | SMD or PTH |
 | — | Kailh hotswap sockets (right) | SMD |
-| — | passives: decoupling, roller debounce caps, optional column pull-ups | SMD |
+| — | passives: sensor decoupling (4.7 µF / 1 µF / 100 nF), roller debounce caps, optional column pull-ups | SMD |
 
 ### You hand-finish
 
 | Item | Why it's not fab-assembled |
 | --- | --- |
-| PMW3360 sensor breakout (+ lens) | optical/mechanical; lens is hand-fitted, sensor not in the LCSC catalog → attaches to J4 |
+| LM19-LSI lens | optical/mechanical — snaps onto the fab-placed U3; add alignment holes + standoff per the lens datasheet |
 | Key switches | push into the fab-placed hotswap sockets — **no soldering** (or hand-solder if solder-in) |
 | ENC1 — EC11 rotary | through-hole; hand-soldered |
 | ENC2 — EVQVYA001 roller | through-hole / niche, not in catalog; hand-soldered |
 | Case, plate, lens window, tether cable, final assembly | mechanical |
 
-> Use **LCSC-catalog parts** in the BOM so JLCPCB can source them; prefer in-stock "Basic" parts to avoid per-part feeder fees, and verify the FE1.1s / RP2040 / MCP23017 stock at order time. Hotswap sockets being fab-placed means switches just snap in — your iron only touches the sensor module and the two encoders.
+> Use **LCSC-catalog parts** so JLCPCB can source them; prefer "Basic" parts to dodge feeder fees, and verify stock at order time for the Extended ones — **FE1.1s, RP2040, MCP23017, and the PMW3360 (C20612443, ~$0.90, MOQ ~4 / reel 200; JLCPCB's own stock can read 0 while LCSC has it)**. With the hotswap sockets and the sensor both fab-placed, your soldering iron only touches the **two encoders**, and your hands only **snap on the lens**.
