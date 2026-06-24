@@ -50,11 +50,13 @@ Two constraints decide whether the single-controller idea actually works:
 ## Decisions made so far
 
 - **Pointing method: the desk-mouse.** Committed. The right half moving on the desk *is* the cursor — we accept the engineering that makes it usable (see below) as the price of the concept, rather than retreating to a trackball or trackpad.
-- **Not a true split.** One controller means the right half is passive wiring, not a second smart half. Simpler and lower-latency, at the cost of more conductors in the tether.
+- **Not a true split.** One controller, not a second smart half — simpler and lower-latency. The right half carries only one *dumb* IO expander (no firmware), so it's still a single-MCU design.
 - **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
 - **Detachable outer column** (after Corne). The 6th column unplugs, so Scoot can be a 42-key (6-col) or 36-key (5-col) board. The matrix and pin budget are sized for the 42-key max.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
 - **Fingerprint pass-through: integrated USB hub.** Committed. A USB 2.0 hub IC on the left half puts the keyboard and the dongle behind one cable (see *USB architecture*). The original "tap the spare D+/D-" idea can't work — the RP2040 has a single USB PHY.
+- **Bare RP2040, fab-assembled.** On the left, routed cleanly into the hub. JLCPCB's assembly service solders it, so the reflow isn't ours to do. (The RP2040-Zero module + USB jumper is the conservative fallback.)
+- **IO expander on the right (MCP23017).** Scans the right matrix locally so only ~10 conductors cross the tether — which lets the slim USB-C cable fit. Still one MCU (an expander has no firmware). See [docs/schematic.md](docs/schematic.md).
 
 ## Interaction model
 
@@ -91,14 +93,14 @@ host PC
 The pointing method is committed, so these are the problems that decide whether it's actually usable:
 
 1. **Accidental clicks while gripping.** With the interaction model settled (hold-to-mouse, see above), the residual risk is that keyboard switches actuate lighter than mouse buttons — and you grip hard to slide. The remapped click keys may need heavier springs, or the buttons assigned to keys you *don't* grip. Tune on a prototype.
-2. **The roaming-half tether.** Unlike a normal split, the right half *moves around* — so the inter-half cable must flex and extend across the entire mousing range without tugging the cursor or dragging the left half. Likely a coiled/retractable cable or a generous service loop. It still has to carry ~16 signal lines (10 matrix: 3 rows + 7 cols; 4 sensor SPI; 2 roller) plus power.
+2. **The roaming-half tether.** Unlike a normal split, the right half *moves around* — so the inter-half cable must flex and extend across the entire mousing range without tugging the cursor or dragging the left half. Likely a coiled/retractable cable or a generous service loop. With the right-half expander it carries only ~10 conductors (I²C + sensor SPI + roller + power), which fits a USB-C cable — see [docs/schematic.md](docs/schematic.md).
 3. **Re-homing.** The mouse is also your right-hand typing surface — after pointing you have to put it back in a repeatable spot. By feel, a tactile detent, or a physical dock/outline on the desk mat.
 4. **Glide, window, Z-height.** The bottom plate needs low-friction skates, a clean optical window for the lens, and the ~10 mm sensor standoff — while still feeling like a keyboard, not a brick.
 5. **Clutching fatigue.** Like any mouse you'll lift and reposition when you run out of desk; doing that with a keyboard half is heavier than a mouse, so it's worth prototyping for comfort early.
 
 ## Other open questions
 
-- **MCU packaging — deferred to schematic.** Integrating the hub puts the RP2040 behind it as a downstream device, and the Zero module only exposes USB on its own connector. So at schematic time we pick: a bare RP2040 on a custom PCB (clean routing) vs. keeping the Zero module fed by an internal USB jumper (kludge).
+- **MCU packaging — resolved: bare RP2040.** Fab-assembled on a custom PCB for clean USB routing into the hub. (The Zero module + USB jumper remains the conservative fallback.) See [docs/schematic.md](docs/schematic.md).
 - **Mousing handedness.** The right half is the mouse — fine for right-handers; no plan yet for left-handed mousing.
 
 ## Roadmap (rough)
