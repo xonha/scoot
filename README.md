@@ -47,11 +47,20 @@ Two constraints decide whether the single-controller idea actually works:
 - **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
 
+## Interaction model
+
+Typing and mousing share the same right hand, so they're separated by a **hold-to-mouse** mode:
+
+- **Hold a left thumb key** to enter mouse mode; release to return to typing. The left half stays planted, so that key is always under your thumb — no state to forget, no false triggers.
+- **While held, the right half becomes the mouse.** Slide it to move the cursor. Its finger keys are **remapped** (not disabled) to Left / Right / Middle click — so resting your hand doesn't actuate, but a press does, exactly like mouse buttons.
+- **Left-hand modifiers stay live** (Ctrl / Shift / Alt) → Ctrl-click, Shift-click and click-drag work without leaving the board.
+- **The roller always scrolls**, in either mode — it's a dedicated wheel, independent of mouse mode.
+
 ## Making the desk-mouse work
 
 The pointing method is committed, so these are the problems that decide whether it's actually usable:
 
-1. **Typing ↔ mousing coexistence.** The thing you grab and slide is covered in switches. Plan: a *mouse mode* that **remaps** the right half rather than just disabling it — the keys under your fingers become mouse buttons, the rest go inert — so you can grip, move, and click without ever typing garbage. **Still open: how do you enter/exit it** — hold a left-thumb key, a toggle, or auto-trigger on sensor motion?
+1. **Accidental clicks while gripping.** With the interaction model settled (hold-to-mouse, see above), the residual risk is that keyboard switches actuate lighter than mouse buttons — and you grip hard to slide. The remapped click keys may need heavier springs, or the buttons assigned to keys you *don't* grip. Tune on a prototype.
 2. **The roaming-half tether.** Unlike a normal split, the right half *moves around* — so the inter-half cable must flex and extend across the entire mousing range without tugging the cursor or dragging the left half. Likely a coiled/retractable cable or a generous service loop. It still has to carry ~16 signal lines (10 matrix: 3 rows + 7 cols; 4 sensor SPI; 2 roller) plus power.
 3. **Re-homing.** The mouse is also your right-hand typing surface — after pointing you have to put it back in a repeatable spot. By feel, a tactile detent, or a physical dock/outline on the desk mat.
 4. **Glide, window, Z-height.** The bottom plate needs low-friction skates, a clean optical window for the lens, and the ~10 mm sensor standoff — while still feeling like a keyboard, not a brick.
