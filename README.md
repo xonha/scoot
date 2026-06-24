@@ -46,6 +46,7 @@ Two constraints decide whether the single-controller idea actually works:
 - **Not a true split.** One controller means the right half is passive wiring, not a second smart half. Simpler and lower-latency, at the cost of more conductors in the tether.
 - **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
+- **Fingerprint pass-through: integrated USB hub.** Committed. A USB 2.0 hub IC on the left half puts the keyboard and the dongle behind one cable (see *USB architecture*). The original "tap the spare D+/D-" idea can't work — the RP2040 has a single USB PHY.
 
 ## Interaction model
 
@@ -55,6 +56,27 @@ Typing and mousing share the same right hand, so they're separated by a **hold-t
 - **While held, the right half becomes the mouse.** Slide it to move the cursor. Its finger keys are **remapped** (not disabled) to Left / Right / Middle click — so resting your hand doesn't actuate, but a press does, exactly like mouse buttons.
 - **Left-hand modifiers stay live** (Ctrl / Shift / Alt) → Ctrl-click, Shift-click and click-drag work without leaving the board.
 - **The roller always scrolls**, in either mode — it's a dedicated wheel, independent of mouse mode.
+
+## USB architecture
+
+One cable to the computer; a USB 2.0 hub IC on the left half fans it out to the keyboard and the fingerprint dongle:
+
+```
+host PC
+  │  USB-C
+  ▼
+┌──────────────────────────┐
+│  USB 2.0 hub IC (left)   │   bus-powered, 4-port (e.g. FE1.1s / SL2.1A)
+└───┬──────────────┬───────┘
+    │ downstream 1  │ downstream 2
+    ▼               ▼
+  RP2040         USB-A jack → fingerprint dongle   (+ 2 spare ports)
+```
+
+- The dongle is enumerated by the **host**, entirely around the firmware — QMK never sees it.
+- The hub sits on the USB *data path*, **not** the RP2040's GPIO, so it doesn't touch the pin budget.
+- It lives on the planted left half, so it doesn't burden the roaming tether.
+- New externals it brings in: the hub's crystal + caps, a host-side USB-C connector with CC pulldown resistors, and per-port power/ESD.
 
 ## Making the desk-mouse work
 
@@ -68,7 +90,7 @@ The pointing method is committed, so these are the problems that decide whether 
 
 ## Other open questions
 
-- **Fingerprint USB-A pass-through — in or out?** The original "tap spare D+/D- off the MCU's USB" can't work (the RP2040 has a single USB PHY). Doing it properly means a **USB 2.0 hub IC** on the left half so the PC enumerates both the keyboard and the dongle. Keep it (more complex board) or drop it? It lives on the planted left half, so it doesn't burden the roaming tether.
+- **MCU packaging — deferred to schematic.** Integrating the hub puts the RP2040 behind it as a downstream device, and the Zero module only exposes USB on its own connector. So at schematic time we pick: a bare RP2040 on a custom PCB (clean routing) vs. keeping the Zero module fed by an internal USB jumper (kludge).
 - **Mousing handedness.** The right half is the mouse — fine for right-handers; no plan yet for left-handed mousing.
 
 ## Roadmap (rough)
