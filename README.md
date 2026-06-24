@@ -104,8 +104,8 @@ The pointing method is committed, so these are the problems that decide whether 
 ## Roadmap (rough)
 
 1. **Concept** — core architecture settled (this README).
-2. **Block diagram + tether/conductor plan** ← we are here.
-3. Schematic + PCB (per half).
+2. **Block diagram + tether/conductor plan** — done.
+3. **Schematic + PCB** — net-level design capture underway in [docs/schematic.md](docs/schematic.md) ← we are here.
 4. Case / bottom-plate design (sensor window, glide surface).
 5. Firmware.
 
