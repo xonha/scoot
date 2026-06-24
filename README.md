@@ -42,19 +42,25 @@ Two constraints decide whether the single-controller idea actually works:
 
 ## Decisions made so far
 
+- **Pointing method: the desk-mouse.** Committed. The right half moving on the desk *is* the cursor — we accept the engineering that makes it usable (see below) as the price of the concept, rather than retreating to a trackball or trackpad.
 - **Not a true split.** One controller means the right half is passive wiring, not a second smart half. Simpler and lower-latency, at the cost of more conductors in the tether.
 - **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
 
-## Open questions to resolve
+## Making the desk-mouse work
 
-The point of this stage — these shape everything downstream:
+The pointing method is committed, so these are the problems that decide whether it's actually usable:
 
-1. **Is "move the whole half" the right pointing method?** It's the distinctive idea, but it means lifting your hand off home row and sliding a keyed object around — and the half must glide smoothly. Worth pressure-testing against a trackball or a flat capacitive trackpad before committing.
-2. **Fingerprint USB-A pass-through — in or out?** The original idea (tap "spare" D+/D- off the MCU's USB) can't work: the RP2040 has a single USB PHY. Doing it properly means adding a **USB 2.0 hub IC** on the left half so the PC enumerates both the keyboard and the dongle. Keep it (more complex board) or drop it?
-3. **Tether conductor count.** With left = rows 0–2 and right = rows 3–5, roughly 7 cols + 3 rows + 4 sensor + 2 roller lines must cross the cable. Confirm a real USB-C breakout passes that many conductors — or rethink the row/column split to reduce crossings.
-4. **Sensor Z-height vs case thickness.** The optical sensor + lens needs a focus standoff and a clean window in the bottom plate (~10 mm stack). This sets the minimum case height under the right half — at odds with a low-profile feel.
-5. **Mousing handedness.** The right half is the mouse. Fine for right-handed users; no plan yet for left-handed mousing.
+1. **Typing ↔ mousing coexistence.** The thing you grab and slide is covered in switches. Plan: a *mouse mode* that **remaps** the right half rather than just disabling it — the keys under your fingers become mouse buttons, the rest go inert — so you can grip, move, and click without ever typing garbage. **Still open: how do you enter/exit it** — hold a left-thumb key, a toggle, or auto-trigger on sensor motion?
+2. **The roaming-half tether.** Unlike a normal split, the right half *moves around* — so the inter-half cable must flex and extend across the entire mousing range without tugging the cursor or dragging the left half. Likely a coiled/retractable cable or a generous service loop. It still has to carry ~16 signal lines (10 matrix: 3 rows + 7 cols; 4 sensor SPI; 2 roller) plus power.
+3. **Re-homing.** The mouse is also your right-hand typing surface — after pointing you have to put it back in a repeatable spot. By feel, a tactile detent, or a physical dock/outline on the desk mat.
+4. **Glide, window, Z-height.** The bottom plate needs low-friction skates, a clean optical window for the lens, and the ~10 mm sensor standoff — while still feeling like a keyboard, not a brick.
+5. **Clutching fatigue.** Like any mouse you'll lift and reposition when you run out of desk; doing that with a keyboard half is heavier than a mouse, so it's worth prototyping for comfort early.
+
+## Other open questions
+
+- **Fingerprint USB-A pass-through — in or out?** The original "tap spare D+/D- off the MCU's USB" can't work (the RP2040 has a single USB PHY). Doing it properly means a **USB 2.0 hub IC** on the left half so the PC enumerates both the keyboard and the dongle. Keep it (more complex board) or drop it? It lives on the planted left half, so it doesn't burden the roaming tether.
+- **Mousing handedness.** The right half is the mouse — fine for right-handers; no plan yet for left-handed mousing.
 
 ## Roadmap (rough)
 
