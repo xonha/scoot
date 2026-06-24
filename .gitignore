@@ -1,0 +1,12 @@
+# QMK build artifacts
+.build/
+*.uf2
+*.bin
+*.hex
+*.elf
+
+# Editor / OS cruft
+.DS_Store
+*.swp
+.vscode/
+compile_commands.json
