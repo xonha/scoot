@@ -6,7 +6,7 @@ A Corne 3×6+3 layout — with a **detachable outer column**, so it runs as 5 or
 
 <p align="center">
   <img src="docs/scoot-layout.svg" width="100%"
-       alt="Scoot physical layout — a Corne 3×6+3 split: two mirrored halves, each with three rows of six staggered finger keys plus a three-key fanned thumb cluster.">
+       alt="Scoot physical layout — a Corne 3×6+3 split: two mirrored halves, each with three rows of six staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key.">
 </p>
 
 > <sub>Physical layout ([`docs/scoot-layout.svg`](docs/scoot-layout.svg)) — a hand-built SVG in GitHub's dark palette.</sub>
@@ -17,7 +17,7 @@ A Corne 3×6+3 layout — with a **detachable outer column**, so it runs as 5 or
 
 - **One controller, two halves.** A single MCU on the left half reads every key, both encoders, and the mouse sensor directly — matrix and peripheral lines cross the tether. No split-link protocol, no inter-half sync latency.
 - **The right half *is* the mouse.** An optical sensor mounts face-down on the bottom plate; you pick up the right half and move it on the desk to drive the cursor — instead of a trackball or trackpad.
-- **Dedicated scroll + media.** A roller wheel on the right half is a pure scroll wheel; a rotary encoder on the left handles volume / play-pause.
+- **Matching rollers, both halves.** Each half carries a clickable roller wheel: the right is scroll + middle-click, the left is volume / play-pause.
 - **Wired and fast.** Targets 1000 Hz polling — favoring latency and simplicity over wireless.
 
 ## Prior art
@@ -33,24 +33,25 @@ Scoot stands on two open-source keyboards:
 | --- | --- |
 | Waveshare RP2040-Zero | Sole controller, left half |
 | PMW3360 breakout (lens included) | Desk-mouse sensor, right half, face-down |
-| EC11 rotary encoder | Left half — volume / play-pause |
-| EVQVYA001 roller encoder | Right half — scroll wheel (no click) |
+| EVQWGD001 roller encoder (×2) | Both halves — clickable rollers: left = volume / play-pause, right = scroll / middle-click |
 | USB-C ↔ USB-C tether | Carries matrix + peripheral + power between halves |
 
 ### Does it fit? (feasibility)
 
 Two constraints decide whether the single-controller idea actually works:
 
-- **Matrix size.** 42 keys + the encoder click need a grid of at least that many nodes (`rows × cols ≥ 43`). A **6×8 = 48-node** matrix covers it with headroom — left finger keys on rows 0–2, right on rows 3–5, thumbs sharing a column. Dropping the detachable outer column just leaves those nodes unpopulated (down to 36 keys); the matrix is unchanged.
+- **Matrix size.** 42 keys + two encoder clicks (one per roller) need a grid of at least that many nodes (`rows × cols ≥ 44`). A **6×8 = 48-node** matrix covers it with headroom — left finger keys on rows 0–2, right on rows 3–5, thumbs sharing a column. Dropping the detachable outer column just leaves those nodes unpopulated (down to 36 keys); the matrix is unchanged.
 - **GPIO budget.** Everything has to land on the RP2040-Zero's pins:
 
   | Subsystem | Pins |
   | --- | --- |
   | Matrix (6 rows + 8 cols) | 14 |
   | Mouse sensor (SPI) | 4 |
-  | Left encoder (A/B) | 2 |
+  | Left roller (A/B) | 2 |
   | Right roller (A/B) | 2 |
   | **Total** | **22** |
+
+  Both roller pushes are matrix nodes (left in the left matrix, right scanned by the expander), so they cost no GPIO — the total holds at 22.
 
   The Zero breaks out ~20 pins on its edge castellations plus more on underside pads, so 22 fits — but it's tight, and that tightness is itself a design constraint to keep in mind.
 
@@ -58,7 +59,7 @@ Two constraints decide whether the single-controller idea actually works:
 
 - **Pointing method: the desk-mouse.** Committed. The right half moving on the desk *is* the cursor — we accept the engineering that makes it usable (see below) as the price of the concept, rather than retreating to a trackball or trackpad.
 - **Not a true split.** One controller, not a second smart half — simpler and lower-latency. The right half carries only one *dumb* IO expander (no firmware), so it's still a single-MCU design.
-- **6×8 matrix.** Chosen over tighter grids so 42 keys + the encoder click fit with a few spare nodes.
+- **6×8 matrix.** Chosen over tighter grids so 42 keys + the two encoder clicks fit with a few spare nodes.
 - **Detachable outer column** (after Corne). The 6th column unplugs, so Scoot can be a 42-key (6-col) or 36-key (5-col) board. The matrix and pin budget are sized for the 42-key max.
 - **PMW3360, not PAW3204.** The PAW3204 is an OEM part that isn't realistically buyable. The PMW3360 sells as an assembled breakout *with the lens fitted* and speaks standard 4-wire SPI.
 - **Fingerprint pass-through: integrated USB hub.** Committed. A USB 2.0 hub IC on the left half puts the keyboard and the dongle behind one cable (see *USB architecture*). The original "tap the spare D+/D-" idea can't work — the RP2040 has a single USB PHY.
@@ -72,7 +73,7 @@ Typing and mousing share the same right hand, so they're separated by a **hold-t
 - **Hold a left thumb key** to enter mouse mode; release to return to typing. The left half stays planted, so that key is always under your thumb — no state to forget, no false triggers.
 - **While held, the right half becomes the mouse.** Slide it to move the cursor. Its finger keys are **remapped** (not disabled) to Left / Right / Middle click — so resting your hand doesn't actuate, but a press does, exactly like mouse buttons.
 - **Left-hand modifiers stay live** (Ctrl / Shift / Alt) → Ctrl-click, Shift-click and click-drag work without leaving the board.
-- **The roller always scrolls**, in either mode — it's a dedicated wheel, independent of mouse mode.
+- **Both rollers stay live** in either mode — the right always scrolls (press = middle-click), the left always does volume / play-pause. They're dedicated wheels, independent of mouse mode.
 
 ## USB architecture
 

@@ -1,4 +1,4 @@
-# Scoot — Schematic design (rev 0.2, WIP)
+# Scoot — Schematic design (rev 0.3, WIP)
 
 Net-level design capture — the spec a KiCad schematic transcribes. The architecture is now **locked**; what remains is drawing it and finalizing component values/footprints in the EDA tool.
 
@@ -19,12 +19,12 @@ With the expander scanning the right matrix, the raw matrix lines no longer cros
 | --- | --- |
 | I²C to expander (SDA, SCL) | 2 |
 | PMW3360 SPI (SCK, MOSI, MISO, CS) | 4 |
-| Roller encoder (A, B) — kept direct for reliable scroll | 2 |
+| Right roller (A, B) — kept direct for reliable scroll | 2 |
 | **Signal subtotal** | **8** |
 | Power (3V3 + GND) | 2 |
 | **Total** | **10** |
 
-A full-featured USB-C cable carries ~13 signal wires + VBUS/GND, so 8 signals leave **~4–5 spare**. Comfortable.
+A full-featured USB-C cable carries ~13 signal wires + VBUS/GND, so 8 signals leave **~4–5 spare**. Comfortable. The right roller's *push* adds nothing here — it's read as a node in the expander-scanned right matrix, so only its A/B rotation lines cross.
 
 > ⚠ **J3 is a USB-C *connector* carrying non-USB signals** — a proprietary pinout, not a USB port. Plugging a charger or real USB device into J3 can feed 5 V into the 3V3/signal lines and damage the board. **Label or mechanically key J3**, and only ever use the Scoot tether cable. (The host port J1 *is* real USB and is safe to treat normally.)
 
@@ -49,10 +49,10 @@ A full-featured USB-C cable carries ~13 signal wires + VBUS/GND, so 8 signals le
 | --- | --- |
 | Left matrix rows R0–R3 | GP0, GP1, GP2, GP3 |
 | Left matrix cols C0–C5 | GP6, GP7, GP10, GP11, GP12, GP13 |
-| Left EC11 A / B | GP4, GP5 |
+| Left roller A / B | GP4, GP5 |
 | Sensor SPI (SPI1): SCK / MOSI / MISO / CS | GP14 / GP15 / GP8 / GP9 |
 | Expander I²C (I²C1): SDA / SCL | GP18 / GP19 |
-| Roller A / B (direct, across tether) | GP26 / GP27 |
+| Right roller A / B (direct, across tether) | GP26 / GP27 |
 
 ---
 
@@ -60,14 +60,15 @@ A full-featured USB-C cable carries ~13 signal wires + VBUS/GND, so 8 signals le
 
 **Two independent sub-matrices**, combined into one logical keymap by a QMK custom matrix:
 
-- **Left half** — a 4×6 matrix read **directly by the RP2040** (rows R0–R2 = finger rows, R3 = thumb row; 6 columns). 21 keys + the EC11 click = 22 of 24 nodes.
-- **Right half** — a 4×6 matrix read **by the MCP23017 (U6)** over I²C (same row/col layout). 21 keys of 24 nodes.
+- **Left half** — a 4×6 matrix read **directly by the RP2040** (rows R0–R2 = finger rows, R3 = thumb row; 6 columns). 21 keys + the left roller click = 22 of 24 nodes.
+- **Right half** — a 4×6 matrix read **by the MCP23017 (U6)** over I²C (same row/col layout). 21 keys + the right roller click = 22 of 24 nodes.
 
 Both are `COL2ROW` with one diode per key.
 
 **Per-key cell:** `COLn — switch — D(anode→cathode) — ROWm`, i.e. **diode cathode (banded end) to the ROW net**. (COL2ROW: rows driven low, columns read with pull-ups → current flows col→row. A flipped diode kills that matrix — verify before routing.)
 
-- **EC11 push (SW_EC):** a node in the left thumb row (R3).
+- **Left roller push (SW_ENCL):** a node in the left thumb row (R3).
+- **Right roller push (SW_ENCR):** a node in the right thumb row (R3), scanned by the expander — so it costs no extra tether conductor.
 - **Detachable outer column:** the outer finger column (one column net per half) sits on a removable PCB section; unpopulating it gives the 5-col / 36-key build. Row/col counts and the GPIO map are unchanged.
 - The MCP23017's internal pull-ups are weak (~100 kΩ); add external column pull-ups on the right board if scan reliability needs it.
 
@@ -95,12 +96,14 @@ Support: 4.7 µF + 1 µF + 100 nF decoupling per the PMW3360 datasheet. SPI cloc
 
 ## Sheet 6 — Encoders *(locked)*
 
-| Enc | Half | A | B | Common | Push |
-| --- | --- | --- | --- | --- | --- |
-| ENC1 (EC11) | left | GP4 | GP5 | GND | in left matrix (R3) |
-| ENC2 (roller) | right | GP26 | GP27 | GND | none — A/B cross J3 |
+Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, plus an SPST push). Same part on each half.
 
-100 nF A/B-to-GND debounce caps per encoder (optional small series R). Roller A/B are part of the tether budget; debounce caps go on the right board.
+| Enc | Half | A | B | Common | Push | Function |
+| --- | --- | --- | --- | --- | --- | --- |
+| ENC1 (roller) | left | GP4 | GP5 | GND | in left matrix (R3) | volume / play-pause |
+| ENC2 (roller) | right | GP26 | GP27 | GND | in right matrix (R3, via expander) | scroll / middle-click |
+
+100 nF A/B-to-GND debounce caps per encoder (optional small series R). Left roller A/B/push are local to the left board; right roller A/B cross J3 (part of the tether budget) while its push rides the expander-scanned matrix — no extra tether conductor. Debounce caps sit on each roller's own board.
 
 ---
 
@@ -111,7 +114,7 @@ Suggested wire mapping onto a full-featured USB-C cable (exact pin pairs finaliz
 | USB-C wire | Scoot net | | USB-C wire | Scoot net |
 | --- | --- | --- | --- | --- |
 | VBUS | 3V3 | | RX1± | MISO, CS |
-| GND | GND | | TX2± | Roller A, B |
+| GND | GND | | TX2± | Right roller A, B |
 | D+ / D− | SDA, SCL | | RX2±, SBU1/2, CC | spare (~5) |
 | TX1± | SCK, MOSI | | | |
 
@@ -122,7 +125,7 @@ Power is sent as **3V3** (regulated on the left), so the right half needs no reg
 ## Sheet 8 — Right-half expander (U6, MCP23017) *(locked)*
 
 - I²C from the RP2040 over J3 (SDA/SCL); address pins A0–A2 tied for a fixed address; RESET tied high; 100 nF decoupling.
-- 10 of its 16 GPIO drive/read the right 4×6 matrix (GPB0–3 = rows, GPA0–5 = cols); 6 spare.
+- 10 of its 16 GPIO drive/read the right 4×6 matrix (GPB0–3 = rows, GPA0–5 = cols); 6 spare. The right roller's push is just an unpopulated node in this matrix (right thumb row, R3), so it adds no GPIO.
 - I²C pull-ups (~4.7 kΩ) on SDA/SCL — place on the **left** board (at the MCU) so the right half stays minimal.
 
 ---
@@ -155,7 +158,7 @@ Power is sent as **3V3** (regulated on the left), so the right half needs no reg
 | J2 | USB-A receptacle (dongle) | SMD if available |
 | D… | 1N4148W left matrix diodes | SOD-123 |
 | — | Kailh hotswap sockets (left) | SMD |
-| — | passives: 5.1 kΩ ×2, 4.7 kΩ I²C pull-ups, 15 kΩ ×N, decoupling, crystal caps, polyfuse | SMD |
+| — | passives: 5.1 kΩ ×2, 4.7 kΩ I²C pull-ups, 15 kΩ ×N, left roller debounce caps, decoupling, crystal caps, polyfuse | SMD |
 
 **Right board**
 
@@ -174,8 +177,7 @@ Power is sent as **3V3** (regulated on the left), so the right half needs no reg
 | --- | --- |
 | LM19-LSI lens | optical/mechanical — snaps onto the fab-placed U3; add alignment holes + standoff per the lens datasheet |
 | Key switches | push into the fab-placed hotswap sockets — **no soldering** (or hand-solder if solder-in) |
-| ENC1 — EC11 rotary | through-hole; hand-soldered |
-| ENC2 — EVQVYA001 roller | through-hole / niche, not in catalog; hand-soldered |
+| ENC1, ENC2 — EVQWGD001 clickable rollers (×2) | through-hole / niche, not in LCSC catalog; hand-soldered |
 | Case, plate, lens window, tether cable, final assembly | mechanical |
 
 > Use **LCSC-catalog parts** so JLCPCB can source them; prefer "Basic" parts to dodge feeder fees, and verify stock at order time for the Extended ones — **FE1.1s, RP2040, MCP23017, and the PMW3360 (C20612443, ~$0.90, MOQ ~4 / reel 200; JLCPCB's own stock can read 0 while LCSC has it)**. With the hotswap sockets and the sensor both fab-placed, your soldering iron only touches the **two encoders**, and your hands only **snap on the lens**.

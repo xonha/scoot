@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-"""Scoot physical layout — bare keys, GitHub dark theme, matching the
-keymap-drawer reference photo. Outputs docs/scoot-layout.svg."""
+"""Scoot physical layout — keys plus a roller encoder per half, GitHub dark
+theme, matching the keymap-drawer reference photo. Outputs docs/scoot-layout.svg."""
 
 # ---- colors (GitHub dark theme, tuned) ----
 BG = "#262c36"          # canvas background
 KEY_FILL = "#151b23"    # finger + thumb keys
 OUTER_FILL = "#212830"  # outer (detachable) column
 STROKE = "#30363d"      # key border
+ENC_FILL = "#690ee6"    # roller encoders (one per half)
+
+# accent palette — reserved for other parts (assigned as those are added)
+ACCENT_GREEN = "#0fbf3e"
+ACCENT_RED = "#d53613"
+ACCENT_BLUE = "#0150fe"
+ACCENT_AMBER = "#ecaa00"
 
 # ---- geometry ----
 PITCH = 72
@@ -31,6 +38,13 @@ THUMBS = [
     (4.856, 3.530, 26, 1.0, 1.0),
     (5.861, 3.936, 40, 1.0, 1.5),   # innermost: longer keycap, set toward the centre
 ]
+
+# roller encoder (one per half): a wheel in the inner pocket, beside the
+# bottom index key (B / N) and above the innermost thumb. Column-aligned
+# with that thumb so it reads as sitting just above it.
+ENC_CC = THUMBS[-1][0]   # share the innermost thumb's column centre
+ENC_YU = 2.80            # between the bottom finger row and the thumb cluster
+ENC_R = KEY * 0.36       # roller radius
 
 parts = []
 def add(s): parts.append(s)
@@ -57,10 +71,21 @@ def thumbs(origin, mirror):
         cy = TOP + yu * PITCH + KEY / 2
         cap(cx, cy, -rot if mirror else rot, w, h)
 
+def encoder(origin, mirror):
+    cxl = ENC_CC * PITCH + KEY / 2
+    cx = origin + (BLOCKW - cxl if mirror else cxl)
+    cy = TOP + ENC_YU * PITCH + KEY / 2
+    add(f'<circle class="enc" cx="{cx:.1f}" cy="{cy:.1f}" r="{ENC_R:.1f}" fill="{ENC_FILL}"/>')
+    for dy in (-7, 0, 7):   # tread lines hint at a scroll roller
+        add(f'<line class="enc-tread" x1="{cx-ENC_R*0.55:.1f}" y1="{cy+dy}" '
+            f'x2="{cx+ENC_R*0.55:.1f}" y2="{cy+dy}"/>')
+
 finger(LX, False)
 thumbs(LX, False)
+encoder(LX, False)
 finger(RX0, True)
 thumbs(RX0, True)
+encoder(RX0, True)
 
 W = RX0 + BLOCKW + MARGIN
 maxbottom = max(TOP + yu * PITCH + KEY / 2 + (KEY * h) / 2 + 14 for _, yu, _, _, h in THUMBS)
@@ -70,6 +95,8 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{
 <style>
   .canvas {{ fill: {BG}; }}
   .cap {{ stroke: {STROKE}; stroke-width: 1; }}
+  .enc {{ stroke: {STROKE}; stroke-width: 1; }}
+  .enc-tread {{ stroke: rgba(255,255,255,0.35); stroke-width: 2; stroke-linecap: round; }}
 </style>
 <rect class="canvas" x="0" y="0" width="{W}" height="{H}"/>
 {''.join(parts)}

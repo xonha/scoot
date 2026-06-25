@@ -11,8 +11,7 @@ Prove the keyboard-and-mouse **core** on a breadboard before committing to a PCB
 | 1 | Raspberry Pi Pico (H, with headers) | same RP2040 as the final board |
 | 1 | MCP23017 breakout | the IO expander |
 | 1 | PMW3360 motion-sensor breakout | lens fitted |
-| 1 | EC11 rotary encoder | left / media |
-| 1 | EVQVYA001 roller (or a 2nd EC11) | scroll |
+| 2 | EVQWGD001 clickable roller (or EC11 stand-ins) | left = volume / play-pause, right = scroll / middle-click |
 | ~8 | MX / tactile switches | test keys |
 | ~10 | 1N4148 diodes | one per test key |
 | 2 | 4.7 kΩ resistors | I²C pull-ups |
@@ -29,8 +28,8 @@ Power everything from the Pico's **3V3 (OUT)** → breadboard **+ rail**, and **
 | --- | --- | --- |
 | GP14 / GP15 / GP8 / GP9 | → | sensor SCLK / MOSI / MISO / NCS (SPI) |
 | GP18 / GP19 | → | expander SDA / SCL (I²C) |
-| GP4 / GP5 | → | EC11 A / B |
-| GP26 / GP27 | → | roller A / B |
+| GP4 / GP5 | → | left roller A / B |
+| GP26 / GP27 | → | right roller A / B |
 | GP0–GP3 | → | left matrix rows (start GP0, GP1) |
 | GP6, GP7, GP10–GP13 | → | left matrix cols (start GP6, GP7) |
 | 3V3(OUT) / GND | → | + rail / − rail |
@@ -60,8 +59,12 @@ Add **4.7 kΩ** from SDA→3V3 and SCL→3V3 (I²C pull-ups).
 
 | Pin | → |
 | --- | --- |
-| EC11 A / B / C | Pico GP4 / GP5 / GND |
-| Roller A / B / C | Pico GP26 / GP27 / GND |
+| Left roller A / B / C | Pico GP4 / GP5 / GND |
+| Left roller push | a node in the left test matrix (or a spare GPIO for now) |
+| Right roller A / B / C | Pico GP26 / GP27 / GND |
+| Right roller push | a node in the right (MCP23017) test matrix (or a spare GPIO for now) |
+
+Each roller is an EVQWGD001: rotation on A/B (common to GND) plus an SPST push. On the final board each push is a matrix node; on the breadboard wiring it to a spare GPIO is fine to prove the press.
 
 **Test matrices** (2×2 each side to start)
 
@@ -74,7 +77,7 @@ Add **4.7 kΩ** from SDA→3V3 and SCL→3V3 (I²C pull-ups).
 1. **Power rails** — 3V3/GND rails, Pico on USB. *Verify: Pico enumerates on your PC.*
 2. **Expander + one key** — wire the MCP23017 + one switch/diode on GPA0/GPB0. *Verify: that key registers (matrix-over-I²C works).*
 3. **Sensor** — wire the PMW3360 (power + 4 SPI lines). *Verify: cursor moves when you slide a surface under the lens.*
-4. **Encoders** — EC11 → volume, roller → scroll. *Verify: each does the right thing.*
+4. **Encoders** — left roller → volume (push = play-pause), right roller → scroll (push = middle-click). *Verify: each rotation and press does the right thing.*
 5. **Expand + mouse-mode** — more keys both sides; load the real keymap with hold-to-mouse. *Verify: typing works, and the thumb-hold turns the right keys into mouse clicks.*
 
 Firmware: a QMK build with a **custom matrix** (reads the Pico's direct pins + the MCP23017 over I²C), the **PMW3360 pointing driver**, and the **hold-to-mouse** layer. That sketch is the next software step.
