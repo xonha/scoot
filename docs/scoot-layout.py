@@ -14,6 +14,12 @@ ACCENT_RED = "#e35a52"
 ACCENT_BLUE = "#478be6"
 ACCENT_AMBER = "#c69026"
 
+# part -> accent assignments
+MCU_FILL = ACCENT_BLUE        # RP2040 (left)
+HUB_FILL = ACCENT_GREEN       # FE1.1s USB hub (left)
+SENSOR_FILL = ACCENT_RED      # PMW3360 (right)
+EXPANDER_FILL = ACCENT_AMBER  # MCP23017 (right)
+
 # ---- geometry ----
 PITCH = 72
 KEY = 64
@@ -44,6 +50,16 @@ THUMBS = [
 ENC_CC = THUMBS[-1][0]  # share the innermost thumb's column centre
 ENC_YU = 2.80  # between the bottom finger row and the thumb cluster
 ENC_R = KEY * 0.36  # roller radius
+
+# internal ICs as top-view markers (label, x, y, fill): the left half carries
+# the MCU + hub, the right half the sensor + expander. Positions are
+# indicative (concept stage), placed over the half each part lives on.
+COMPONENTS = [
+    ("FE1.1s", LX + 112, TOP + 64, HUB_FILL),
+    ("RP2040", LX + BLOCKW / 2 - 12, TOP + 150, MCU_FILL),
+    ("MCP23017", RX0 + 126, TOP + 64, EXPANDER_FILL),
+    ("PMW3360", RX0 + BLOCKW / 2, TOP + 156, SENSOR_FILL),
+]
 
 parts = []
 
@@ -93,12 +109,24 @@ def encoder(origin, mirror):
         )
 
 
+def chip(cx, cy, label, fill):
+    w = len(label) * 7.6 + 22
+    add(
+        f'<g class="chip">'
+        f'<rect x="{cx - w / 2:.1f}" y="{cy - 13:.1f}" width="{w:.1f}" height="26" rx="6" fill="{fill}"/>'
+        f'<text x="{cx:.1f}" y="{cy:.1f}">{label}</text>'
+        f"</g>"
+    )
+
+
 finger(LX, False)
 thumbs(LX, False)
 encoder(LX, False)
 finger(RX0, True)
 thumbs(RX0, True)
 encoder(RX0, True)
+for label, x, y, fill in COMPONENTS:
+    chip(x, y, label, fill)
 
 W = RX0 + BLOCKW + MARGIN
 maxbottom = max(
@@ -112,6 +140,8 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{
   .cap {{ stroke: {STROKE}; stroke-width: 1; }}
   .enc {{ stroke: {STROKE}; stroke-width: 1; }}
   .enc-tread {{ stroke: rgba(255,255,255,0.35); stroke-width: 2; stroke-linecap: round; }}
+  .chip rect {{ stroke: {STROKE}; stroke-width: 1; }}
+  .chip text {{ fill: #fff; font: 600 12.5px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }}
 </style>
 <rect class="canvas" x="0" y="0" width="{W}" height="{H}"/>
 {"".join(parts)}

@@ -6,7 +6,7 @@ A Corne 3×6+3 layout — with a **detachable outer column**, so it runs as 5 or
 
 <p align="center">
   <img src="docs/scoot-layout.svg" width="100%"
-       alt="Scoot physical layout — a Corne 3×6+3 split: two mirrored halves, each with three rows of six staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key.">
+       alt="Scoot physical layout — a Corne 3×6+3 split: two mirrored halves, each with three rows of six staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Color-coded markers show the internal ICs: RP2040 MCU and FE1.1s hub on the left, PMW3360 sensor and MCP23017 expander on the right.">
 </p>
 
 > <sub>Physical layout ([`docs/scoot-layout.svg`](docs/scoot-layout.svg)) — a hand-built SVG in GitHub's dark palette.</sub>
