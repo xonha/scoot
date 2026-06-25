@@ -4,6 +4,13 @@ A wired, low-latency, 36–42-key split ergonomic keyboard where **the entire ri
 
 A Corne 3×6+3 layout — with a **detachable outer column**, so it runs as 5 or 6 columns per hand (36 or 42 keys) — driven by a **single** controller. There's no second microcontroller — the right half carries only its keys plus pointing/scroll hardware, all wired back to the left half over a tether. Electrically it behaves like one unibody board that happens to be physically split.
 
+<p align="center">
+  <img src="docs/scoot-layout.svg" width="100%"
+       alt="Scoot physical layout — a Corne 3×6+3 split: two mirrored halves, each with three rows of six staggered finger keys plus a three-key fanned thumb cluster.">
+</p>
+
+> <sub>Physical layout ([`docs/scoot-layout.svg`](docs/scoot-layout.svg)) — a hand-built SVG in GitHub's dark palette.</sub>
+
 > **Status: concept.** This repo is currently just the idea and its open questions — no firmware, no PCB, no case. Implementation comes after the concept is settled.
 
 ## The core bets
