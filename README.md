@@ -6,7 +6,8 @@ A Corne 3×5+3 layout — **two RP2040 "Pro Micro" modules (~18 × 33 mm each), 
 
 <p align="center">
   <img src="docs/scoot-layout.svg" width="100%"
-       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green), the PMW3360 pointing sensor under the right module (blue), and the USB-C tether port that links the halves (grey) — between module and roller on the left, below the roller on the right.">
+       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green) and the USB-C tether port linking the halves (grey, below each roller, symmetric). The PMW3360 pointing sensor is implicit — mounted under the right module.">
+
 
 </p>
 
@@ -54,7 +55,7 @@ Both halves fit with margin. The encoder *push* is just another direct GPIO now 
 - **5 columns, 36 keys — fixed.** No detachable outer column. 3×5+3 per half fits direct-wiring on both halves with margin; it also matches an off-the-shelf 5-column Corne for prototyping. A 6th column would need a 3-wire sensor (PMW3610) or a diode'd sub-matrix to fit the pin budget — not worth it.
 - **Hand-built from modules.** RP2040 "Pro Micro" boards + a sensor breakout, soldered (and socketed where it helps) onto a custom PCB. Cheaper at one-off quantity, fully repairable, and continuous with the breadboard/Corne prototype. A fab-assembled "bare chip" revision is a *future option* only if Scoot ever becomes a product (see roadmap).
 - **PMW3360 / PMW3389 breakout, not embedded.** Both sell as assembled breakouts *with the lens fitted* (AliExpress/Tindie) and speak standard SPI; QMK drives either. The fitted lens sidesteps the hardest, least-documented part (optical alignment). Embedding the bare sensor is left to a possible future bare revision.
-- **Tether: thin serial over USB-C.** UART (single-wire half-duplex via RP2040 PIO, or 2-wire) plus 3V3/5V and GND — roughly 4 conductors — through a **USB-C connector on each half** (reversible and robust; a slim/coiled USB-C cable works). It carries *only* UART + power, **not** USB data, so it's a non-USB pinout: key/label the port and use only the Scoot tether cable. Port placement: between module and roller (top side) on the left, below the roller (bottom side) on the right.
+- **Tether: thin serial over USB-C.** UART (single-wire half-duplex via RP2040 PIO, or 2-wire) plus 3V3/5V and GND — roughly 4 conductors — through a **USB-C connector on each half** (reversible and robust; a slim/coiled USB-C cable works). It carries *only* UART + power, **not** USB data, so it's a non-USB pinout: key/label the port and use only the Scoot tether cable. Port placement is **symmetric** — below the roller on each half, facing the inner edge for the shortest cable run.
 - **Fingerprint pass-through: deferred.** The integrated USB-hub idea (one cable to the host, dongle behind it) needs raw access to the host-side MCU's USB lines, which module-based boards don't expose cleanly. It's parked for a possible future bare/wired revision; the prototype runs the dongle on its own cable.
 
 ## Interaction model

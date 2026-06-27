@@ -104,7 +104,7 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 
 - One UART data line between the two MCUs (QMK split serial; RP2040 supports a single-wire half-duplex transport over PIO, or use 2 wires for full-duplex), plus power + GND. ~3–4 conductors total (see budget).
 - Connector: a **USB-C receptacle on each half** carrying the ~4 conductors (non-USB pinout — see the tether budget note). Reversible and robust, with easy slim/coiled cables for the roaming half.
-- **Placement:** on the **left**, between the controller module and the roller (top side), where the inner region has a gap; on the **right**, that gap is taken by the sensor (which sits under the module), so the port goes **below the roller (bottom side)**. Both face the inner edge so the cable runs the short path between halves.
+- **Placement:** symmetric — **below the roller on each half**, facing the inner edge so the cable runs the short path between halves. (On the right the sensor sits under the module, which is why the port goes below the roller rather than between module and roller; the left mirrors it for symmetry.)
 - Power sent from the left (host-powered). See the power & flashing caution above, and mark the tether port distinctly from the module's own USB-C.
 
 ---
