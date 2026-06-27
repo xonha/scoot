@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   viewBox="0 0 1158 459"
-   width="1158"
-   height="459"
+   viewBox="0 0 1158 458.99999"
+   width="306.38751mm"
+   height="121.44375mm"
    role="img"
    aria-label="Scoot physical layout"
    version="1.1"
@@ -25,15 +25,27 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showguides="true"
-     inkscape:zoom="0.5"
-     inkscape:cx="549"
-     inkscape:cy="332"
+     inkscape:zoom="2"
+     inkscape:cx="496.25"
+     inkscape:cy="192.5"
      inkscape:window-width="1900"
      inkscape:window-height="1028"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg49" />
+     inkscape:current-layer="svg49"
+     inkscape:document-units="mm">
+    <sodipodi:guide
+       position="443.96363,379.99999"
+       orientation="0,-1"
+       id="guide46"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="667.18516,217.05093"
+       orientation="0,-1"
+       id="guide47"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
   <style
      id="style1">
   .canvas { fill: #262c36; }
@@ -45,575 +57,539 @@
 </style>
   <rect
      class="canvas"
-     x="-0.17677666"
-     y="-3.7123106"
+     x="0"
+     y="0"
      width="1158"
      height="459"
      id="rect1" />
   <path
      id="path75-8-6"
      style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#30363d;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;enable-background:accumulate;stop-color:#000000"
-     d="M 845.00391 49.523438 C 837.63741 49.523437 831.50391 55.656866 831.50391 63.023438 L 831.50391 66.523438 C 829.15491 64.556978 826.25361 63.222656 823.00391 63.222656 L 773.00391 63.222656 C 767.10731 63.222656 762.05906 67.176946 760.25586 72.523438 L 751.00391 72.523438 L 701.00391 72.523438 L 668.49609 72.523438 L 643.49609 72.523438 L 618.49609 72.523438 C 611.12959 72.523438 604.99609 78.656868 604.99609 86.023438 L 604.99609 116.29102 L 604.99609 136.02344 L 604.99609 136.02734 L 604.99609 355.7207 C 604.92579 358.3505 605.6545 361.03173 607.13672 363.35156 L 607.11719 363.3457 L 607.23242 363.52344 C 607.23242 363.52344 636.34771 387.11702 655.83203 433.5625 C 655.83203 433.5625 660.44434 445.55274 670.16211 437.39844 C 670.20681 437.36094 670.25131 437.32424 670.29492 437.28711 L 679.88086 429.24414 L 679.88281 429.24219 L 685.57617 424.46484 L 690.04883 420.71289 L 691.05859 419.86523 L 718.01758 397.24414 L 731.32812 387.5332 L 775.19141 366.14062 L 790.81641 361.93359 L 805.3418 358.58203 L 811.51367 357.15625 L 815.0625 356.33789 A 6.50065 6.50065 0 0 0 815.1875 356.30859 L 829.75977 352.94336 L 832.31641 352.35352 L 832.66016 352.27344 L 837.59961 351.12695 L 837.60547 351.125 L 845.72266 349.05273 L 846.29688 348.90039 L 846.30078 348.90039 C 846.33561 348.89341 846.36981 348.88608 846.4043 348.87891 L 846.40625 348.87891 C 846.82837 348.79109 847.22664 348.68866 847.59961 348.57422 C 847.7189 348.53762 847.8348 348.50003 847.94922 348.46094 C 856.26435 345.62025 851.89258 336.18359 851.89258 336.18359 C 849.89509 331.50852 848.13371 326.92565 846.58008 322.46289 A 41.719299 41.719299 0 0 1 845.87695 314.83984 A 41.719299 41.719299 0 0 1 887.5957 273.11914 A 41.719299 41.719299 0 0 1 896.7207 274.20898 L 896.72852 274.13086 L 898.4082 274.54492 A 41.719299 41.719299 0 0 1 898.41016 274.54492 L 975.47461 293.52344 L 989 293.52344 L 1039 293.52344 L 1061 293.52344 L 1086 293.52344 L 1111 293.52344 C 1118.3665 293.52344 1124.5 287.39 1124.5 280.02344 L 1124.5 255.02344 L 1124.5 230.02344 L 1124.5 208.02344 L 1124.5 158.02344 L 1124.5 136.02344 L 1124.5 111.02344 L 1124.5 86.023438 C 1124.5 78.656867 1118.3665 72.523438 1111 72.523438 L 1086 72.523438 L 1061 72.523438 L 1039 72.523438 L 989 72.523438 L 980.5 72.523438 L 980.5 70.222656 C 980.5 62.856086 974.3666 56.722656 967 56.722656 L 917 56.722656 C 913.6181 56.722656 910.57941 58.121202 908.19141 60.232422 C 906.87801 54.172212 901.4107 49.523438 895 49.523438 L 845.00391 49.523438 z " />
+     d="m 845.00391,49.523438 c -7.3665,-10e-7 -13.5,6.133428 -13.5,13.5 v 3.5 c -2.349,-1.96646 -5.2503,-3.300782 -8.5,-3.300782 h -50 c -5.8966,0 -10.94485,3.95429 -12.74805,9.300782 h -9.25195 -50 -32.50782 -25 -25 c -7.3665,0 -13.5,6.13343 -13.5,13.5 v 30.267582 19.73242 0.004 219.69336 c -0.0703,2.6298 0.65841,5.31103 2.14063,7.63086 l -0.0195,-0.006 0.11523,0.17774 c 0,0 29.11529,23.59358 48.59961,70.03906 0,0 4.61231,11.99024 14.33008,3.83594 0.0447,-0.0375 0.0892,-0.0742 0.13281,-0.11133 l 9.58594,-8.04297 0.002,-0.002 5.69336,-4.77735 4.47266,-3.75195 1.00976,-0.84766 26.95899,-22.62109 13.31054,-9.71094 43.86329,-21.39258 15.625,-4.20703 14.52539,-3.35156 6.17187,-1.42578 3.54883,-0.81836 a 6.50065,6.50065 0 0 0 0.125,-0.0293 l 14.57227,-3.36523 2.55664,-0.58984 0.34375,-0.0801 8.77343,-2.03711 c 0.004,-0.002 0.007,-0.002 0.0117,-0.004 0.86448,-0.30367 1.92237,-0.79543 3.00196,-1.58984 l 0.0547,0.51953 c 0.057,-0.005 0.11378,-0.0135 0.17188,-0.0195 12.6187,-1.30253 7.21875,-12.95899 7.21875,-12.95899 -1.99749,-4.67507 -3.75887,-9.25794 -5.3125,-13.7207 a 41.719299,41.719299 0 0 1 -0.70313,-7.62305 41.719299,41.719299 0 0 1 41.71875,-41.7207 41.719299,41.719299 0 0 1 9.125,1.08984 l 0.008,-0.0781 1.67968,0.41406 a 41.719299,41.719299 0 0 1 0.002,0 l 77.06445,18.97852 H 989 h 50 c 7.3665,0 13.5,-6.13344 13.5,-13.5 v -25 -25 -22 -50 -22 -25 -25.000002 c 0,-7.366571 -6.1335,-13.5 -13.5,-13.5 h -50 -8.5 v -2.300782 c 0,-7.36657 -6.1334,-13.5 -13.5,-13.5 h -50 c -3.3819,0 -6.42059,1.398546 -8.80859,3.509766 C 906.87801,54.172212 901.4107,49.523438 895,49.523438 Z" />
   <path
      id="path75-8-6-2"
      style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#30363d;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;enable-background:accumulate;stop-color:#000000"
-     d="m 312.99572,49.523459 c 7.3665,0 13.5,6.13343 13.5,13.5 v 3.5 c 2.349,-1.96646 5.2503,-3.30078 8.5,-3.30078 h 50 c 5.8966,0 10.94485,3.95429 12.74805,9.30078 h 9.25195 50 32.50782 25 25 c 7.3665,0 13.5,6.13343 13.5,13.5 v 30.267581 19.73242 0.004 219.69336 c 0.0703,2.6298 -0.65841,5.31103 -2.14063,7.63086 l 0.0195,-0.006 -0.11523,0.17774 c 0,0 -29.11529,23.59358 -48.59961,70.03906 0,0 -4.61231,11.99024 -14.33008,3.83594 -0.0447,-0.0375 -0.0892,-0.0742 -0.13281,-0.11133 l -9.58594,-8.04297 -0.002,-0.002 -5.69336,-4.77735 -4.47266,-3.75195 -1.00976,-0.84766 -26.95899,-22.62109 -13.31054,-9.71094 -43.86329,-21.39258 -15.625,-4.20703 -14.52539,-3.35156 -6.17187,-1.42578 -3.54883,-0.81836 a 6.50065,6.50065 0 0 1 -0.125,-0.0293 l -14.57227,-3.36523 -9.66015,-2.23047 a 6.50065,6.50065 0 0 1 0,-0.002 l -78.86524,0.002 -57.18945,-57.18945 h -13.52531 -50.00005 -22.000004 -25 -25 c -7.3665,0 -13.5,-6.13344 -13.5,-13.5 v -25 -25 -22 -50 -22 -25 -25.000001 c 0,-7.36657 6.1335,-13.5 13.5,-13.5 h 25 25 22.000004 50.00005 8.5 v -2.30078 c 0,-7.36657 6.1334,-13.5 13.5,-13.5 h 50 c 3.3819,0 6.42059,1.39854 8.80859,3.50976 1.3134,-6.06021 6.78071,-10.70889 13.19141,-10.70889 z M 487.82775,430.99807 c -0.0821,0.0176 -0.15223,0.0434 -0.23242,0.0625 0.0801,-0.0191 0.15045,-0.0449 0.23242,-0.0625 z m -1.52734,0.47656 c -0.0654,0.0294 -0.12356,0.0624 -0.18555,0.0937 0.0619,-0.0313 0.12019,-0.0644 0.18555,-0.0937 z m -0.42383,0.21875 c -0.0435,0.0258 -0.0799,0.055 -0.12109,0.082 0.0411,-0.0269 0.0777,-0.0563 0.12109,-0.082 z m -0.76562,0.67773 c -0.0164,0.0238 -0.0319,0.0479 -0.0469,0.0723 0.015,-0.0244 0.0305,-0.0485 0.0469,-0.0723 z m -0.18164,0.34766 c -0.009,0.0238 -0.0158,0.048 -0.0234,0.0723 0.008,-0.0242 0.0147,-0.0486 0.0234,-0.0723 z m -0.0527,0.17578 c -0.006,0.0236 -0.009,0.0482 -0.0137,0.0723 0.004,-0.024 0.008,-0.0487 0.0137,-0.0723 z m -0.0351,0.20313 c -0.002,0.018 -0.003,0.0364 -0.004,0.0547 0.001,-0.0182 0.002,-0.0367 0.004,-0.0547 z m -0.008,0.20312 c 4e-4,0.0173 0.003,0.0352 0.004,0.0527 -9e-4,-0.0176 -0.004,-0.0354 -0.004,-0.0527 z m 0.0606,0.4336 c 0.006,0.0237 0.0129,0.0482 0.0195,0.0723 -0.007,-0.0241 -0.0138,-0.0486 -0.0195,-0.0723 z m 0.1582,0.46093 c 0.0338,0.0777 0.0848,0.16118 0.12696,0.24219 -0.0421,-0.0808 -0.0933,-0.16467 -0.12696,-0.24219 z m 0.29297,0.54883 c 0.0449,0.0722 0.10493,0.1499 0.15625,0.22461 -0.0514,-0.0749 -0.11131,-0.15226 -0.15625,-0.22461 z m 0.39844,0.56641 c 0.0844,0.10813 0.18775,0.22483 0.28516,0.33789 -0.0979,-0.11355 -0.20042,-0.22931 -0.28516,-0.33789 z m 0.51563,0.60156 c 0.1987,0.21557 0.48638,0.46417 0.73242,0.69727 -0.24539,-0.23246 -0.53411,-0.48225 -0.73242,-0.69727 z" />
+     d="m 312.99572,49.523459 c 7.3665,0 13.5,6.13343 13.5,13.5 v 3.5 c 2.349,-1.96646 5.2503,-3.30078 8.5,-3.30078 h 50 c 5.8966,0 10.94485,3.95429 12.74805,9.30078 h 9.25195 50 32.50782 25 25 c 7.3665,0 13.5,6.13343 13.5,13.5 v 30.267581 19.73242 0.004 219.69336 c 0.0703,2.6298 -0.65841,5.31103 -2.14063,7.63086 l 0.0195,-0.006 -0.11523,0.17774 c 0,0 -29.11529,23.59358 -48.59961,70.03906 0,0 -4.61231,11.99024 -14.33008,3.83594 -0.0447,-0.0375 -0.0892,-0.0742 -0.13281,-0.11133 l -9.58594,-8.04297 -0.002,-0.002 -5.69336,-4.77735 -4.47266,-3.75195 -1.00976,-0.84766 -26.95899,-22.62109 -13.31054,-9.71094 -43.86329,-21.39258 -15.625,-4.20703 -14.52539,-3.35156 -6.17187,-1.42578 -3.54883,-0.81836 a 6.50065,6.50065 0 0 1 -0.125,-0.0293 l -14.57227,-3.36523 -9.66015,-2.23047 a 6.50065,6.50065 0 0 1 0,-0.002 l -78.86524,0.002 -57.18945,-57.18945 h -13.52531 -50.00005 c -7.3665,0 -13.5,-6.13344 -13.5,-13.5 v -25 -25 -22 -50 -22 -25 -25.000001 c 0,-7.36657 6.1335,-13.5 13.5,-13.5 h 50.00005 8.5 v -2.30078 c 0,-7.36657 6.1334,-13.5 13.5,-13.5 h 50 c 3.3819,0 6.42059,1.39854 8.80859,3.50976 1.3134,-6.06021 6.78071,-10.70889 13.19141,-10.70889 z M 487.82775,430.99807 c -0.0821,0.0176 -0.15223,0.0434 -0.23242,0.0625 0.0801,-0.0191 0.15045,-0.0449 0.23242,-0.0625 z m -1.52734,0.47656 c -0.0654,0.0294 -0.12356,0.0624 -0.18555,0.0937 0.0619,-0.0313 0.12019,-0.0644 0.18555,-0.0937 z m -0.42383,0.21875 c -0.0435,0.0258 -0.0799,0.055 -0.12109,0.082 0.0411,-0.0269 0.0777,-0.0563 0.12109,-0.082 z m -0.76562,0.67773 c -0.0164,0.0238 -0.0319,0.0479 -0.0469,0.0723 0.015,-0.0244 0.0305,-0.0485 0.0469,-0.0723 z m -0.18164,0.34766 c -0.009,0.0238 -0.0158,0.048 -0.0234,0.0723 0.008,-0.0242 0.0147,-0.0486 0.0234,-0.0723 z m -0.0527,0.17578 c -0.006,0.0236 -0.009,0.0482 -0.0137,0.0723 0.004,-0.024 0.008,-0.0487 0.0137,-0.0723 z m -0.0351,0.20313 c -0.002,0.018 -0.003,0.0364 -0.004,0.0547 0.001,-0.0182 0.002,-0.0367 0.004,-0.0547 z m -0.008,0.20312 c 4e-4,0.0173 0.003,0.0352 0.004,0.0527 -9e-4,-0.0176 -0.004,-0.0354 -0.004,-0.0527 z m 0.0606,0.4336 c 0.006,0.0237 0.0129,0.0482 0.0195,0.0723 -0.007,-0.0241 -0.0138,-0.0486 -0.0195,-0.0723 z m 0.1582,0.46093 c 0.0338,0.0777 0.0848,0.16118 0.12696,0.24219 -0.0421,-0.0808 -0.0933,-0.16467 -0.12696,-0.24219 z m 0.29297,0.54883 c 0.0449,0.0722 0.10493,0.1499 0.15625,0.22461 -0.0514,-0.0749 -0.11131,-0.15226 -0.15625,-0.22461 z m 0.39844,0.56641 c 0.0844,0.10813 0.18775,0.22483 0.28516,0.33789 -0.0979,-0.11355 -0.20042,-0.22931 -0.28516,-0.33789 z m 0.51563,0.60156 c 0.1987,0.21557 0.48638,0.46417 0.73242,0.69727 -0.24539,-0.23246 -0.53411,-0.48225 -0.73242,-0.69727 z" />
   <g
-     id="g51">
-    <g
-       id="g2"
-       transform="rotate(0 72.0 111.0)">
-      <rect
-         class="cap"
-         x="40.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect2" />
-    </g>
-    <g
-       id="g3"
-       transform="rotate(0 72.0 183.0)">
-      <rect
-         class="cap"
-         x="40.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect3" />
-    </g>
-    <g
-       id="g4"
-       transform="rotate(0 72.0 255.0)">
-      <rect
-         class="cap"
-         x="40.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect4" />
-    </g>
+     id="g23">
     <g
        id="g5"
-       transform="rotate(0 144.0 111.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="112.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
+         x="112"
+         y="79"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect5" />
+         id="rect5"
+         style="stroke:none" />
     </g>
     <g
        id="g6"
-       transform="rotate(0 144.0 183.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="112.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
+         x="112"
+         y="151"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect6" />
+         id="rect6"
+         style="stroke:none" />
     </g>
     <g
        id="g7"
-       transform="rotate(0 144.0 255.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="112.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
+         x="112"
+         y="223"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect7" />
+         id="rect7"
+         style="stroke:none" />
     </g>
     <g
        id="g8"
-       transform="rotate(0 216.0 95.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="184.0"
-         y="63.2"
-         width="64.0"
-         height="64.0"
+         x="184"
+         y="63.200001"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect8" />
+         id="rect8"
+         style="stroke:none" />
     </g>
     <g
        id="g9"
-       transform="rotate(0 216.0 167.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="184.0"
+         x="184"
          y="135.2"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect9" />
+         id="rect9"
+         style="stroke:none" />
     </g>
     <g
        id="g10"
-       transform="rotate(0 216.0 239.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="184.0"
+         x="184"
          y="207.2"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect10" />
+         id="rect10"
+         style="stroke:none" />
     </g>
     <g
        id="g11"
-       transform="rotate(0 288.0 88.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="256.0"
-         y="56.0"
-         width="64.0"
-         height="64.0"
+         x="256"
+         y="56"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect11" />
+         id="rect11"
+         style="stroke:none" />
     </g>
     <g
        id="g12"
-       transform="rotate(0 288.0 160.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="256.0"
-         y="128.0"
-         width="64.0"
-         height="64.0"
+         x="256"
+         y="128"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect12" />
+         id="rect12"
+         style="stroke:none" />
     </g>
     <g
        id="g13"
-       transform="rotate(0 288.0 232.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="256.0"
-         y="200.0"
-         width="64.0"
-         height="64.0"
+         x="256"
+         y="200"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect13" />
+         id="rect13"
+         style="stroke:none" />
     </g>
     <g
        id="g14"
-       transform="rotate(0 360.0 101.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="328.0"
-         y="69.7"
-         width="64.0"
-         height="64.0"
+         x="328"
+         y="69.699997"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect14" />
+         id="rect14"
+         style="stroke:none" />
     </g>
     <g
        id="g15"
-       transform="rotate(0 360.0 173.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="328.0"
+         x="328"
          y="141.7"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect15" />
+         id="rect15"
+         style="stroke:none" />
     </g>
     <g
        id="g16"
-       transform="rotate(0 360.0 245.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="328.0"
+         x="328"
          y="213.7"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect16" />
+         id="rect16"
+         style="stroke:none" />
     </g>
     <g
        id="g17"
-       transform="rotate(0 432.0 111.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="400.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
+         x="400"
+         y="79"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect17" />
+         id="rect17"
+         style="stroke:none" />
     </g>
     <g
        id="g18"
-       transform="rotate(0 432.0 183.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="400.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
+         x="400"
+         y="151"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect18" />
+         id="rect18"
+         style="stroke:none" />
     </g>
     <g
        id="g19"
-       transform="rotate(0 432.0 255.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="400.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
+         x="400"
+         y="223"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect19" />
+         id="rect19"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(13 351.6 318.8)"
-       id="g20">
+       transform="rotate(13,351.6,318.8)"
+       id="g20"
+       style="stroke:none">
       <rect
          class="cap"
-         x="319.6"
-         y="286.8"
-         width="64.0"
-         height="64.0"
+         x="319.60001"
+         y="286.79999"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect20" />
+         id="rect20"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(26 421.6 342.2)"
-       id="g21">
+       transform="rotate(26,421.6,342.2)"
+       id="g21"
+       style="stroke:none">
       <rect
          class="cap"
-         x="389.6"
-         y="310.2"
-         width="64.0"
-         height="64.0"
+         x="389.60001"
+         y="310.20001"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect21" />
+         id="rect21"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(40 494.0 371.4)"
-       id="g22">
+       transform="rotate(40,494,371.4)"
+       id="g22"
+       style="stroke:none">
       <rect
          class="cap"
-         x="462.0"
-         y="323.4"
-         width="64.0"
-         height="96.0"
+         x="462"
+         y="323.39999"
+         width="64"
+         height="96"
          rx="7"
          fill="#151b23"
-         id="rect22" />
+         id="rect22"
+         style="stroke:none" />
     </g>
   </g>
   <g
-     id="g50">
-    <g
-       id="g24"
-       transform="rotate(0 1086.0 111.0)">
-      <rect
-         class="cap"
-         x="1054.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect24" />
-    </g>
-    <g
-       id="g25"
-       transform="rotate(0 1086.0 183.0)">
-      <rect
-         class="cap"
-         x="1054.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect25" />
-    </g>
-    <g
-       id="g26"
-       transform="rotate(0 1086.0 255.0)">
-      <rect
-         class="cap"
-         x="1054.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
-         rx="7"
-         fill="#212830"
-         id="rect26" />
-    </g>
+     id="g45">
     <g
        id="g27"
-       transform="rotate(0 1014.0 111.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="982.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
+         x="982"
+         y="79"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect27" />
+         id="rect27"
+         style="stroke:none" />
     </g>
     <g
        id="g28"
-       transform="rotate(0 1014.0 183.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="982.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
+         x="982"
+         y="151"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect28" />
+         id="rect28"
+         style="stroke:none" />
     </g>
     <g
        id="g29"
-       transform="rotate(0 1014.0 255.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="982.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
+         x="982"
+         y="223"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect29" />
+         id="rect29"
+         style="stroke:none" />
     </g>
     <g
        id="g30"
-       transform="rotate(0 942.0 95.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="910.0"
-         y="63.2"
-         width="64.0"
-         height="64.0"
+         x="910"
+         y="63.200001"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect30" />
+         id="rect30"
+         style="stroke:none" />
     </g>
     <g
        id="g31"
-       transform="rotate(0 942.0 167.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="910.0"
+         x="910"
          y="135.2"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect31" />
+         id="rect31"
+         style="stroke:none" />
     </g>
     <g
        id="g32"
-       transform="rotate(0 942.0 239.2)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="910.0"
+         x="910"
          y="207.2"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect32" />
+         id="rect32"
+         style="stroke:none" />
     </g>
     <g
        id="g33"
-       transform="rotate(0 870.0 88.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="838.0"
-         y="56.0"
-         width="64.0"
-         height="64.0"
+         x="838"
+         y="56"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect33" />
+         id="rect33"
+         style="stroke:none" />
     </g>
     <g
        id="g34"
-       transform="rotate(0 870.0 160.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="838.0"
-         y="128.0"
-         width="64.0"
-         height="64.0"
+         x="838"
+         y="128"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect34" />
+         id="rect34"
+         style="stroke:none" />
     </g>
     <g
        id="g35"
-       transform="rotate(0 870.0 232.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="838.0"
-         y="200.0"
-         width="64.0"
-         height="64.0"
+         x="838"
+         y="200"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect35" />
+         id="rect35"
+         style="stroke:none" />
     </g>
     <g
        id="g36"
-       transform="rotate(0 798.0 101.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="766.0"
-         y="69.7"
-         width="64.0"
-         height="64.0"
+         x="766"
+         y="69.699997"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect36" />
+         id="rect36"
+         style="stroke:none" />
     </g>
     <g
        id="g37"
-       transform="rotate(0 798.0 173.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="766.0"
+         x="766"
          y="141.7"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect37" />
+         id="rect37"
+         style="stroke:none" />
     </g>
     <g
        id="g38"
-       transform="rotate(0 798.0 245.7)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="766.0"
+         x="766"
          y="213.7"
-         width="64.0"
-         height="64.0"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect38" />
+         id="rect38"
+         style="stroke:none" />
     </g>
     <g
        id="g39"
-       transform="rotate(0 726.0 111.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="694.0"
-         y="79.0"
-         width="64.0"
-         height="64.0"
+         x="694"
+         y="79"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect39" />
+         id="rect39"
+         style="stroke:none" />
     </g>
     <g
        id="g40"
-       transform="rotate(0 726.0 183.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="694.0"
-         y="151.0"
-         width="64.0"
-         height="64.0"
+         x="694"
+         y="151"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect40" />
+         id="rect40"
+         style="stroke:none" />
     </g>
     <g
        id="g41"
-       transform="rotate(0 726.0 255.0)">
+       style="stroke:none">
       <rect
          class="cap"
-         x="694.0"
-         y="223.0"
-         width="64.0"
-         height="64.0"
+         x="694"
+         y="223"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect41" />
+         id="rect41"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(-13 806.4 318.8)"
-       id="g42">
+       transform="rotate(-13,806.4,318.8)"
+       id="g42"
+       style="stroke:none">
       <rect
          class="cap"
-         x="774.4"
-         y="286.8"
-         width="64.0"
-         height="64.0"
+         x="774.40002"
+         y="286.79999"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect42" />
+         id="rect42"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(-26 736.4 342.2)"
-       id="g43">
+       transform="rotate(-26,736.4,342.2)"
+       id="g43"
+       style="stroke:none">
       <rect
          class="cap"
-         x="704.4"
-         y="310.2"
-         width="64.0"
-         height="64.0"
+         x="704.40002"
+         y="310.20001"
+         width="64"
+         height="64"
          rx="7"
          fill="#151b23"
-         id="rect43" />
+         id="rect43"
+         style="stroke:none" />
     </g>
     <g
-       transform="rotate(-40 664.0 371.4)"
-       id="g44">
+       transform="rotate(-40,664,371.4)"
+       id="g44"
+       style="stroke:none">
       <rect
          class="cap"
-         x="632.0"
-         y="323.4"
-         width="64.0"
-         height="96.0"
+         x="632"
+         y="323.39999"
+         width="64"
+         height="96"
          rx="7"
          fill="#151b23"
-         id="rect44" />
+         id="rect44"
+         style="stroke:none" />
     </g>
   </g>
   <g
      id="g36-99-5"
-     transform="matrix(1.1687774,0,0,1.5849404,-424.18122,-4.3045441)"
-     style="fill:#347d39;fill-opacity:1">
+     transform="matrix(1.0629921,0,0,1.2401575,-339.96772,-7.4389739)"
+     style="fill:#347d39;fill-opacity:1;stroke:none">
     <rect
        class="cap"
        x="766"
@@ -623,12 +599,12 @@
        rx="7"
        fill="#151b23"
        id="rect36-4-8"
-       style="fill:#347d39;fill-opacity:1;stroke:#30363d;stroke-width:1" />
+       style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
   </g>
   <g
-     id="g36-99-7"
-     transform="matrix(0.44615385,0,0,0.44615385,263.2411,181.57589)"
-     style="fill:#c69026;fill-opacity:1;stroke:none">
+     id="g36-99-5-6"
+     transform="matrix(1.0629921,0,0,1.2401575,-194.50931,-7.4639819)"
+     style="fill:#347d39;fill-opacity:1;stroke:none">
     <rect
        class="cap"
        x="766"
@@ -637,43 +613,13 @@
        height="64"
        rx="7"
        fill="#151b23"
-       id="rect36-4-0"
-       style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     id="g36-99-7-4"
-     transform="matrix(0.44615385,0,0,0.44615385,182.69797,181.57589)"
-     style="fill:#c69026;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="766"
-       y="69.699997"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect36-4-0-6"
-       style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     id="g36-99-7-4-6"
-     transform="matrix(0.44615385,0,0,0.44615385,152.47233,41.427385)"
-     style="fill:#c69026;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="766"
-       y="69.699997"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect36-4-0-6-3"
-       style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:1" />
+       id="rect36-4-8-3"
+       style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
   </g>
   <g
      id="g39-78-0"
-     transform="translate(-450.28711,199.21289)"
-     style="fill:#478be6;fill-opacity:1">
+     transform="translate(96,110)"
+     style="fill:#478be6;fill-opacity:1;stroke:none">
     <rect
        class="cap"
        x="694"
@@ -683,12 +629,12 @@
        rx="7"
        fill="#151b23"
        id="rect39-8-2"
-       style="fill:#478be6;fill-opacity:1;stroke:#30363d;stroke-width:1" />
+       style="fill:#478be6;fill-opacity:1;stroke:none;stroke-width:1" />
   </g>
   <g
      transform="rotate(-13,552.4932,991.9018)"
      id="g42-76-3"
-     style="fill:#946cdc;fill-opacity:1">
+     style="fill:#946cdc;fill-opacity:1;stroke:none">
     <rect
        class="cap"
        x="774.40002"
@@ -698,12 +644,12 @@
        rx="7"
        fill="#151b23"
        id="rect42-0-8"
-       style="stroke:#30363d;stroke-width:1;fill:#946cdc;fill-opacity:1" />
+       style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
   </g>
   <g
      transform="matrix(-0.97437006,-0.22495105,-0.22495105,0.97437006,1366.969,149.70631)"
      id="g42-76-3-2"
-     style="fill:#946cdc;fill-opacity:1">
+     style="fill:#946cdc;fill-opacity:1;stroke:none">
     <rect
        class="cap"
        x="774.40002"
@@ -713,22 +659,7 @@
        rx="7"
        fill="#151b23"
        id="rect42-0-8-2"
-       style="fill:#946cdc;stroke:#30363d;stroke-width:1;fill-opacity:1" />
-  </g>
-  <g
-     transform="matrix(1.1459885,-0.00100035,9.051028e-4,1.2665753,-111.54307,-328.70142)"
-     id="g44-9-9"
-     style="fill:#e35a52;fill-opacity:1">
-    <rect
-       class="cap"
-       x="632"
-       y="323.39999"
-       width="64"
-       height="96"
-       rx="7"
-       fill="#151b23"
-       id="rect44-7-7"
-       style="fill:#e35a52;fill-opacity:1;stroke:#30363d;stroke-width:1" />
+       style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
   </g>
   <g
      id="g50-5"
@@ -953,8 +884,4 @@
      style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:13;stroke-linejoin:round;stroke-opacity:0.94902;paint-order:markers stroke fill"
      d="m 607.23242,363.52344 53.21289,82.02929"
      id="path1" />
-  <path
-     style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:13;stroke-linejoin:round;stroke-opacity:0.94902;paint-order:markers stroke fill"
-     d="m 607.23242,363.52344 53.21289,82.02929"
-     id="path2" />
 </svg>

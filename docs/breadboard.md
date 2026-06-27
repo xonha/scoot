@@ -1,83 +1,44 @@
-# Scoot — breadboard prototype (stage 1)
+# Scoot — prototype (stage 2)
 
-Prove the keyboard-and-mouse **core** on a breadboard before committing to a PCB — dev modules + jumper wires, nothing permanent, ~$30. The final PCB swaps in the bare chips ([docs/schematic.md](schematic.md)); the firmware is identical (same RP2040).
+Prove the **firmware and pointing-over-split** before committing to a custom PCB. The fastest path isn't a breadboard — it's an existing **Corne** (the layout Scoot adopts) plus a bought sensor breakout. A XIAO/RP2040 Corne is already a two-MCU split running QMK, so the keyboard, the split, and the encoders are done; the only new thing to bring up is the mouse sensor.
 
-**Stage it:** skip the USB hub and USB-A dongle for now — plug the Pico straight into your PC. Prove the core first, add the hub later, *then* lay out the PCB.
+**What this stage proves:** hold-to-mouse, click remapping, and the PMW3360 reporting from the *secondary* half to the *primary* over the split link.
+**What it can't prove:** the physical desk-mouse (lifting/sliding the half, the ~10 mm standoff, glide, re-homing). That waits for the standalone PCB (stage 3).
 
 ## Parts
 
 | Qty | Part | Note |
 | --- | --- | --- |
-| 1 | Raspberry Pi Pico (H, with headers) | same RP2040 as the final board |
-| 1 | MCP23017 breakout | the IO expander |
-| 1 | PMW3360 motion-sensor breakout | lens fitted |
-| 2 | EVQWGD001 clickable roller (or EC11 stand-ins) | left = volume / play-pause, right = scroll / middle-click |
-| ~8 | MX / tactile switches | test keys |
-| ~10 | 1N4148 diodes | one per test key |
-| 2 | 4.7 kΩ resistors | I²C pull-ups |
-| 1–2 | solderless breadboard + jumper wires | M-M and M-F |
-| 1 | USB cable for the Pico | data, not charge-only |
+| 1 | Corne (XIAO RP2040 preferred, runs QMK; nRF/ZMK works but firmware won't port) | the keyboard + split + encoders, already working |
+| 1 | PMW3360 or PMW3389 motion-sensor breakout | lens fitted; AliExpress/Tindie |
+| — | thin wire (magnet/silicone) + Dupont jumpers | to wire the sensor to one half |
 
-## Wiring
+> If you don't have a Corne yet, a literal breadboard with two RP2040 boards + a sensor breakout works too — but the Corne is cheaper to get running and ergonomically real for the typing side.
 
-Power everything from the Pico's **3V3 (OUT)** → breadboard **+ rail**, and **GND** → **− rail**.
+## Which half gets the sensor
 
-**Pico (RP2040)**
+Mount the sensor on the half **not** connected to USB, and plug USB into the **left**, so left = primary, right = secondary + sensor — mirroring Scoot. In QMK: `SPLIT_POINTING_ENABLE` + `#define POINTING_DEVICE_RIGHT`.
 
-| Pico pin | → | Net |
+## Wiring the sensor (6 lines)
+
+The sensor talks SPI to the **local** MCU on its half; nothing extra crosses the split cable (the split protocol already carries pointing reports).
+
+| Breakout pin | → | Net |
 | --- | --- | --- |
-| GP14 / GP15 / GP8 / GP9 | → | sensor SCLK / MOSI / MISO / NCS (SPI) |
-| GP18 / GP19 | → | expander SDA / SCL (I²C) |
-| GP4 / GP5 | → | left roller A / B |
-| GP26 / GP27 | → | right roller A / B |
-| GP0–GP3 | → | left matrix rows (start GP0, GP1) |
-| GP6, GP7, GP10–GP13 | → | left matrix cols (start GP6, GP7) |
-| 3V3(OUT) / GND | → | + rail / − rail |
+| VI / VCC | → | 3V3 (check module voltage; many regulate 3.3–5 V) |
+| GND | → | GND |
+| SCLK / MOSI / MISO / NCS | → | four free GPIO on that half's MCU |
+| MT (motion) | → | leave unconnected |
 
-**MCP23017 (expander)**
+**Finding 4 free GPIO:** the OLED header conveniently breaks out VCC/GND/SDA/SCL — repurpose SDA/SCL as two SPI signals (they're just GPIO to the firmware) and take power from the same header. Get the other two from the freed RGB pin and a spare pad. On a XIAO RP2040 you have hardware SPI and a bit more room; SPI clock is low, so bit-banged pins on any GPIO are fine. Keep the wires short (≲10–15 cm).
 
-| Pin | → |
-| --- | --- |
-| VDD / VSS | + rail / − rail |
-| SDA / SCL | Pico GP18 / GP19 |
-| A0, A1, A2 | GND (I²C address 0x20) |
-| RESET | 3V3 (tie high) |
-| GPB0–3 | right matrix rows |
-| GPA0–5 | right matrix cols |
+For testing tracking, just set the breakout lens-down and slide it, or wave a textured surface under the lens — it doesn't need the final standoff to prove it works.
 
-Add **4.7 kΩ** from SDA→3V3 and SCL→3V3 (I²C pull-ups).
+## Build in stages
 
-**PMW3360 breakout**
+1. **Baseline** — flash the Corne with your QMK config; confirm both halves type and the encoders work. *Verify: normal split keyboard.*
+2. **Sensor** — wire the breakout to the secondary half, enable the pointing device + split pointing. *Verify: sliding a surface under the lens moves the cursor.*
+3. **Hold-to-mouse** — add the layer: hold a left thumb key → right finger keys remap to L/R/M click, left modifiers stay live, both rollers stay live. *Verify: typing works, and the thumb-hold turns the right keys into mouse buttons while the sensor drives the cursor.*
 
-| Pin | → |
-| --- | --- |
-| VCC / GND | + rail / − rail |
-| SCLK / MOSI / MISO / NCS | Pico GP14 / GP15 / GP8 / GP9 |
-| MOT | leave unconnected |
-
-**Encoders**
-
-| Pin | → |
-| --- | --- |
-| Left roller A / B / C | Pico GP4 / GP5 / GND |
-| Left roller push | a node in the left test matrix (or a spare GPIO for now) |
-| Right roller A / B / C | Pico GP26 / GP27 / GND |
-| Right roller push | a node in the right (MCP23017) test matrix (or a spare GPIO for now) |
-
-Each roller is an EVQWGD001: rotation on A/B (common to GND) plus an SPST push. On the final board each push is a matrix node; on the breadboard wiring it to a spare GPIO is fine to prove the press.
-
-**Test matrices** (2×2 each side to start)
-
-- Left: rows → GP0, GP1 · cols → GP6, GP7
-- Right: rows → MCP GPB0, GPB1 · cols → MCP GPA0, GPA1
-- Each key: `col → switch → diode → row`, diode **banded end toward the row** (COL2ROW).
-
-## Build in 5 stages
-
-1. **Power rails** — 3V3/GND rails, Pico on USB. *Verify: Pico enumerates on your PC.*
-2. **Expander + one key** — wire the MCP23017 + one switch/diode on GPA0/GPB0. *Verify: that key registers (matrix-over-I²C works).*
-3. **Sensor** — wire the PMW3360 (power + 4 SPI lines). *Verify: cursor moves when you slide a surface under the lens.*
-4. **Encoders** — left roller → volume (push = play-pause), right roller → scroll (push = middle-click). *Verify: each rotation and press does the right thing.*
-5. **Expand + mouse-mode** — more keys both sides; load the real keymap with hold-to-mouse. *Verify: typing works, and the thumb-hold turns the right keys into mouse clicks.*
-
-Firmware: a QMK build with a **custom matrix** (reads the Pico's direct pins + the MCP23017 over I²C), the **PMW3360 pointing driver**, and the **hold-to-mouse** layer. That sketch is the next software step.
+Firmware: a QMK build with **`DIRECT_PINS`** (matching Scoot's diodeless wiring — though a stock Corne uses a diode matrix, so you keep its matrix here and only adopt `DIRECT_PINS` on the standalone PCB), the **PMW33xx pointing driver**, **split pointing**, and the **hold-to-mouse** layer. That keymap is what carries forward to the standalone board.
+</content>

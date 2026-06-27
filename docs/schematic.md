@@ -1,183 +1,135 @@
-# Scoot — Schematic design (rev 0.3, WIP)
+# Scoot — Schematic design (rev 0.4, WIP)
 
-Net-level design capture — the spec a KiCad schematic transcribes. The architecture is now **locked**; what remains is drawing it and finalizing component values/footprints in the EDA tool.
+Net-level design capture — the spec a KiCad schematic transcribes. This rev replaces the earlier single-controller / IO-expander / matrix-with-diodes design (rev 0.3) with a **two-MCU true split, direct-wired (no diodes), hand-built from modules**.
 
 ## Architecture decisions (locked)
 
-- **Pointing:** desk-mouse, PMW3360 sensor (on a breakout, lens fitted).
-- **One MCU:** **bare RP2040** on the left half (not the RP2040-Zero module) — clean USB routing into the hub, and JLCPCB assembles it so the reflow isn't ours to do. Copy a proven RP2040 reference circuit (Pico-class) for the flash/crystal/regulator/boot subsystem; don't freelance it.
-- **Right half is near-passive:** it carries one *dumb* chip — an **MCP23017 I²C IO expander (U6)** — that scans the right matrix locally. No firmware on the right. This resolves the tether shortfall (below).
-- **Tether:** **USB-C**, full-featured cable. Only ~10 conductors cross, so it fits comfortably.
-- **Hub:** FE1.1s on the left (host + RP2040 + USB-A dongle behind one cable).
-- **Assembly:** JLCPCB PCBA places all SMD parts — RP2040, hub, expander, flash, **the PMW3360 sensor (it's a cataloged LCSC part)**, passives, hotswap sockets; you hand-finish only the **sensor lens**, switches, and the two encoders. See the split BOM at the end.
+- **Pointing:** desk-mouse, PMW3360 (or PMW3389) sensor on an assembled breakout, lens fitted.
+- **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required.
+- **Right half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the left over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
+- **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
+- **Layout: 5 columns, 36 keys (3×5 + 3 thumb per half), fixed.** No detachable outer column.
+- **Tether:** a thin serial link — UART (single-wire half-duplex via RP2040 PIO, or 2-wire) + power + GND, ~4 conductors. A slim/coiled cable works since no SPI/I²C crosses.
+- **Build:** off-the-shelf modules + a sensor breakout, soldered (and socketed where useful) onto a custom PCB. Hotswap sockets are hand-soldered SMD; switches push in. A fab-assembled "bare" revision is a future option only (see README roadmap).
+
+## Per-half GPIO budget (resolved)
+
+Each MCU only handles its own half, so direct wiring fits with margin on a ~29-pin board:
+
+| Function | Left pins | Right pins |
+| --- | --- | --- |
+| 18 keys (3×5 finger + 3 thumb), direct | 18 | 18 |
+| Roller encoder A / B | 2 | 2 |
+| Roller push (direct GPIO) | 1 | 1 |
+| Mouse sensor SPI (SCK/MOSI/MISO/CS) | — | 4 |
+| Inter-half UART link | 1 | 1 |
+| **Total** | **22 / 29** | **26 / 29** |
+
+> Verify the chosen module actually breaks out ~29 *usable* GPIO — a couple of pins are often reserved for an onboard LED/NeoPixel or BOOT. The budget above assumes single-wire UART; a 2-wire link costs one more pin on each side (still fits).
 
 ## Tether conductor budget (resolved)
 
-With the expander scanning the right matrix, the raw matrix lines no longer cross — only the expander's I²C does:
-
-| Signal group | Conductors |
+| Signal | Conductors |
 | --- | --- |
-| I²C to expander (SDA, SCL) | 2 |
-| PMW3360 SPI (SCK, MOSI, MISO, CS) | 4 |
-| Right roller (A, B) — kept direct for reliable scroll | 2 |
-| **Signal subtotal** | **8** |
-| Power (3V3 + GND) | 2 |
-| **Total** | **10** |
+| UART data (single-wire half-duplex; 2 if full-duplex) | 1–2 |
+| Power (3V3 or 5V) | 1 |
+| GND | 1 |
+| **Total** | **3–4** |
 
-A full-featured USB-C cable carries ~13 signal wires + VBUS/GND, so 8 signals leave **~4–5 spare**. Comfortable. The right roller's *push* adds nothing here — it's read as a node in the expander-scanned right matrix, so only its A/B rotation lines cross.
+No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which the roaming right half needs. A simple 4-conductor cable (TRRS, JST, or a captive soldered cable) is sufficient; nothing here requires USB-C.
 
-> ⚠ **J3 is a USB-C *connector* carrying non-USB signals** — a proprietary pinout, not a USB port. Plugging a charger or real USB device into J3 can feed 5 V into the 3V3/signal lines and damage the board. **Label or mechanically key J3**, and only ever use the Scoot tether cable. (The host port J1 *is* real USB and is safe to treat normally.)
+> **Power & flashing caution.** The right module is powered over the tether *and* has its own USB-C used for flashing/debug. Don't let both feed power at once: either unplug the tether before flashing the right half, or send 5 V over the tether to the module's 5V/VIN pin and Schottky-diode-OR it against the USB VBUS so either source can power the board safely.
 
 ## Sheet plan
 
 | # | Sheet | Status |
 | --- | --- | --- |
-| 1 | Power & host USB | locked |
-| 2 | USB hub (U2) | locked |
-| 3 | MCU core — bare RP2040 (U1) | locked (copy reference) |
-| 4 | Key matrix (split: left direct / right via expander) | locked |
-| 5 | Pointing sensor (U3) | locked |
-| 6 | Encoders | locked |
-| 7 | Inter-half tether (J3) | locked |
-| 8 | Right-half expander (U6) | locked |
+| 1 | Left controller (RP2040 module) + host USB | locked |
+| 2 | Right controller (RP2040 module) | locked |
+| 3 | Direct-wired keys (both halves) | locked |
+| 4 | Pointing sensor (U_R, on right) | locked |
+| 5 | Encoders (rollers, both halves) | locked |
+| 6 | Inter-half tether (serial link) | locked |
 
-## RP2040 GPIO map (master)
+## Sheet 1 — Left controller (primary) *(locked)*
 
-20 of 30 GPIO used; 10 spare (GP16, GP17, GP20–25, GP28, GP29).
+- An RP2040 "Pro Micro" module. Its onboard USB-C is the **host link** (this half enumerates to the PC). QMK runs here as the split **primary**.
+- Direct-wired left keys + left roller on its GPIO (see Sheet 3 / budget).
+- One pin to the UART tether; 3V3 (or 5V) + GND out to the tether to power the right half.
 
-| Function | Pins |
-| --- | --- |
-| Left matrix rows R0–R3 | GP0, GP1, GP2, GP3 |
-| Left matrix cols C0–C5 | GP6, GP7, GP10, GP11, GP12, GP13 |
-| Left roller A / B | GP4, GP5 |
-| Sensor SPI (SPI1): SCK / MOSI / MISO / CS | GP14 / GP15 / GP8 / GP9 |
-| Expander I²C (I²C1): SDA / SCL | GP18 / GP19 |
-| Right roller A / B (direct, across tether) | GP26 / GP27 |
+## Sheet 2 — Right controller (secondary) *(locked)*
 
----
+- A second RP2040 "Pro Micro" module, the split **secondary**. Its onboard USB-C is used only for **flashing/debug** — the right half never connects to the host (see the power caution above).
+- Direct-wired right keys + right roller + the PMW3360 SPI + one UART pin.
 
-## Sheet 4 — Key matrix *(locked)*
+## Sheet 3 — Direct-wired keys *(locked)*
 
-**Two independent sub-matrices**, combined into one logical keymap by a QMK custom matrix:
+- **No matrix, no diodes.** Each switch: one terminal to a dedicated **GPIO**, the other to **GND**. Firmware enables the internal pull-up and reads the pin low = pressed (QMK `DIRECT_PINS`).
+- 18 keys per half: 15 finger (3 rows × 5 cols) + 3 thumb.
+- **Hotswap:** Kailh hotswap sockets, hand-soldered (two pads each); a **switch plate** is required so switch-swap pull-out force loads the plate, not the solder joints.
+- Roller push is just another direct key GPIO (Sheet 5).
 
-- **Left half** — a 4×6 matrix read **directly by the RP2040** (rows R0–R2 = finger rows, R3 = thumb row; 6 columns). 21 keys + the left roller click = 22 of 24 nodes.
-- **Right half** — a 4×6 matrix read **by the MCP23017 (U6)** over I²C (same row/col layout). 21 keys + the right roller click = 22 of 24 nodes.
+## Sheet 4 — Pointing sensor (U_R, PMW3360/PMW3389) *(locked)*
 
-Both are `COL2ROW` with one diode per key.
+On an **assembled breakout with the lens fitted**, mounted face-down, read by the **right** MCU over local SPI. Only pointing *reports* cross the tether (via the split protocol), never SPI.
 
-**Per-key cell:** `COLn — switch — D(anode→cathode) — ROWm`, i.e. **diode cathode (banded end) to the ROW net**. (COL2ROW: rows driven low, columns read with pull-ups → current flows col→row. A flipped diode kills that matrix — verify before routing.)
-
-- **Left roller push (SW_ENCL):** a node in the left thumb row (R3).
-- **Right roller push (SW_ENCR):** a node in the right thumb row (R3), scanned by the expander — so it costs no extra tether conductor.
-- **Detachable outer column:** the outer finger column (one column net per half) sits on a removable PCB section; unpopulating it gives the 5-col / 36-key build. Row/col counts and the GPIO map are unchanged.
-- The MCP23017's internal pull-ups are weak (~100 kΩ); add external column pull-ups on the right board if scan reliability needs it.
-
----
-
-## Sheet 5 — Pointing sensor (U3, PMW3360) *(locked, embedded)*
-
-The sensor is **embedded directly on the right-half PCB — no breakout.** The sub-circuit is adapted from [siderakb/pmw3360-pcb](https://github.com/siderakb/pmw3360-pcb) (CERN-OHL-P) in its **3.3 V-direct** mode, so the breakout's LDO and level-shifter are dropped. JLCPCB places U3 (cataloged LCSC part); you hand-mount only the lens. SPI still crosses J3 to the RP2040 on the left.
-
-| U3 pin | Net | RP2040 |
+| Breakout pin | Net | Right MCU |
 | --- | --- | --- |
-| SCLK | SPI1_SCK | GP14 |
-| MOSI | SPI1_TX | GP15 |
-| MISO | SPI1_RX | GP8 |
-| NCS | PMW3360_CS | GP9 |
-| VDD / VDDIO | 3V3 | direct — no LDO/level-shifter (board is 3.3 V) |
+| SCLK | SPI_SCK | a GPIO |
+| MOSI | SPI_TX | a GPIO |
+| MISO | SPI_RX | a GPIO |
+| NCS | SENSOR_CS | a GPIO |
+| VI / VCC | 3V3 (check module: many regulate 3.3–5 V) | — |
 | GND | GND | — |
-| MOTION | — | NC (QMK polls; wire to a spare GPIO only for motion interrupts) |
+| MT (motion) | NC | wire to a spare GPIO only for interrupt-driven polling |
 
-Support: 4.7 µF + 1 µF + 100 nF decoupling per the PMW3360 datasheet. SPI clock stays ≤ ~2 MHz in QMK, fine over the tether.
+- Decoupling per the module (it usually carries its own caps; the PMW3360 wants 4.7 µF + 1 µF + 100 nF nearby). SPI clock stays low (≤ ~2 MHz), trivial on short local traces.
+- **Lens/standoff:** the breakout's lens needs the **~10 mm sensor-to-surface standoff** and a clean optical window in the bottom plate. This sets the right half's bottom-cavity height. Hold it rigid and consistent or tracking suffers.
+- If pins are tight in a future 6-column variant, a **PMW3610** (3-wire SPI, shared SDIO → 3 pins) frees one GPIO.
 
-**Lens (LM19-LSI):** hand-mounted onto U3 — add the lens alignment holes and the sensor-to-surface standoff per the lens datasheet. This optical geometry is the one thing the breakout repos under-document; get it right or it won't track.
-
----
-
-## Sheet 6 — Encoders *(locked)*
+## Sheet 5 — Encoders *(locked)*
 
 Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, plus an SPST push). Same part on each half.
 
 | Enc | Half | A | B | Common | Push | Function |
 | --- | --- | --- | --- | --- | --- | --- |
-| ENC1 (roller) | left | GP4 | GP5 | GND | in left matrix (R3) | volume / play-pause |
-| ENC2 (roller) | right | GP26 | GP27 | GND | in right matrix (R3, via expander) | scroll / middle-click |
+| ENC_L (roller) | left | GPIO | GPIO | GND | direct GPIO | volume / play-pause |
+| ENC_R (roller) | right | GPIO | GPIO | GND | direct GPIO | scroll / middle-click |
 
-100 nF A/B-to-GND debounce caps per encoder (optional small series R). Left roller A/B/push are local to the left board; right roller A/B cross J3 (part of the tether budget) while its push rides the expander-scanned matrix — no extra tether conductor. Debounce caps sit on each roller's own board.
+100 nF A/B-to-GND debounce caps per encoder (optional small series R). Each roller is local to its own half's MCU — nothing encoder-related crosses the tether.
 
----
+## Sheet 6 — Inter-half tether (serial link) *(locked)*
 
-## Sheet 7 — Inter-half tether (J3, USB-C) *(locked)*
-
-Suggested wire mapping onto a full-featured USB-C cable (exact pin pairs finalize at layout):
-
-| USB-C wire | Scoot net | | USB-C wire | Scoot net |
-| --- | --- | --- | --- | --- |
-| VBUS | 3V3 | | RX1± | MISO, CS |
-| GND | GND | | TX2± | Right roller A, B |
-| D+ / D− | SDA, SCL | | RX2±, SBU1/2, CC | spare (~5) |
-| TX1± | SCK, MOSI | | | |
-
-Power is sent as **3V3** (regulated on the left), so the right half needs no regulator. See the not-USB caution above.
+- One UART data line between the two MCUs (QMK split serial; RP2040 supports a single-wire half-duplex transport over PIO, or use 2 wires for full-duplex), plus power + GND. ~3–4 conductors total (see budget).
+- Connector: a simple 4-pin link (TRRS / JST / pin header) or a captive soldered cable. The roaming right half favors a flexible/coiled cable; a captive cable avoids a wear-prone connector entirely.
+- Power sent from the left (host-powered). See the power & flashing caution above.
 
 ---
 
-## Sheet 8 — Right-half expander (U6, MCP23017) *(locked)*
+## BOM — hand-built
 
-- I²C from the RP2040 over J3 (SDA/SCL); address pins A0–A2 tied for a fixed address; RESET tied high; 100 nF decoupling.
-- 10 of its 16 GPIO drive/read the right 4×6 matrix (GPB0–3 = rows, GPA0–5 = cols); 6 spare. The right roller's push is just an unpopulated node in this matrix (right thumb row, R3), so it adds no GPIO.
-- I²C pull-ups (~4.7 kΩ) on SDA/SCL — place on the **left** board (at the MCU) so the right half stays minimal.
+### Per half
 
----
-
-## Sheets 1–3 — Power, hub, MCU *(locked)*
-
-**Sheet 1 — Power:** J1 VBUS (5 V) → U4 (AP2112K-3.3) → 3V3 rail. J1 CC1/CC2 → 5.1 kΩ pulldowns (present as a USB device). 3V3 feeds the RP2040, and crosses J3 to power the expander + sensor on the right. Bulk + per-rail decoupling.
-
-**Sheet 2 — USB hub (U2, FE1.1s):** upstream ⟷ J1 D+/D−; downstream 1 ⟷ U1 RP2040 USB; downstream 2 ⟷ J2 USB-A; +2 spare. Y2 12 MHz + load caps, 15 kΩ downstream D± pulldowns, bus-powered strap, decoupling. Optional polyfuse on J2 VBUS.
-
-**Sheet 3 — MCU core (U1, bare RP2040):** Y1 12 MHz + load caps, U5 W25Q128 QSPI flash, BOOT button (QSPI_CS→GND), RUN/reset, core-LDO cap on the RP2040, generous decoupling, USB D± → hub downstream 1, USB ESD. **Copy a proven RP2040 reference (the Pico schematic) for this subsystem.**
-
----
-
-## BOM — split by who solders it
-
-### JLCPCB assembles (PCBA, machine-placed SMD)
-
-**Left board**
-
-| Ref | Part | Package |
+| Ref | Part | Notes |
 | --- | --- | --- |
-| U1 | RP2040 | QFN-56 |
-| U5 | W25Q128 QSPI flash | SOIC-8 |
-| U4 | AP2112K-3.3 LDO | SOT-23-5 |
-| Y1 | 12 MHz crystal | SMD |
-| U2 | FE1.1s USB 2.0 hub | SSOP-28 |
-| Y2 | 12 MHz crystal | SMD |
-| J1 | USB-C receptacle (host) | SMD |
-| J2 | USB-A receptacle (dongle) | SMD if available |
-| D… | 1N4148W left matrix diodes | SOD-123 |
-| — | Kailh hotswap sockets (left) | SMD |
-| — | passives: 5.1 kΩ ×2, 4.7 kΩ I²C pull-ups, 15 kΩ ×N, left roller debounce caps, decoupling, crystal caps, polyfuse | SMD |
+| U | RP2040 "Pro Micro" module | ~29 GPIO; onboard USB-C (host on left, flash-only on right) |
+| SW… | Kailh hotswap sockets ×18 | hand-soldered SMD; needs a switch plate |
+| ENC | EVQWGD001 clickable roller | through-hole/niche; hand-soldered |
+| — | passives: encoder debounce caps; UART/power link parts | SMD or THT |
 
-**Right board**
+### Right half only
 
-| Ref | Part | Package |
+| Ref | Part | Notes |
 | --- | --- | --- |
-| U3 | PMW3360 sensor (LCSC C20612443) | embedded; lens added by hand |
-| U6 | MCP23017 IO expander | SOIC-28 |
-| D… | 1N4148W right matrix diodes | SOD-123 |
-| J3 | USB-C receptacle (tether) | SMD |
-| — | Kailh hotswap sockets (right) | SMD |
-| — | passives: sensor decoupling (4.7 µF / 1 µF / 100 nF), roller debounce caps, optional column pull-ups | SMD |
+| U_R | PMW3360 / PMW3389 breakout (lens fitted) | AliExpress/Tindie; SPI to the right MCU |
 
 ### You hand-finish
 
-| Item | Why it's not fab-assembled |
+| Item | Why |
 | --- | --- |
-| LM19-LSI lens | optical/mechanical — snaps onto the fab-placed U3; add alignment holes + standoff per the lens datasheet |
-| Key switches | push into the fab-placed hotswap sockets — **no soldering** (or hand-solder if solder-in) |
-| ENC1, ENC2 — EVQWGD001 clickable rollers (×2) | through-hole / niche, not in LCSC catalog; hand-soldered |
-| Case, plate, lens window, tether cable, final assembly | mechanical |
+| Key switches | push into the hand-soldered hotswap sockets |
+| Sensor breakout + lens standoff | mount face-down; set the ~10 mm optical standoff + bottom-plate window |
+| Case, plate, tether cable, final assembly | mechanical |
 
-> Use **LCSC-catalog parts** so JLCPCB can source them; prefer "Basic" parts to dodge feeder fees, and verify stock at order time for the Extended ones — **FE1.1s, RP2040, MCP23017, and the PMW3360 (C20612443, ~$0.90, MOQ ~4 / reel 200; JLCPCB's own stock can read 0 while LCSC has it)**. With the hotswap sockets and the sensor both fab-placed, your soldering iron only touches the **two encoders**, and your hands only **snap on the lens**.
+> Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's header. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360, and the integrated fingerprint USB hub) — see the README roadmap.
+</content>
