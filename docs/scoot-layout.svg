@@ -25,27 +25,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showguides="true"
-     inkscape:zoom="2"
-     inkscape:cx="496.25"
-     inkscape:cy="192.5"
+     inkscape:zoom="1"
+     inkscape:cx="419.5"
+     inkscape:cy="168"
      inkscape:window-width="1900"
      inkscape:window-height="1028"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg49"
-     inkscape:document-units="mm">
-    <sodipodi:guide
-       position="443.96363,379.99999"
-       orientation="0,-1"
-       id="guide46"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="667.18516,217.05093"
-       orientation="0,-1"
-       id="guide47"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
+     inkscape:document-units="mm" />
   <style
      id="style1">
   .canvas { fill: #262c36; }
@@ -62,277 +51,540 @@
      width="983"
      height="427"
      id="rect1" />
-  <path
-     id="path75-8-6"
-     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#30363d;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;enable-background:accumulate;stop-color:#000000"
-     d="m 845.00391,49.523438 c -7.3665,-10e-7 -13.5,6.133428 -13.5,13.5 v 3.5 c -2.349,-1.96646 -5.2503,-3.300782 -8.5,-3.300782 h -50 c -5.8966,0 -10.94485,3.95429 -12.74805,9.300782 h -9.25195 -50 -32.50782 -25 -25 c -7.3665,0 -13.5,6.13343 -13.5,13.5 v 30.267582 19.73242 0.004 219.69336 c -0.0703,2.6298 0.65841,5.31103 2.14063,7.63086 l -0.0195,-0.006 0.11523,0.17774 c 0,0 29.11529,23.59358 48.59961,70.03906 0,0 4.61231,11.99024 14.33008,3.83594 0.0447,-0.0375 0.0892,-0.0742 0.13281,-0.11133 l 9.58594,-8.04297 0.002,-0.002 5.69336,-4.77735 4.47266,-3.75195 1.00976,-0.84766 26.95899,-22.62109 13.31054,-9.71094 43.86329,-21.39258 15.625,-4.20703 14.52539,-3.35156 6.17187,-1.42578 3.54883,-0.81836 a 6.50065,6.50065 0 0 0 0.125,-0.0293 l 14.57227,-3.36523 2.55664,-0.58984 0.34375,-0.0801 8.77343,-2.03711 c 0.004,-0.002 0.007,-0.002 0.0117,-0.004 0.86448,-0.30367 1.92237,-0.79543 3.00196,-1.58984 l 0.0547,0.51953 c 0.057,-0.005 0.11378,-0.0135 0.17188,-0.0195 12.6187,-1.30253 7.21875,-12.95899 7.21875,-12.95899 -1.99749,-4.67507 -3.75887,-9.25794 -5.3125,-13.7207 a 41.719299,41.719299 0 0 1 -0.70313,-7.62305 41.719299,41.719299 0 0 1 41.71875,-41.7207 41.719299,41.719299 0 0 1 9.125,1.08984 l 0.008,-0.0781 1.67968,0.41406 a 41.719299,41.719299 0 0 1 0.002,0 l 77.06445,18.97852 H 989 h 50 c 7.3665,0 13.5,-6.13344 13.5,-13.5 v -25 -25 -22 -50 -22 -25 -25.000002 c 0,-7.366571 -6.1335,-13.5 -13.5,-13.5 h -50 -8.5 v -2.300782 c 0,-7.36657 -6.1334,-13.5 -13.5,-13.5 h -50 c -3.3819,0 -6.42059,1.398546 -8.80859,3.509766 C 906.87801,54.172212 901.4107,49.523438 895,49.523438 Z" />
-  <path
-     id="path75-8-6-2"
-     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#30363d;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;enable-background:accumulate;stop-color:#000000"
-     d="m 312.99572,49.523459 c 7.3665,0 13.5,6.13343 13.5,13.5 v 3.5 c 2.349,-1.96646 5.2503,-3.30078 8.5,-3.30078 h 50 c 5.8966,0 10.94485,3.95429 12.74805,9.30078 h 9.25195 50 32.50782 25 25 c 7.3665,0 13.5,6.13343 13.5,13.5 v 30.267581 19.73242 0.004 219.69336 c 0.0703,2.6298 -0.65841,5.31103 -2.14063,7.63086 l 0.0195,-0.006 -0.11523,0.17774 c 0,0 -29.11529,23.59358 -48.59961,70.03906 0,0 -4.61231,11.99024 -14.33008,3.83594 -0.0447,-0.0375 -0.0892,-0.0742 -0.13281,-0.11133 l -9.58594,-8.04297 -0.002,-0.002 -5.69336,-4.77735 -4.47266,-3.75195 -1.00976,-0.84766 -26.95899,-22.62109 -13.31054,-9.71094 -43.86329,-21.39258 -15.625,-4.20703 -14.52539,-3.35156 -6.17187,-1.42578 -3.54883,-0.81836 a 6.50065,6.50065 0 0 1 -0.125,-0.0293 l -14.57227,-3.36523 -9.66015,-2.23047 a 6.50065,6.50065 0 0 1 0,-0.002 l -78.86524,0.002 -57.18945,-57.18945 h -13.52531 -50.00005 c -7.3665,0 -13.5,-6.13344 -13.5,-13.5 v -25 -25 -22 -50 -22 -25 -25.000001 c 0,-7.36657 6.1335,-13.5 13.5,-13.5 h 50.00005 8.5 v -2.30078 c 0,-7.36657 6.1334,-13.5 13.5,-13.5 h 50 c 3.3819,0 6.42059,1.39854 8.80859,3.50976 1.3134,-6.06021 6.78071,-10.70889 13.19141,-10.70889 z M 487.82775,430.99807 c -0.0821,0.0176 -0.15223,0.0434 -0.23242,0.0625 0.0801,-0.0191 0.15045,-0.0449 0.23242,-0.0625 z m -1.52734,0.47656 c -0.0654,0.0294 -0.12356,0.0624 -0.18555,0.0937 0.0619,-0.0313 0.12019,-0.0644 0.18555,-0.0937 z m -0.42383,0.21875 c -0.0435,0.0258 -0.0799,0.055 -0.12109,0.082 0.0411,-0.0269 0.0777,-0.0563 0.12109,-0.082 z m -0.76562,0.67773 c -0.0164,0.0238 -0.0319,0.0479 -0.0469,0.0723 0.015,-0.0244 0.0305,-0.0485 0.0469,-0.0723 z m -0.18164,0.34766 c -0.009,0.0238 -0.0158,0.048 -0.0234,0.0723 0.008,-0.0242 0.0147,-0.0486 0.0234,-0.0723 z m -0.0527,0.17578 c -0.006,0.0236 -0.009,0.0482 -0.0137,0.0723 0.004,-0.024 0.008,-0.0487 0.0137,-0.0723 z m -0.0351,0.20313 c -0.002,0.018 -0.003,0.0364 -0.004,0.0547 0.001,-0.0182 0.002,-0.0367 0.004,-0.0547 z m -0.008,0.20312 c 4e-4,0.0173 0.003,0.0352 0.004,0.0527 -9e-4,-0.0176 -0.004,-0.0354 -0.004,-0.0527 z m 0.0606,0.4336 c 0.006,0.0237 0.0129,0.0482 0.0195,0.0723 -0.007,-0.0241 -0.0138,-0.0486 -0.0195,-0.0723 z m 0.1582,0.46093 c 0.0338,0.0777 0.0848,0.16118 0.12696,0.24219 -0.0421,-0.0808 -0.0933,-0.16467 -0.12696,-0.24219 z m 0.29297,0.54883 c 0.0449,0.0722 0.10493,0.1499 0.15625,0.22461 -0.0514,-0.0749 -0.11131,-0.15226 -0.15625,-0.22461 z m 0.39844,0.56641 c 0.0844,0.10813 0.18775,0.22483 0.28516,0.33789 -0.0979,-0.11355 -0.20042,-0.22931 -0.28516,-0.33789 z m 0.51563,0.60156 c 0.1987,0.21557 0.48638,0.46417 0.73242,0.69727 -0.24539,-0.23246 -0.53411,-0.48225 -0.73242,-0.69727 z" />
   <g
-     id="g23">
+     id="g3-0"
+     transform="matrix(-1,0,0,1,1155.8701,0)">
     <g
-       id="g5"
-       style="stroke:none">
+       id="g27-6"
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
-         x="112"
+         x="982"
          y="79"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect5"
-         style="stroke:none" />
+         id="rect27-32"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g6"
-       style="stroke:none">
+       id="g28-0"
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
-         x="112"
+         x="982"
          y="151"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect6"
-         style="stroke:none" />
+         id="rect28-6"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g7"
-       style="stroke:none">
+       id="g29-1"
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
-         x="112"
+         x="982"
          y="223"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect7"
-         style="stroke:none" />
+         id="rect29-5"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g8"
+       id="g30-5"
        style="stroke:none">
       <rect
          class="cap"
-         x="184"
+         x="910"
          y="63.200001"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect8"
-         style="stroke:none" />
+         id="rect30-4"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g9"
+       id="g31-7"
        style="stroke:none">
       <rect
          class="cap"
-         x="184"
+         x="910"
          y="135.2"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect9"
-         style="stroke:none" />
+         id="rect31-6"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g10"
+       id="g32-56"
        style="stroke:none">
       <rect
          class="cap"
-         x="184"
+         x="910"
          y="207.2"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect10"
-         style="stroke:none" />
+         id="rect32-9"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g11"
+       id="g33-3"
        style="stroke:none">
       <rect
          class="cap"
-         x="256"
+         x="838"
          y="56"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect11"
-         style="stroke:none" />
+         id="rect33-7"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g12"
+       id="g34-4"
        style="stroke:none">
       <rect
          class="cap"
-         x="256"
+         x="838"
          y="128"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect12"
-         style="stroke:none" />
+         id="rect34-5"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g13"
+       id="g35-25"
        style="stroke:none">
       <rect
          class="cap"
-         x="256"
+         x="838"
          y="200"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect13"
-         style="stroke:none" />
+         id="rect35-4"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g14"
+       id="g36-7"
        style="stroke:none">
       <rect
          class="cap"
-         x="328"
+         x="766"
          y="69.699997"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect14"
-         style="stroke:none" />
+         id="rect36-4"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g15"
+       id="g37-43"
        style="stroke:none">
       <rect
          class="cap"
-         x="328"
+         x="766"
          y="141.7"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect15"
-         style="stroke:none" />
+         id="rect37-0"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g16"
+       id="g38-7"
        style="stroke:none">
       <rect
          class="cap"
-         x="328"
+         x="766"
          y="213.7"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect16"
-         style="stroke:none" />
+         id="rect38-8"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g17"
+       id="g39-68"
        style="stroke:none">
       <rect
          class="cap"
-         x="400"
+         x="694"
          y="79"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect17"
-         style="stroke:none" />
+         id="rect39-8"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g18"
+       id="g40-43"
        style="stroke:none">
       <rect
          class="cap"
-         x="400"
+         x="694"
          y="151"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect18"
-         style="stroke:none" />
+         id="rect40-1"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       id="g19"
+       id="g41-4"
        style="stroke:none">
       <rect
          class="cap"
-         x="400"
+         x="694"
          y="223"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect19"
-         style="stroke:none" />
+         id="rect41-9"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       transform="rotate(13,351.6,318.8)"
-       id="g20"
+       transform="rotate(-13,806.4,318.8)"
+       id="g42-2"
        style="stroke:none">
       <rect
          class="cap"
-         x="319.60001"
+         x="774.40002"
          y="286.79999"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect20"
-         style="stroke:none" />
+         id="rect42-0"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       transform="rotate(26,421.6,342.2)"
-       id="g21"
+       transform="rotate(-26,736.4,342.2)"
+       id="g43-68"
        style="stroke:none">
       <rect
          class="cap"
-         x="389.60001"
+         x="704.40002"
          y="310.20001"
          width="64"
          height="64"
          rx="7"
          fill="#151b23"
-         id="rect21"
-         style="stroke:none" />
+         id="rect43-9"
+         style="stroke:none;stroke-width:1" />
     </g>
     <g
-       transform="rotate(40,494,371.4)"
-       id="g22"
+       transform="rotate(-40,664,371.4)"
+       id="g44-2"
        style="stroke:none">
       <rect
          class="cap"
-         x="462"
+         x="632"
          y="323.39999"
          width="64"
          height="96"
          rx="7"
          fill="#151b23"
-         id="rect22"
-         style="stroke:none" />
+         id="rect44-6"
+         style="stroke:none;stroke-width:1" />
     </g>
+    <g
+       id="g36-99-5-6-6"
+       transform="matrix(1.0625,0,0,1.953125,-199.875,-57.13281)"
+       style="fill:#347d39;fill-opacity:1;stroke:none">
+      <rect
+         class="cap"
+         x="766"
+         y="69.699997"
+         width="64"
+         height="64"
+         rx="7"
+         fill="#151b23"
+         id="rect36-4-8-3-4"
+         style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
+    </g>
+    <g
+       transform="rotate(-13,552.4932,991.9018)"
+       id="g42-76-3-9"
+       style="fill:#946cdc;fill-opacity:1;stroke:none">
+      <rect
+         class="cap"
+         x="774.40002"
+         y="286.79999"
+         width="64"
+         height="64"
+         rx="7"
+         fill="#151b23"
+         id="rect42-0-8-50"
+         style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
+    </g>
+    <g
+       id="usbc-right-4"
+       style="fill:#478be6;fill-opacity:1;stroke:none"
+       transform="rotate(90,676.22741,276.17634)">
+      <rect
+         x="610"
+         y="320"
+         width="34"
+         height="20"
+         rx="3"
+         id="rect-usbc-right-8"
+         style="fill:#478be6;fill-opacity:1;stroke:none" />
+    </g>
+    <path
+       style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:13;stroke-linejoin:round;stroke-opacity:0.94902;paint-order:markers stroke fill"
+       d="m 607.23242,363.52344 53.21289,82.02929"
+       id="path1-7" />
   </g>
   <g
-     id="g45">
+     id="g50-5"
+     transform="translate(154,480)">
+    <g
+       id="g24-49" />
+    <g
+       id="g25-5" />
+    <g
+       id="g26-4" />
+    <g
+       id="g27-9" />
+    <g
+       id="g28-5" />
+    <g
+       id="g29-3" />
+    <g
+       id="g30-7" />
+    <g
+       id="g31-8" />
+    <g
+       id="g32-9" />
+    <g
+       id="g33-7" />
+    <g
+       id="g34-2" />
+    <g
+       id="g35-3" />
+    <g
+       id="g36-9" />
+    <g
+       id="g37-2" />
+    <g
+       id="g38-1" />
+    <g
+       id="g39-6" />
+    <g
+       id="g40-12" />
+    <g
+       id="g41-7" />
+    <g
+       transform="rotate(-13,806.4,318.8)"
+       id="g42-11" />
+    <g
+       transform="rotate(-26,736.4,342.2)"
+       id="g43-0" />
+    <g
+       transform="rotate(-40,664,371.4)"
+       id="g44-6" />
+  </g>
+  <g
+     id="g28-68-7"
+     transform="translate(-216.50776,408)" />
+  <g
+     id="g50-1"
+     transform="translate(87.231749,530.19805)">
+    <g
+       id="g24-9" />
+    <g
+       id="g25-9" />
+    <g
+       id="g26-3" />
+    <g
+       id="g27-0" />
+    <g
+       id="g28-6" />
+    <g
+       id="g29-4" />
+    <g
+       id="g30-0" />
+    <g
+       id="g31-62" />
+    <g
+       id="g32-7" />
+    <g
+       id="g33-6" />
+    <g
+       id="g34-8" />
+    <g
+       id="g35-2" />
+    <g
+       id="g36-29" />
+    <g
+       id="g37-6" />
+    <g
+       id="g38-27" />
+    <g
+       id="g39-1" />
+    <g
+       id="g40-1" />
+    <g
+       id="g41-9" />
+    <g
+       transform="rotate(-13,806.4,318.8)"
+       id="g42-1" />
+    <g
+       transform="rotate(-26,736.4,342.2)"
+       id="g43-9" />
+    <g
+       transform="rotate(-40,664,371.4)"
+       id="g44-0" />
+  </g>
+  <g
+     id="g39-0-5"
+     transform="translate(4.7239886,530.19805)" />
+  <g
+     id="g50-7"
+     transform="translate(-2.178737e-6,447.56486)">
+    <g
+       id="g24-7" />
+    <g
+       id="g25-4" />
+    <g
+       id="g26-1" />
+    <g
+       id="g27-8" />
+    <g
+       id="g28-3" />
+    <g
+       id="g29-8" />
+    <g
+       id="g30-21" />
+    <g
+       id="g31-5" />
+    <g
+       id="g32-1" />
+    <g
+       id="g33-8" />
+    <g
+       id="g34-0" />
+    <g
+       id="g35-4" />
+    <g
+       id="g36-2" />
+    <g
+       id="g37-8" />
+    <g
+       id="g38-28" />
+    <g
+       id="g39-7" />
+    <g
+       id="g40-40" />
+    <g
+       id="g41-2" />
+    <g
+       transform="rotate(-13,806.4,318.8)"
+       id="g42-9" />
+    <g
+       transform="rotate(-26,736.4,342.2)"
+       id="g43-8" />
+    <g
+       transform="rotate(-40,664,371.4)"
+       id="g44-3" />
+  </g>
+  <g
+     id="g39-0-1"
+     transform="translate(-83.007762,447.56486)" />
+  <g
+     id="g24-4"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g25-8"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g26-5"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g27-3"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g28-1"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g29-6"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g30-2"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g31-6"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g32-5"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g33-4"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g34-6"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g35-6"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g36-3"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g37-4"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g38-2"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g39-4"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g40-4"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     id="g41-3"
+     transform="translate(-117.99224,-33.5)" />
+  <g
+     transform="rotate(-13,600.39102,819.8523)"
+     id="g42-7" />
+  <g
+     transform="rotate(-26,604.85166,580.99027)"
+     id="g43-6" />
+  <g
+     transform="rotate(-40,558.98363,516.74051)"
+     id="g44-8" />
+  <g
+     id="g3">
     <g
        id="g27"
-       style="stroke:none">
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
          x="982"
@@ -346,7 +598,8 @@
     </g>
     <g
        id="g28"
-       style="stroke:none">
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
          x="982"
@@ -360,7 +613,8 @@
     </g>
     <g
        id="g29"
-       style="stroke:none">
+       style="stroke:none"
+       transform="translate(0,32.000257)">
       <rect
          class="cap"
          x="982"
@@ -585,312 +839,52 @@
          id="rect44"
          style="stroke:none" />
     </g>
+    <g
+       id="g36-99-5-6"
+       transform="matrix(1.0625,0,0,1.953125,-199.875,-57.13281)"
+       style="fill:#347d39;fill-opacity:1;stroke:none">
+      <rect
+         class="cap"
+         x="766"
+         y="69.699997"
+         width="64"
+         height="64"
+         rx="7"
+         fill="#151b23"
+         id="rect36-4-8-3"
+         style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
+    </g>
+    <g
+       transform="rotate(-13,552.4932,991.9018)"
+       id="g42-76-3"
+       style="fill:#946cdc;fill-opacity:1;stroke:none">
+      <rect
+         class="cap"
+         x="774.40002"
+         y="286.79999"
+         width="64"
+         height="64"
+         rx="7"
+         fill="#151b23"
+         id="rect42-0-8"
+         style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
+    </g>
+    <g
+       id="usbc-right"
+       style="fill:#478be6;fill-opacity:1;stroke:none"
+       transform="rotate(90,676.22741,276.17634)">
+      <rect
+         x="610"
+         y="320"
+         width="34"
+         height="20"
+         rx="3"
+         id="rect-usbc-right"
+         style="fill:#478be6;fill-opacity:1;stroke:none" />
+    </g>
+    <path
+       style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:13;stroke-linejoin:round;stroke-opacity:0.94902;paint-order:markers stroke fill"
+       d="m 607.23242,363.52344 53.21289,82.02929"
+       id="path1" />
   </g>
-  <g
-     id="g36-99-5"
-     transform="matrix(1.0625,0,0,1.953125,-337.875,-66.13)"
-     style="fill:#347d39;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="766"
-       y="69.699997"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect36-4-8"
-       style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     id="g36-99-5-6"
-     transform="matrix(1.0625,0,0,1.953125,-199.875,-66.13)"
-     style="fill:#347d39;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="766"
-       y="69.699997"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect36-4-8-3"
-       style="fill:#347d39;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     transform="rotate(-13,552.4932,991.9018)"
-     id="g42-76-3"
-     style="fill:#946cdc;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="774.40002"
-       y="286.79999"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect42-0-8"
-       style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     transform="matrix(-0.97437006,-0.22495105,-0.22495105,0.97437006,1366.969,149.70631)"
-     id="g42-76-3-2"
-     style="fill:#946cdc;fill-opacity:1;stroke:none">
-    <rect
-       class="cap"
-       x="774.40002"
-       y="286.79999"
-       width="64"
-       height="64"
-       rx="7"
-       fill="#151b23"
-       id="rect42-0-8-2"
-       style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
-  </g>
-  <g
-     id="usbc-left"
-     style="stroke:none">
-    <rect
-       x="514"
-       y="320"
-       width="34"
-       height="20"
-       rx="3"
-       id="rect-usbc-left"
-       style="fill:#adbac7;fill-opacity:1;stroke:none" />
-  </g>
-  <g
-     id="usbc-right"
-     style="stroke:none">
-    <rect
-       x="610"
-       y="320"
-       width="34"
-       height="20"
-       rx="3"
-       id="rect-usbc-right"
-       style="fill:#adbac7;fill-opacity:1;stroke:none" />
-  </g>
-  <g
-     id="g50-5"
-     transform="translate(154,480)">
-    <g
-       id="g24-49" />
-    <g
-       id="g25-5" />
-    <g
-       id="g26-4" />
-    <g
-       id="g27-9" />
-    <g
-       id="g28-5" />
-    <g
-       id="g29-3" />
-    <g
-       id="g30-7" />
-    <g
-       id="g31-8" />
-    <g
-       id="g32-9" />
-    <g
-       id="g33-7" />
-    <g
-       id="g34-2" />
-    <g
-       id="g35-3" />
-    <g
-       id="g36-9" />
-    <g
-       id="g37-2" />
-    <g
-       id="g38-1" />
-    <g
-       id="g39-6" />
-    <g
-       id="g40-12" />
-    <g
-       id="g41-7" />
-    <g
-       transform="rotate(-13,806.4,318.8)"
-       id="g42-11" />
-    <g
-       transform="rotate(-26,736.4,342.2)"
-       id="g43-0" />
-    <g
-       transform="rotate(-40,664,371.4)"
-       id="g44-6" />
-  </g>
-  <g
-     id="g28-68-7"
-     transform="translate(-216.50776,408)" />
-  <g
-     id="g50-1"
-     transform="translate(87.231749,530.19805)">
-    <g
-       id="g24-9" />
-    <g
-       id="g25-9" />
-    <g
-       id="g26-3" />
-    <g
-       id="g27-0" />
-    <g
-       id="g28-6" />
-    <g
-       id="g29-4" />
-    <g
-       id="g30-0" />
-    <g
-       id="g31-62" />
-    <g
-       id="g32-7" />
-    <g
-       id="g33-6" />
-    <g
-       id="g34-8" />
-    <g
-       id="g35-2" />
-    <g
-       id="g36-29" />
-    <g
-       id="g37-6" />
-    <g
-       id="g38-27" />
-    <g
-       id="g39-1" />
-    <g
-       id="g40-1" />
-    <g
-       id="g41-9" />
-    <g
-       transform="rotate(-13,806.4,318.8)"
-       id="g42-1" />
-    <g
-       transform="rotate(-26,736.4,342.2)"
-       id="g43-9" />
-    <g
-       transform="rotate(-40,664,371.4)"
-       id="g44-0" />
-  </g>
-  <g
-     id="g39-0-5"
-     transform="translate(4.7239886,530.19805)" />
-  <g
-     id="g50-7"
-     transform="translate(-2.178737e-6,447.56486)">
-    <g
-       id="g24-7" />
-    <g
-       id="g25-4" />
-    <g
-       id="g26-1" />
-    <g
-       id="g27-8" />
-    <g
-       id="g28-3" />
-    <g
-       id="g29-8" />
-    <g
-       id="g30-21" />
-    <g
-       id="g31-5" />
-    <g
-       id="g32-1" />
-    <g
-       id="g33-8" />
-    <g
-       id="g34-0" />
-    <g
-       id="g35-4" />
-    <g
-       id="g36-2" />
-    <g
-       id="g37-8" />
-    <g
-       id="g38-28" />
-    <g
-       id="g39-7" />
-    <g
-       id="g40-40" />
-    <g
-       id="g41-2" />
-    <g
-       transform="rotate(-13,806.4,318.8)"
-       id="g42-9" />
-    <g
-       transform="rotate(-26,736.4,342.2)"
-       id="g43-8" />
-    <g
-       transform="rotate(-40,664,371.4)"
-       id="g44-3" />
-  </g>
-  <g
-     id="g39-0-1"
-     transform="translate(-83.007762,447.56486)" />
-  <g
-     id="g24-4"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g25-8"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g26-5"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g27-3"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g28-1"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g29-6"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g30-2"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g31-6"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g32-5"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g33-4"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g34-6"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g35-6"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g36-3"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g37-4"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g38-2"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g39-4"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g40-4"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     id="g41-3"
-     transform="translate(-117.99224,-33.5)" />
-  <g
-     transform="rotate(-13,600.39102,819.8523)"
-     id="g42-7" />
-  <g
-     transform="rotate(-26,604.85166,580.99027)"
-     id="g43-6" />
-  <g
-     transform="rotate(-40,558.98363,516.74051)"
-     id="g44-8" />
-  <path
-     style="fill:#c69026;fill-opacity:1;stroke:none;stroke-width:13;stroke-linejoin:round;stroke-opacity:0.94902;paint-order:markers stroke fill"
-     d="m 607.23242,363.52344 53.21289,82.02929"
-     id="path1" />
 </svg>
