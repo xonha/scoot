@@ -2,11 +2,12 @@
 
 A wired, low-latency, 36-key split ergonomic keyboard where **the entire right half is a physical desk mouse**.
 
-A Corne 3×5+3 layout — **two tiny microcontrollers, one per half** (a true split), wired together over a thin serial tether. The right half carries its own MCU plus the pointing sensor and reads them locally; only its key/pointer reports cross the cable. Built to be **hand-soldered and repairable** from off-the-shelf modules.
+A Corne 3×5+3 layout — **two RP2040 "Pro Micro" modules (~18 × 33 mm each), one per half** (a true split), wired together over a thin serial tether. The right half carries its own MCU plus the pointing sensor and reads them locally; only its key/pointer reports cross the cable. Built to be **hand-soldered and repairable** from off-the-shelf modules.
 
 <p align="center">
   <img src="docs/scoot-layout.svg" width="100%"
-       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Accent markers show the internal parts: an RP2040 controller on each half and the PMW3360 pointing sensor on the right.">
+       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green), the PMW3360 pointing sensor under the right module (blue), and the USB-C tether port that links the halves (grey) — between module and roller on the left, below the roller on the right.">
+
 </p>
 
 > <sub>Physical layout ([`docs/scoot-layout.svg`](docs/scoot-layout.svg)) — a hand-built SVG in GitHub's dark palette.</sub>
@@ -16,7 +17,7 @@ A Corne 3×5+3 layout — **two tiny microcontrollers, one per half** (a true sp
 ## The core bets
 
 - **The right half *is* the mouse.** An optical sensor mounts face-down on the bottom plate; you pick up the right half and move it on the desk to drive the cursor — instead of a trackball or trackpad.
-- **Two MCUs, a true split.** One small RP2040 controller per half. The right half reads its own keys, its roller, and the mouse sensor *locally*; only compact reports cross the tether. No timing-sensitive bus runs over the roaming cable.
+- **Two MCUs, a true split.** One RP2040 "Pro Micro" module (~18 × 33 mm) per half. The right half reads its own keys, its roller, and the mouse sensor *locally*; only compact reports cross the tether. No timing-sensitive bus runs over the roaming cable.
 - **Direct-wired, no diodes.** Every key gets its own GPIO (switch → pin → GND). No matrix, no per-key diodes, no ghosting, free NKRO — and far less to hand-solder.
 - **Hand-built and repairable.** Off-the-shelf modules (RP2040 boards, a PMW3360/3389 sensor breakout) soldered onto a custom PCB. A dead controller or sensor unplugs and swaps; nothing is a fab-only QFN.
 - **Matching rollers, both halves.** Each half carries a clickable roller wheel: the right is scroll + middle-click, the left is volume / play-pause.
@@ -29,7 +30,7 @@ A Corne 3×5+3 layout — **two tiny microcontrollers, one per half** (a true sp
 | RP2040 "Pro Micro" module (×2) | One controller per half (e.g. TENSTAR RP2040 Pro Micro, ~29 GPIO) |
 | PMW3360 / PMW3389 breakout (lens included) | Desk-mouse sensor, right half, face-down, read by the right MCU |
 | EVQWGD001 roller encoder (×2) | Both halves — clickable rollers: left = volume / play-pause, right = scroll / middle-click |
-| Thin serial tether (UART + power) | Carries the split link + power between halves — ~4 conductors |
+| USB-C tether (UART + power) | Carries the split link + power between halves — ~4 conductors; USB-C connector per half (non-USB pinout) |
 
 ### Does it fit? (feasibility)
 
@@ -53,7 +54,7 @@ Both halves fit with margin. The encoder *push* is just another direct GPIO now 
 - **5 columns, 36 keys — fixed.** No detachable outer column. 3×5+3 per half fits direct-wiring on both halves with margin; it also matches an off-the-shelf 5-column Corne for prototyping. A 6th column would need a 3-wire sensor (PMW3610) or a diode'd sub-matrix to fit the pin budget — not worth it.
 - **Hand-built from modules.** RP2040 "Pro Micro" boards + a sensor breakout, soldered (and socketed where it helps) onto a custom PCB. Cheaper at one-off quantity, fully repairable, and continuous with the breadboard/Corne prototype. A fab-assembled "bare chip" revision is a *future option* only if Scoot ever becomes a product (see roadmap).
 - **PMW3360 / PMW3389 breakout, not embedded.** Both sell as assembled breakouts *with the lens fitted* (AliExpress/Tindie) and speak standard SPI; QMK drives either. The fitted lens sidesteps the hardest, least-documented part (optical alignment). Embedding the bare sensor is left to a possible future bare revision.
-- **Tether: thin serial.** UART (single-wire half-duplex via RP2040 PIO, or 2-wire) plus 3V3/5V and GND — roughly 4 conductors. No raw SPI/I²C crosses, so a slim, flexible/coiled cable works.
+- **Tether: thin serial over USB-C.** UART (single-wire half-duplex via RP2040 PIO, or 2-wire) plus 3V3/5V and GND — roughly 4 conductors — through a **USB-C connector on each half** (reversible and robust; a slim/coiled USB-C cable works). It carries *only* UART + power, **not** USB data, so it's a non-USB pinout: key/label the port and use only the Scoot tether cable. Port placement: between module and roller (top side) on the left, below the roller (bottom side) on the right.
 - **Fingerprint pass-through: deferred.** The integrated USB-hub idea (one cable to the host, dongle behind it) needs raw access to the host-side MCU's USB lines, which module-based boards don't expose cleanly. It's parked for a possible future bare/wired revision; the prototype runs the dongle on its own cable.
 
 ## Interaction model

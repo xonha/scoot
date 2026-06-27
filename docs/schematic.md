@@ -5,7 +5,7 @@ Net-level design capture — the spec a KiCad schematic transcribes. This rev re
 ## Architecture decisions (locked)
 
 - **Pointing:** desk-mouse, PMW3360 (or PMW3389) sensor on an assembled breakout, lens fitted.
-- **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required.
+- **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, **~18 × 33 mm**, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required. At ~18 × 33 mm the module footprint is a real placement constraint, not a dot — it sits in the inner region, tucked under the key field on the bottom side where the sensor cavity already provides clearance.
 - **Right half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the left over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
 - **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
 - **Layout: 5 columns, 36 keys (3×5 + 3 thumb per half), fixed.** No detachable outer column.
@@ -36,7 +36,9 @@ Each MCU only handles its own half, so direct wiring fits with margin on a ~29-p
 | GND | 1 |
 | **Total** | **3–4** |
 
-No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which the roaming right half needs. A simple 4-conductor cable (TRRS, JST, or a captive soldered cable) is sufficient; nothing here requires USB-C.
+No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which the roaming right half needs. The chosen connector is a **USB-C receptacle on each half** (reversible, robust, and a slim/coiled USB-C cable is easy to source). It carries **only UART + power — not USB data**, so it is a *non-USB pinout*: key/label it and use only the Scoot tether cable; never plug a charger or USB device into it.
+
+> Each half therefore has **two USB-C ports**: the controller module's own (host link on the left / flash-only on the right) and this tether port. They are not interchangeable — mark them so the host cable and the tether cable never get swapped.
 
 > **Power & flashing caution.** The right module is powered over the tether *and* has its own USB-C used for flashing/debug. Don't let both feed power at once: either unplug the tether before flashing the right half, or send 5 V over the tether to the module's 5V/VIN pin and Schottky-diode-OR it against the USB VBUS so either source can power the board safely.
 
@@ -101,8 +103,9 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 ## Sheet 6 — Inter-half tether (serial link) *(locked)*
 
 - One UART data line between the two MCUs (QMK split serial; RP2040 supports a single-wire half-duplex transport over PIO, or use 2 wires for full-duplex), plus power + GND. ~3–4 conductors total (see budget).
-- Connector: a simple 4-pin link (TRRS / JST / pin header) or a captive soldered cable. The roaming right half favors a flexible/coiled cable; a captive cable avoids a wear-prone connector entirely.
-- Power sent from the left (host-powered). See the power & flashing caution above.
+- Connector: a **USB-C receptacle on each half** carrying the ~4 conductors (non-USB pinout — see the tether budget note). Reversible and robust, with easy slim/coiled cables for the roaming half.
+- **Placement:** on the **left**, between the controller module and the roller (top side), where the inner region has a gap; on the **right**, that gap is taken by the sensor (which sits under the module), so the port goes **below the roller (bottom side)**. Both face the inner edge so the cable runs the short path between halves.
+- Power sent from the left (host-powered). See the power & flashing caution above, and mark the tether port distinctly from the module's own USB-C.
 
 ---
 
@@ -112,7 +115,8 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 
 | Ref | Part | Notes |
 | --- | --- | --- |
-| U | RP2040 "Pro Micro" module | ~29 GPIO; onboard USB-C (host on left, flash-only on right) |
+| U | RP2040 "Pro Micro" module (~18 × 33 mm) | ~29 GPIO; onboard USB-C (host on left, flash-only on right) |
+| J | USB-C receptacle (tether) | non-USB pinout (UART + power); distinct from the module's USB-C |
 | SW… | Kailh hotswap sockets ×18 | hand-soldered SMD; needs a switch plate |
 | ENC | EVQWGD001 clickable roller | through-hole/niche; hand-soldered |
 | — | passives: encoder debounce caps; UART/power link parts | SMD or THT |
@@ -129,7 +133,7 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 | --- | --- |
 | Key switches | push into the hand-soldered hotswap sockets |
 | Sensor breakout + lens standoff | mount face-down; set the ~10 mm optical standoff + bottom-plate window |
-| Case, plate, tether cable, final assembly | mechanical |
+| Case, plate, USB-C tether cable, final assembly | mechanical |
 
 > Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's header. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360, and the integrated fingerprint USB hub) — see the README roadmap.
 </content>

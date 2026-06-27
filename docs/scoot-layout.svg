@@ -588,7 +588,7 @@
   </g>
   <g
      id="g36-99-5"
-     transform="matrix(1.0629921,0,0,1.2401575,-339.96772,-7.4389739)"
+     transform="matrix(1.0625,0,0,1.953125,-337.875,-66.13)"
      style="fill:#347d39;fill-opacity:1;stroke:none">
     <rect
        class="cap"
@@ -603,7 +603,7 @@
   </g>
   <g
      id="g36-99-5-6"
-     transform="matrix(1.0629921,0,0,1.2401575,-194.50931,-7.4639819)"
+     transform="matrix(1.0625,0,0,1.953125,-199.875,-66.13)"
      style="fill:#347d39;fill-opacity:1;stroke:none">
     <rect
        class="cap"
@@ -618,7 +618,7 @@
   </g>
   <g
      id="g39-78-0"
-     transform="translate(96,110)"
+     transform="matrix(1.1875,0,0,1.1875,-214.125,106.19)"
      style="fill:#478be6;fill-opacity:1;stroke:none">
     <rect
        class="cap"
@@ -660,6 +660,30 @@
        fill="#151b23"
        id="rect42-0-8-2"
        style="fill:#946cdc;fill-opacity:1;stroke:none;stroke-width:1" />
+  </g>
+  <g
+     id="usbc-left"
+     style="stroke:none">
+    <rect
+       x="492"
+       y="212"
+       width="34"
+       height="20"
+       rx="3"
+       id="rect-usbc-left"
+       style="fill:#adbac7;fill-opacity:1;stroke:none" />
+  </g>
+  <g
+     id="usbc-right"
+     style="stroke:none">
+    <rect
+       x="610"
+       y="320"
+       width="34"
+       height="20"
+       rx="3"
+       id="rect-usbc-right"
+       style="fill:#adbac7;fill-opacity:1;stroke:none" />
   </g>
   <g
      id="g50-5"
