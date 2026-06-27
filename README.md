@@ -11,10 +11,6 @@ A Corne 3×5+3 layout — **two RP2040 "Pro Micro" modules (~18 × 33 mm each), 
 
 </p>
 
-> <sub>Physical layout ([`docs/scoot-layout.svg`](docs/scoot-layout.svg)) — a hand-built SVG in GitHub's dark palette.</sub>
-
-> **Status: concept.** This repo is currently just the idea and its open questions — no firmware, no PCB, no case. Implementation comes after the concept is settled.
-
 ## The core bets
 
 - **The right half *is* the mouse.** An optical sensor mounts face-down on the bottom plate; you pick up the right half and move it on the desk to drive the cursor — instead of a trackball or trackpad.
