@@ -8,7 +8,7 @@ Net-level design capture — the spec a KiCad schematic transcribes. This rev re
 - **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, **~18 × 33 mm**, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required. At ~18 × 33 mm the module footprint is a real placement constraint, not a dot — it sits in the inner region, tucked under the key field on the bottom side where the sensor cavity already provides clearance.
 - **Right half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the left over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
 - **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
-- **Layout: 5 columns, 36 keys (3×5 + 3 thumb per half), fixed.** No detachable outer column.
+- **Layout: 5 columns standard (3×5 + 3 thumb = 36 keys), with an optional 6th column on a snap-off breakaway.** The PCB carries the outer column on a **V-score / mouse-bite breakaway**: build 6-col, or snap it off for 5-col (a permanent, build-time choice). 5-col keeps spare GPIO for repair margin; the 6th column (+3 keys/half) spends them. Left fits either way (25/29 populated); the right reaches 29/29 — see budget. Wire the outer column to the *lowest-value* GPIO, **and route those 3 GPIO to labeled repair pads on the main board** so a snapped-off build keeps them as remappable spares.
 - **Tether:** a thin serial link — UART (single-wire half-duplex via RP2040 PIO, or 2-wire) + power + GND, ~4 conductors. A slim/coiled cable works since no SPI/I²C crosses.
 - **Build:** off-the-shelf modules + a sensor breakout, soldered (and socketed where useful) onto a custom PCB. Hotswap sockets are hand-soldered SMD; switches push in. A fab-assembled "bare" revision is a future option only (see README roadmap).
 
@@ -26,6 +26,10 @@ Each MCU only handles its own half, so direct wiring fits with margin on a ~29-p
 | **Total** | **22 / 29** | **26 / 29** |
 
 > Verify the chosen module actually breaks out ~29 *usable* GPIO — a couple of pins are often reserved for an onboard LED/NeoPixel or BOOT. The budget above assumes single-wire UART; a 2-wire link costs one more pin on each side (still fits).
+
+**Optional 6th (outer) column.** Adds 3 direct-wired keys per half → left **25 / 29**, right **29 / 29** (full). The outer column sits on a snap-off breakaway; assign it the three *lowest-value* GPIO. At 29/29 the right half has no margin: only build the right 6th column if you accept losing the spare-pin headroom, or move to a **PMW3610** (3-wire SPI, −1 pin) to keep one pin free. Left half keeps margin regardless.
+>
+> **Repair pads.** Route the 3 outer-column GPIO to small **labeled test pads/vias on the main-board side** of the breakaway seam. If a build snaps the column off (5-col), those 3 pins stay reachable: a dead GPIO on any of the other 18 keys is repaired by bodging that key to a repair pad and remapping one line of `DIRECT_PINS`. Without these pads the freed pins are cut off at the seam and can't be reused.
 
 ## Tether conductor budget (resolved)
 
@@ -67,8 +71,9 @@ No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which 
 ## Sheet 3 — Direct-wired keys *(locked)*
 
 - **No matrix, no diodes.** Each switch: one terminal to a dedicated **GPIO**, the other to **GND**. Firmware enables the internal pull-up and reads the pin low = pressed (QMK `DIRECT_PINS`).
-- 18 keys per half: 15 finger (3 rows × 5 cols) + 3 thumb.
-- **Hotswap:** Kailh hotswap sockets, hand-soldered (two pads each); a **switch plate** is required so switch-swap pull-out force loads the plate, not the solder joints.
+- 18 keys per half: 15 finger (3 rows × 5 cols) + 3 thumb. **Optional +3** per half if the 6th column is kept (21 keys/half).
+- **Snap-off outer column.** Columns 1–5 are the main board; the outer column (3 keys) hangs off it via a **V-score / mouse-bite breakaway** running vertically between col 5 and col 6 on the pinky side. Keep it for 6-col, snap it off for 5-col. Route the 3 outer-column GPIO from the main MCU's *lowest-priority* pins, and tap them to repair pads on the main-board side of the seam (see budget note).
+- **Hotswap:** Kailh hotswap sockets, hand-soldered (two pads each); a **switch plate** is required so switch-swap pull-out force loads the plate, not the solder joints. If the column is kept, the plate covers it too; the breakaway scores the plate or the column uses a separate plate tab.
 - Roller push is just another direct key GPIO (Sheet 5).
 
 ## Sheet 4 — Pointing sensor (U_R, PMW3360/PMW3389) *(locked)*
@@ -119,6 +124,7 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 | J | USB-C receptacle (tether) | non-USB pinout (UART + power); distinct from the module's USB-C |
 | SW… | Kailh hotswap sockets ×18 | hand-soldered SMD; needs a switch plate |
 | ENC | EVQWGD001 clickable roller | through-hole/niche; hand-soldered |
+| — | outer-column: 3 hotswap sockets on the snap-off breakaway | *optional* — populate for 6-col, or snap the column off for 5-col |
 | — | passives: encoder debounce caps; UART/power link parts | SMD or THT |
 
 ### Right half only
