@@ -6,9 +6,13 @@ A Corne 3×5+3 layout — **two RP2040 "Pro Micro" modules (~18 × 33 mm each), 
 
 <p align="center">
   <img src="docs/scoot-layout.svg" width="100%"
-       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green) and the USB-C tether port linking the halves (grey, below each roller, symmetric). The PMW3360 pointing sensor is implicit — mounted under the right module.">
+       alt="Scoot physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. A faded outer column on each half marks the optional snap-off 6th column. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green), the USB-C tether port (blue), the reset button (red), and the roller encoder (purple). The PMW3360 pointing sensor is implicit — mounted under the right module.">
 
 
+</p>
+
+<p align="center">
+  🟩 MCU&nbsp;&nbsp;·&nbsp;&nbsp;🟦 USB-C connector&nbsp;&nbsp;·&nbsp;&nbsp;🟥 Reset button&nbsp;&nbsp;·&nbsp;&nbsp;🟪 Roller encoder
 </p>
 
 ## The core bets
