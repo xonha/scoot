@@ -10,6 +10,7 @@ Net-level design capture — the spec a KiCad schematic transcribes. This rev re
 - **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
 - **Layout: 5 columns standard (3×5 + 3 thumb = 36 keys), with an optional 6th column on a snap-off breakaway.** The PCB carries the outer column on a **V-score / mouse-bite breakaway**: build 6-col, or snap it off for 5-col (a permanent, build-time choice). 5-col keeps spare GPIO for repair margin; the 6th column (+3 keys/half) spends them. Left fits either way (25/29 populated); the right reaches 29/29 — see budget. Wire the outer column to the *lowest-value* GPIO, **and route those 3 GPIO to labeled repair pads on the main board** so a snapped-off build keeps them as remappable spares.
 - **Tether:** a thin serial link — UART (single-wire half-duplex via RP2040 PIO, or 2-wire) + power + GND, ~4 conductors. A slim/coiled cable works since no SPI/I²C crosses.
+- **One reversible PCB:** a single board design used for **both halves**, fabricated twice and flipped for left/right. Place all common parts (MCU, roller, reset, USB-C tether, keys, breakaway 6th column, repair pads) **mirror-symmetric**; QMK handedness picks primary/secondary in firmware. The sole asymmetry — the **PMW3360 sensor (right only)** — goes on an **optional footprint** populated for the right build and left unpopulated on the left (its 4 SPI GPIO just idle there). The sensor footprint must land on the face that points *down* in the right-hand orientation. The **case/bottom-plate is not reversible** (sensor window + ~10 mm standoff are right-only).
 - **Build:** off-the-shelf modules + a sensor breakout, soldered (and socketed where useful) onto a custom PCB. Hotswap sockets are hand-soldered SMD; switches push in. A fab-assembled "bare" revision is a future option only (see README roadmap).
 
 ## Per-half GPIO budget (resolved)
@@ -79,6 +80,8 @@ No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which 
 ## Sheet 4 — Pointing sensor (U_R, PMW3360/PMW3389) *(locked)*
 
 On an **assembled breakout with the lens fitted**, mounted face-down, read by the **right** MCU over local SPI. Only pointing *reports* cross the tether (via the split protocol), never SPI.
+
+> **Reversible-PCB note.** The sensor is the board's only left/right asymmetry: lay it as an **optional footprint** populated on the right build only, on the face that ends up **down** when the board is flipped to the right-hand orientation. The 4 SPI pads stay unpopulated/idle on the left build.
 
 | Breakout pin | Net | Right MCU |
 | --- | --- | --- |
