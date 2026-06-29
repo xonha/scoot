@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   viewBox="29 39.5 1105 416"
+   viewBox="29 39.5 1105 490"
    width="292.36mm"
-   height="110.07mm"
+   height="129.64mm"
    role="img"
    aria-label="Scoot physical layout"
    version="1.1"
@@ -49,7 +49,7 @@
      x="24"
      y="34"
      width="1115"
-     height="427"
+     height="500"
      id="rect1" />
   <g
      id="g50-5"
@@ -811,5 +811,25 @@
        rx="7"
        id="bk-k1-r"
        style="opacity:0.5;fill:#151b23;stroke:none" />
+  </g>
+  <g
+     id="legend"
+     style="font:600 20px system-ui,sans-serif">
+    <rect x="220" y="478" width="28" height="28" rx="5" id="lg-sw-mcu"
+       style="fill:#347d39;fill-opacity:1;stroke:none" />
+    <text x="258" y="492" id="lg-tx-mcu"
+       style="fill:#c9d1d9;dominant-baseline:central;text-anchor:start">MCU</text>
+    <rect x="332" y="478" width="28" height="28" rx="5" id="lg-sw-usbc"
+       style="fill:#478be6;fill-opacity:1;stroke:none" />
+    <text x="370" y="492" id="lg-tx-usbc"
+       style="fill:#c9d1d9;dominant-baseline:central;text-anchor:start">USB-C connector</text>
+    <rect x="564" y="478" width="28" height="28" rx="5" id="lg-sw-reset"
+       style="fill:#ea5c53;fill-opacity:1;stroke:none" />
+    <text x="602" y="492" id="lg-tx-reset"
+       style="fill:#c9d1d9;dominant-baseline:central;text-anchor:start">Reset button</text>
+    <rect x="766" y="478" width="28" height="28" rx="5" id="lg-sw-roller"
+       style="fill:#946cdc;fill-opacity:1;stroke:none" />
+    <text x="804" y="492" id="lg-tx-roller"
+       style="fill:#c9d1d9;dominant-baseline:central;text-anchor:start">Roller encoder</text>
   </g>
 </svg>
