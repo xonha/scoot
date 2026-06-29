@@ -141,5 +141,5 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 | Sensor breakout + lens standoff | mount face-down; set the ~10 mm optical standoff + bottom-plate window |
 | Case, plate, USB-C tether cable, final assembly | mechanical |
 
-> Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's header. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360, and the integrated fingerprint USB hub) — see the README roadmap.
+> Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's header. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360) — see the README roadmap.
 </content>

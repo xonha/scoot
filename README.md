@@ -56,7 +56,6 @@ Both halves fit with margin. The encoder *push* is just another direct GPIO now 
 - **Hand-built from modules.** RP2040 "Pro Micro" boards + a sensor breakout, soldered (and socketed where it helps) onto a custom PCB. Cheaper at one-off quantity, fully repairable, and continuous with the breadboard/Corne prototype. A fab-assembled "bare chip" revision is a *future option* only if Scoot ever becomes a product (see roadmap).
 - **PMW3360 / PMW3389 breakout, not embedded.** Both sell as assembled breakouts *with the lens fitted* (AliExpress/Tindie) and speak standard SPI; QMK drives either. The fitted lens sidesteps the hardest, least-documented part (optical alignment). Embedding the bare sensor is left to a possible future bare revision.
 - **Tether: thin serial over USB-C.** UART (single-wire half-duplex via RP2040 PIO, or 2-wire) plus 3V3/5V and GND — roughly 4 conductors — through a **USB-C connector on each half** (reversible and robust; a slim/coiled USB-C cable works). It carries *only* UART + power, **not** USB data, so it's a non-USB pinout: key/label the port and use only the Scoot tether cable. Port placement is **symmetric** — below the roller on each half, facing the inner edge for the shortest cable run.
-- **Fingerprint pass-through: deferred.** The integrated USB-hub idea (one cable to the host, dongle behind it) needs raw access to the host-side MCU's USB lines, which module-based boards don't expose cleanly. It's parked for a possible future bare/wired revision; the prototype runs the dongle on its own cable.
 
 ## Interaction model
 
@@ -80,14 +79,13 @@ The pointing method is committed, so these are the problems that decide whether 
 ## Other open questions
 
 - **Mousing handedness.** The right half is the mouse — fine for right-handers; no plan yet for left-handed mousing.
-- **Fingerprint dongle.** Out of scope for the prototype (own cable); revisit only if a future bare/wired revision wants one-cable pass-through.
 
 ## Roadmap (rough)
 
 1. **Concept** — core architecture settled (this README).
 2. **Corne prototype** — prove the firmware and *pointing-over-split* on an existing XIAO/RP2040 Corne + a sensor breakout: hold-to-mouse, click remapping, sensor on the secondary half reporting to the primary. ([docs/breadboard.md](docs/breadboard.md)) ← we are here.
 3. **Standalone PCB** — a custom board holding the modules + breakout; net-level capture in [docs/schematic.md](docs/schematic.md). Validates the *physical* desk-mouse: case, standoff, glide, re-homing, the roaming tether. Likely the finish line for a personal build.
-4. **Bare PCB (optional)** — only if Scoot becomes a product: a fab-assembled revision (bare RP2040s, embedded sensor, integrated fingerprint hub). Reuses ~90% of the standalone design.
+4. **Bare PCB (optional)** — only if Scoot becomes a product: a fab-assembled revision (bare RP2040s, embedded sensor). Reuses ~90% of the standalone design.
 5. Case / bottom-plate design (sensor window, glide surface) — alongside step 3.
 6. Firmware — a QMK split with `DIRECT_PINS`, the PMW33xx pointing driver, split pointing, and the hold-to-mouse layer.
 
