@@ -94,6 +94,7 @@ On an **assembled breakout with the lens fitted**, mounted face-down, read by th
 | MT (motion) | NC | wire to a spare GPIO only for interrupt-driven polling |
 
 - Decoupling per the module (it usually carries its own caps; the PMW3360 wants 4.7 µF + 1 µF + 100 nF nearby). SPI clock stays low (≤ ~2 MHz), trivial on short local traces.
+- **Interconnect:** connect the breakout to the main PCB with a **6-pin JST-SH 1.0 mm** connector on the main-board side and **flying leads soldered directly to the breakout pads** (no rigid header on the sensor). This mechanically decouples the breakout so the ~10 mm standoff and optical alignment can be set without loading the solder joints. Add strain relief on the lead bundle so a tug can't lift a pad. The 6 ways carry SCLK/MOSI/MISO/NCS/VCC/GND (MT stays NC).
 - **Lens/standoff:** the breakout's lens needs the **~10 mm sensor-to-surface standoff** and a clean optical window in the bottom plate. This sets the right half's bottom-cavity height. Hold it rigid and consistent or tracking suffers.
 - If pins are tight in a future 6-column variant, a **PMW3610** (3-wire SPI, shared SDIO → 3 pins) frees one GPIO.
 
