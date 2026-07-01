@@ -1,23 +1,25 @@
-# Scoot — Schematic design (rev 0.4, WIP)
+# Scoot Keyboard — Schematic design (rev 0.4, WIP)
 
 Net-level design capture — the spec a KiCad schematic transcribes. This rev replaces the earlier single-controller / IO-expander / matrix-with-diodes design (rev 0.3) with a **two-MCU true split, direct-wired (no diodes), hand-built from modules**.
+
+> **Halves.** *Central* = the half wired to the computer over USB; it stays planted and is the typing anchor (QMK split primary). *Peripheral* = the roaming half that carries the pointing sensor and *is* the desk mouse (QMK split secondary), reporting to the central over the tether. The board is reversible, so which physical hand the peripheral sits under is a build-time choice.
 
 ## Architecture decisions (locked)
 
 - **Pointing:** desk-mouse, PMW3360 (or PMW3389) sensor on an assembled breakout, lens fitted.
 - **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, **~18 × 33 mm**, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required. At ~18 × 33 mm the module footprint is a real placement constraint, not a dot — it sits in the inner region, tucked under the key field on the bottom side where the sensor cavity already provides clearance.
-- **Right half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the left over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
+- **Peripheral half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the central over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
 - **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
-- **Layout: 5 columns standard (3×5 + 3 thumb = 36 keys), with an optional 6th column on a snap-off breakaway.** The PCB carries the outer column on a **V-score / mouse-bite breakaway**: build 6-col, or snap it off for 5-col (a permanent, build-time choice). 5-col keeps spare GPIO for repair margin; the 6th column (+3 keys/half) spends them. Left fits either way (25/29 populated); the right reaches 29/29 — see budget. Wire the outer column to the *lowest-value* GPIO, **and route those 3 GPIO to labeled repair pads on the main board** so a snapped-off build keeps them as remappable spares.
+- **Layout: 5 columns standard (3×5 + 3 thumb = 36 keys), with an optional 6th column on a snap-off breakaway.** The PCB carries the outer column on a **V-score / mouse-bite breakaway**: build 6-col, or snap it off for 5-col (a permanent, build-time choice). 5-col keeps spare GPIO for repair margin; the 6th column (+3 keys/half) spends them. Central fits either way (25/29 populated); the peripheral reaches 29/29 — see budget. Wire the outer column to the *lowest-value* GPIO, **and route those 3 GPIO to labeled repair pads on the main board** so a snapped-off build keeps them as remappable spares.
 - **Tether:** a thin serial link — UART (single-wire half-duplex via RP2040 PIO, or 2-wire) + power + GND, ~4 conductors. A slim/coiled cable works since no SPI/I²C crosses.
-- **One reversible PCB:** a single board design used for **both halves**, fabricated twice and flipped for left/right. Place all common parts (MCU, roller, reset, USB-C tether, keys, breakaway 6th column, repair pads) **mirror-symmetric**; QMK handedness picks primary/secondary in firmware. The sole asymmetry — the **PMW3360 sensor (right only)** — goes on an **optional footprint** populated for the right build and left unpopulated on the left (its 4 SPI GPIO just idle there). The sensor footprint must land on the face that points *down* in the right-hand orientation. The **case/bottom-plate is not reversible** (sensor window + ~10 mm standoff are right-only).
+- **One reversible PCB:** a single board design used for **both halves**, fabricated twice and flipped to make the two mirror-image halves. Place all common parts (MCU, roller, reset, USB-C tether, keys, breakaway 6th column, repair pads) **mirror-symmetric**; QMK handedness picks central/peripheral in firmware. The sole asymmetry — the **PMW3360 sensor (peripheral only)** — goes on an **optional footprint** populated for the peripheral build and left unpopulated on the central (its 4 SPI GPIO just idle there). The sensor footprint must land on the face that points *down* in the peripheral orientation. The **case/bottom-plate is not reversible** (sensor window + ~10 mm standoff are peripheral-only). Because the PCB is reversible, the peripheral (mouse) half can be built under either hand — only the enclosure changes.
 - **Build:** off-the-shelf modules + a sensor breakout, soldered (and socketed where useful) onto a custom PCB. Hotswap sockets are hand-soldered SMD; switches push in. A fab-assembled "bare" revision is a future option only (see README roadmap).
 
 ## Per-half GPIO budget (resolved)
 
 Each MCU only handles its own half, so direct wiring fits with margin on a ~29-pin board:
 
-| Function | Left pins | Right pins |
+| Function | Central pins | Peripheral pins |
 | --- | --- | --- |
 | 18 keys (3×5 finger + 3 thumb), direct | 18 | 18 |
 | Roller encoder A / B | 2 | 2 |
@@ -28,7 +30,7 @@ Each MCU only handles its own half, so direct wiring fits with margin on a ~29-p
 
 > Verify the chosen module actually breaks out ~29 *usable* GPIO — a couple of pins are often reserved for an onboard LED/NeoPixel or BOOT. The budget above assumes single-wire UART; a 2-wire link costs one more pin on each side (still fits).
 
-**Optional 6th (outer) column.** Adds 3 direct-wired keys per half → left **25 / 29**, right **29 / 29** (full). The outer column sits on a snap-off breakaway; assign it the three *lowest-value* GPIO. At 29/29 the right half has no margin: only build the right 6th column if you accept losing the spare-pin headroom, or move to a **PMW3610** (3-wire SPI, −1 pin) to keep one pin free. Left half keeps margin regardless.
+**Optional 6th (outer) column.** Adds 3 direct-wired keys per half → central **25 / 29**, peripheral **29 / 29** (full). The outer column sits on a snap-off breakaway; assign it the three *lowest-value* GPIO. At 29/29 the peripheral half has no margin: only build the peripheral 6th column if you accept losing the spare-pin headroom, or move to a **PMW3610** (3-wire SPI, −1 pin) to keep one pin free. Central half keeps margin regardless.
 >
 > **Repair pads.** Route the 3 outer-column GPIO to small **labeled test pads/vias on the main-board side** of the breakaway seam. If a build snaps the column off (5-col), those 3 pins stay reachable: a dead GPIO on any of the other 18 keys is repaired by bodging that key to a repair pad and remapping one line of `DIRECT_PINS`. Without these pads the freed pins are cut off at the seam and can't be reused.
 
@@ -41,33 +43,33 @@ Each MCU only handles its own half, so direct wiring fits with margin on a ~29-p
 | GND | 1 |
 | **Total** | **3–4** |
 
-No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which the roaming right half needs. The chosen connector is a **USB-C receptacle on each half** (reversible, robust, and a slim/coiled USB-C cable is easy to source). It carries **only UART + power — not USB data**, so it is a *non-USB pinout*: key/label it and use only the Scoot tether cable; never plug a charger or USB device into it.
+No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which the roaming peripheral half needs. The chosen connector is a **USB-C receptacle on each half** (reversible, robust, and a slim/coiled USB-C cable is easy to source). It carries **only UART + power — not USB data**, so it is a *non-USB pinout*: key/label it and use only the Scoot Keyboard tether cable; never plug a charger or USB device into it.
 
-> Each half therefore has **two USB-C ports**: the controller module's own (host link on the left / flash-only on the right) and this tether port. They are not interchangeable — mark them so the host cable and the tether cable never get swapped.
+> Each half therefore has **two USB-C ports**: the controller module's own (host link on the central / flash-only on the peripheral) and this tether port. They are not interchangeable — mark them so the host cable and the tether cable never get swapped.
 
-> **Power & flashing caution.** The right module is powered over the tether *and* has its own USB-C used for flashing/debug. Don't let both feed power at once: either unplug the tether before flashing the right half, or send 5 V over the tether to the module's 5V/VIN pin and Schottky-diode-OR it against the USB VBUS so either source can power the board safely.
+> **Power & flashing caution.** The peripheral module is powered over the tether *and* has its own USB-C used for flashing/debug. Don't let both feed power at once: either unplug the tether before flashing the peripheral half, or send 5 V over the tether to the module's 5V/VIN pin and Schottky-diode-OR it against the USB VBUS so either source can power the board safely.
 
 ## Sheet plan
 
 | # | Sheet | Status |
 | --- | --- | --- |
-| 1 | Left controller (RP2040 module) + host USB | locked |
-| 2 | Right controller (RP2040 module) | locked |
+| 1 | Central controller (RP2040 module) + host USB | locked |
+| 2 | Peripheral controller (RP2040 module) | locked |
 | 3 | Direct-wired keys (both halves) | locked |
-| 4 | Pointing sensor (U_R, on right) | locked |
+| 4 | Pointing sensor (U_P, on peripheral) | locked |
 | 5 | Encoders (rollers, both halves) | locked |
 | 6 | Inter-half tether (serial link) | locked |
 
-## Sheet 1 — Left controller (primary) *(locked)*
+## Sheet 1 — Central controller *(locked)*
 
-- An RP2040 "Pro Micro" module. Its onboard USB-C is the **host link** (this half enumerates to the PC). QMK runs here as the split **primary**.
-- Direct-wired left keys + left roller on its GPIO (see Sheet 3 / budget).
-- One pin to the UART tether; 3V3 (or 5V) + GND out to the tether to power the right half.
+- An RP2040 "Pro Micro" module. Its onboard USB-C is the **host link** (this half enumerates to the PC). QMK runs here as the split **central** (primary).
+- Direct-wired central keys + central roller on its GPIO (see Sheet 3 / budget).
+- One pin to the UART tether; 3V3 (or 5V) + GND out to the tether to power the peripheral half.
 
-## Sheet 2 — Right controller (secondary) *(locked)*
+## Sheet 2 — Peripheral controller *(locked)*
 
-- A second RP2040 "Pro Micro" module, the split **secondary**. Its onboard USB-C is used only for **flashing/debug** — the right half never connects to the host (see the power caution above).
-- Direct-wired right keys + right roller + the PMW3360 SPI + one UART pin.
+- A second RP2040 "Pro Micro" module, the split **peripheral** (secondary). Its onboard USB-C is used only for **flashing/debug** — the peripheral half never connects to the host (see the power caution above).
+- Direct-wired peripheral keys + peripheral roller + the PMW3360 SPI + one UART pin.
 
 ## Sheet 3 — Direct-wired keys *(locked)*
 
@@ -77,13 +79,13 @@ No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which 
 - **Hotswap:** Kailh hotswap sockets, hand-soldered (two pads each); a **switch plate** is required so switch-swap pull-out force loads the plate, not the solder joints. If the column is kept, the plate covers it too; the breakaway scores the plate or the column uses a separate plate tab.
 - Roller push is just another direct key GPIO (Sheet 5).
 
-## Sheet 4 — Pointing sensor (U_R, PMW3360/PMW3389) *(locked)*
+## Sheet 4 — Pointing sensor (U_P, PMW3360/PMW3389) *(locked)*
 
-On an **assembled breakout with the lens fitted**, mounted face-down, read by the **right** MCU over local SPI. Only pointing *reports* cross the tether (via the split protocol), never SPI.
+On an **assembled breakout with the lens fitted**, mounted face-down, read by the **peripheral** MCU over local SPI. Only pointing *reports* cross the tether (via the split protocol), never SPI.
 
-> **Reversible-PCB note.** The sensor is the board's only left/right asymmetry: lay it as an **optional footprint** populated on the right build only, on the face that ends up **down** when the board is flipped to the right-hand orientation. The 4 SPI pads stay unpopulated/idle on the left build.
+> **Reversible-PCB note.** The sensor is the board's only handedness asymmetry: lay it as an **optional footprint** populated on the peripheral build only, on the face that ends up **down** in the peripheral orientation. The 4 SPI pads stay unpopulated/idle on the central build.
 
-| Breakout pin | Net | Right MCU |
+| Breakout pin | Net | Peripheral MCU |
 | --- | --- | --- |
 | SCLK | SPI_SCK | a GPIO |
 | MOSI | SPI_TX | a GPIO |
@@ -95,7 +97,7 @@ On an **assembled breakout with the lens fitted**, mounted face-down, read by th
 
 - Decoupling per the module (it usually carries its own caps; the PMW3360 wants 4.7 µF + 1 µF + 100 nF nearby). SPI clock stays low (≤ ~2 MHz), trivial on short local traces.
 - **Interconnect:** connect the breakout to the main PCB with a **6-pin JST-SH 1.0 mm** connector on the main-board side and **flying leads soldered directly to the breakout pads** (no rigid header on the sensor). This mechanically decouples the breakout so the ~10 mm standoff and optical alignment can be set without loading the solder joints. Add strain relief on the lead bundle so a tug can't lift a pad. The 6 ways carry SCLK/MOSI/MISO/NCS/VCC/GND (MT stays NC).
-- **Lens/standoff:** the breakout's lens needs the **~10 mm sensor-to-surface standoff** and a clean optical window in the bottom plate. This sets the right half's bottom-cavity height. Hold it rigid and consistent or tracking suffers.
+- **Lens/standoff:** the breakout's lens needs the **~10 mm sensor-to-surface standoff** and a clean optical window in the bottom plate. This sets the peripheral half's bottom-cavity height. Hold it rigid and consistent or tracking suffers.
 - If pins are tight in a future 6-column variant, a **PMW3610** (3-wire SPI, shared SDIO → 3 pins) frees one GPIO.
 
 ## Sheet 5 — Encoders *(locked)*
@@ -104,8 +106,8 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 
 | Enc | Half | A | B | Common | Push | Function |
 | --- | --- | --- | --- | --- | --- | --- |
-| ENC_L (roller) | left | GPIO | GPIO | GND | direct GPIO | volume / play-pause |
-| ENC_R (roller) | right | GPIO | GPIO | GND | direct GPIO | scroll / middle-click |
+| ENC_C (roller) | central | GPIO | GPIO | GND | direct GPIO | volume / play-pause |
+| ENC_P (roller) | peripheral | GPIO | GPIO | GND | direct GPIO | scroll / middle-click |
 
 100 nF A/B-to-GND debounce caps per encoder (optional small series R). Each roller is local to its own half's MCU — nothing encoder-related crosses the tether.
 
@@ -113,8 +115,8 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 
 - One UART data line between the two MCUs (QMK split serial; RP2040 supports a single-wire half-duplex transport over PIO, or use 2 wires for full-duplex), plus power + GND. ~3–4 conductors total (see budget).
 - Connector: a **USB-C receptacle on each half** carrying the ~4 conductors (non-USB pinout — see the tether budget note). Reversible and robust, with easy slim/coiled cables for the roaming half.
-- **Placement:** symmetric — **below the roller on each half**, facing the inner edge so the cable runs the short path between halves. (On the right the sensor sits under the module, which is why the port goes below the roller rather than between module and roller; the left mirrors it for symmetry.)
-- Power sent from the left (host-powered). See the power & flashing caution above, and mark the tether port distinctly from the module's own USB-C.
+- **Placement:** symmetric — **below the roller on each half**, facing the inner edge so the cable runs the short path between halves. (On the peripheral half the sensor sits under the module, which is why the port goes below the roller rather than between module and roller; the central mirrors it for symmetry.)
+- Power sent from the central (host-powered). See the power & flashing caution above, and mark the tether port distinctly from the module's own USB-C.
 
 ---
 
@@ -124,18 +126,18 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 
 | Ref | Part | Notes |
 | --- | --- | --- |
-| U | RP2040 "Pro Micro" module (~18 × 33 mm) | ~29 GPIO; onboard USB-C (host on left, flash-only on right) |
+| U | RP2040 "Pro Micro" module (~18 × 33 mm) | ~29 GPIO; onboard USB-C (host on central, flash-only on peripheral) |
 | J | USB-C receptacle (tether) | non-USB pinout (UART + power); distinct from the module's USB-C |
 | SW… | Kailh hotswap sockets ×18 | hand-soldered SMD; needs a switch plate |
 | ENC | EVQWGD001 clickable roller | through-hole/niche; hand-soldered |
 | — | outer-column: 3 hotswap sockets on the snap-off breakaway | *optional* — populate for 6-col, or snap the column off for 5-col |
 | — | passives: encoder debounce caps; UART/power link parts | SMD or THT |
 
-### Right half only
+### Peripheral half only
 
 | Ref | Part | Notes |
 | --- | --- | --- |
-| U_R | PMW3360 / PMW3389 breakout (lens fitted) | AliExpress/Tindie; SPI to the right MCU |
+| U_P | PMW3360 / PMW3389 breakout (lens fitted) | AliExpress/Tindie; SPI to the peripheral MCU |
 
 ### You hand-finish
 
@@ -145,5 +147,4 @@ Both encoders are **EVQWGD001 clickable rollers** (6-pin: rotary A, B, common, p
 | Sensor breakout + lens standoff | mount face-down; set the ~10 mm optical standoff + bottom-plate window |
 | Case, plate, USB-C tether cable, final assembly | mechanical |
 
-> Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's header. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360) — see the README roadmap.
-</content>
+> Everything is buyable off the shelf — no PCBA service, no MOQ reels, no fine-pitch QFN. Your iron touches the modules, hotswap sockets, encoders, and the sensor breakout's pads. A future product revision could move all of this to fab-assembled bare chips (bare RP2040s, embedded PMW3360) — see the README roadmap.

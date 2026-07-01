@@ -1,8 +1,10 @@
-# Scoot — prototype (stage 2)
+# Scoot Keyboard — prototype (stage 2)
 
-Prove the **firmware and pointing-over-split** before committing to a custom PCB. The fastest path isn't a breadboard — it's an existing **Corne** (the layout Scoot adopts) plus a bought sensor breakout. A XIAO/RP2040 Corne is already a two-MCU split running QMK, so the keyboard, the split, and the encoders are done; the only new thing to bring up is the mouse sensor.
+Prove the **firmware and pointing-over-split** before committing to a custom PCB. The fastest path isn't a breadboard — it's an existing **Corne** (the layout Scoot Keyboard adopts) plus a bought sensor breakout. A XIAO/RP2040 Corne is already a two-MCU split running QMK, so the keyboard, the split, and the encoders are done; the only new thing to bring up is the mouse sensor.
 
-**What this stage proves:** hold-to-mouse, click remapping, and the PMW3360 reporting from the *secondary* half to the *primary* over the split link.
+> **Central / peripheral.** *Central* = the half wired to the computer over USB (QMK split primary). *Peripheral* = the other half, which here carries the sensor and reports to the central over the split link (QMK split secondary). Which physical hand each sits under is your choice — the wiring below is the same either way.
+
+**What this stage proves:** hold-to-mouse, click remapping, and the PMW3360 reporting from the *peripheral* half to the *central* over the split link.
 **What it can't prove:** the physical desk-mouse (lifting/sliding the half, the ~10 mm standoff, glide, re-homing). That waits for the standalone PCB (stage 3).
 
 ## Parts
@@ -17,7 +19,7 @@ Prove the **firmware and pointing-over-split** before committing to a custom PCB
 
 ## Which half gets the sensor
 
-Mount the sensor on the half **not** connected to USB, and plug USB into the **left**, so left = primary, right = secondary + sensor — mirroring Scoot. In QMK: `SPLIT_POINTING_ENABLE` + `#define POINTING_DEVICE_RIGHT`.
+Mount the sensor on the half **not** connected to USB: the USB half is the **central** (primary), the sensor half is the **peripheral** (secondary) — mirroring Scoot Keyboard. In QMK, turn on `SPLIT_POINTING_ENABLE` and point the device at whichever physical side you put the peripheral: `#define POINTING_DEVICE_RIGHT` for a right-handed build, `POINTING_DEVICE_LEFT` for a left-handed one.
 
 ## Wiring the sensor (6 lines)
 
@@ -37,8 +39,7 @@ For testing tracking, just set the breakout lens-down and slide it, or wave a te
 ## Build in stages
 
 1. **Baseline** — flash the Corne with your QMK config; confirm both halves type and the encoders work. *Verify: normal split keyboard.*
-2. **Sensor** — wire the breakout to the secondary half, enable the pointing device + split pointing. *Verify: sliding a surface under the lens moves the cursor.*
-3. **Hold-to-mouse** — add the layer: hold a left thumb key → right finger keys remap to L/R/M click, left modifiers stay live, both rollers stay live. *Verify: typing works, and the thumb-hold turns the right keys into mouse buttons while the sensor drives the cursor.*
+2. **Sensor** — wire the breakout to the peripheral half, enable the pointing device + split pointing. *Verify: sliding a surface under the lens moves the cursor.*
+3. **Hold-to-mouse** — add the layer: hold a thumb key on the central half → the peripheral finger keys remap to L/R/M click, central modifiers stay live, both rollers stay live. *Verify: typing works, and the thumb-hold turns the peripheral keys into mouse buttons while the sensor drives the cursor.*
 
-Firmware: a QMK build with **`DIRECT_PINS`** (matching Scoot's diodeless wiring — though a stock Corne uses a diode matrix, so you keep its matrix here and only adopt `DIRECT_PINS` on the standalone PCB), the **PMW33xx pointing driver**, **split pointing**, and the **hold-to-mouse** layer. That keymap is what carries forward to the standalone board.
-</content>
+Firmware: a QMK build with **`DIRECT_PINS`** (matching Scoot Keyboard's diodeless wiring — though a stock Corne uses a diode matrix, so you keep its matrix here and only adopt `DIRECT_PINS` on the standalone PCB), the **PMW33xx pointing driver**, **split pointing**, and the **hold-to-mouse** layer. That keymap is what carries forward to the standalone board.
