@@ -10,7 +10,7 @@ Net-level design capture — the spec a KiCad schematic transcribes. This rev re
 - **Two MCUs:** one **RP2040 "Pro Micro" module per half** (e.g. TENSTAR RP2040 Pro Micro, **~18 × 33 mm**, ~29 usable GPIO). Hand-soldered/socketed, so a dead controller swaps out. No bare QFN, no fab assembly required. At ~18 × 33 mm the module footprint is a real placement constraint, not a dot — it sits in the inner region, tucked under the key field on the bottom side where the sensor cavity already provides clearance.
 - **Peripheral half is a full controller**, not a passive/expander half: it reads its own keys and roller, drives the **PMW3360 over local SPI**, and sends reports to the central over the split serial link. This keeps the timing-sensitive sensor bus *off* the roaming tether.
 - **Direct wiring, no diodes:** every key is `GPIO — switch — GND`, read with the MCU's internal pull-up (QMK `DIRECT_PINS`). No matrix, no diodes, no ghosting, native NKRO. Feasible only because the split halves the key count per MCU.
-- **Layout: single fixed 3×5 + 3 thumb + 1 Shift = 19 keys/half (38 total). No detachable column.** The extra key sits at the **bottom of the ring column** and maps to Shift — the one broadly useful key a 6th column would add. No V-score breakaway, no build-time layout choice: one unified board. Direct-wiring fits with margin (central 24/29, peripheral 28/29 *including* an addressable-LED data line — see budget).
+- **Layout: single fixed 3×5 + 3 thumb = 18 keys/half (36 total). No detachable column.** A straightforward Corne-style column-stagger with no breakaway — one unified board, no build-time layout choice. Direct-wiring fits with margin (central 23/29, peripheral 27/29 *including* an addressable-LED data line — see budget).
 - **Tether:** a thin serial link — UART (single-wire half-duplex via RP2040 PIO, or 2-wire) + power + GND, ~4 conductors. A slim/coiled cable works since no SPI/I²C crosses.
 - **One reversible PCB:** a single board design used for **both halves**, fabricated twice and flipped to make the two mirror-image halves. Place all common parts (MCU, roller, reset, USB-C tether, keys, LED chain) **mirror-symmetric**; QMK handedness picks central/peripheral in firmware. The sole asymmetry — the **PMW3360 sensor (peripheral only)** — goes on an **optional footprint** populated for the peripheral build and left unpopulated on the central (its 4 SPI GPIO just idle there). The sensor footprint must land on the face that points *down* in the peripheral orientation. The **case/bottom-plate is not reversible** (sensor window + ~10 mm standoff are peripheral-only). Because the PCB is reversible, the peripheral (mouse) half can be built under either hand — only the enclosure changes.
 - **Build:** off-the-shelf modules + a sensor breakout, soldered (and socketed where useful) onto a custom PCB. Hotswap sockets are hand-soldered SMD; switches push in. A fab-assembled "bare" revision is a future option only (see README roadmap).
@@ -21,17 +21,17 @@ Each MCU only handles its own half, so direct wiring fits with margin on a ~29-p
 
 | Function | Central pins | Peripheral pins |
 | --- | --- | --- |
-| 19 keys (3×5 finger + 3 thumb + 1 Shift), direct | 19 | 19 |
+| 18 keys (3×5 finger + 3 thumb), direct | 18 | 18 |
 | Roller encoder A / B | 2 | 2 |
 | Roller push (direct GPIO) | 1 | 1 |
 | Mouse sensor SPI (SCK/MOSI/MISO/CS) | — | 4 |
 | Inter-half UART link | 1 | 1 |
 | Addressable-LED data (WS2812 / SK6812) | 1 | 1 |
-| **Total** | **24 / 29** | **28 / 29** |
+| **Total** | **23 / 29** | **27 / 29** |
 
 > Verify the chosen module actually breaks out ~29 *usable* GPIO — a couple of pins are often reserved for an onboard LED/NeoPixel or BOOT. The budget above assumes single-wire UART; a 2-wire link costs one more pin on each side (still fits).
 
-**Spare pins.** After keys + roller + sensor + UART + LED, the central keeps **5** free GPIO and the peripheral **1** (28/29). Bring a couple of the central's free pins out to **labeled repair pads**, so a dead key's GPIO can be bodged over and remapped in one line of `DIRECT_PINS`. On the peripheral, the lone spare can take the sensor's **MT (motion) interrupt** instead; if a build needs more peripheral headroom, a 3-wire **PMW3610** (−1 pin) frees one.
+**Spare pins.** After keys + roller + sensor + UART + LED, the central keeps **6** free GPIO and the peripheral **2** (27/29). Bring a couple of the central's free pins out to **labeled repair pads**, so a dead key's GPIO can be bodged over and remapped in one line of `DIRECT_PINS`. On the peripheral, a spare can take the sensor's **MT (motion) interrupt** instead; if a build needs more peripheral headroom, a 3-wire **PMW3610** (−1 pin) frees one.
 
 ## Tether conductor budget (resolved)
 
@@ -73,8 +73,7 @@ No raw SPI/I²C crosses, so the cable can be slim and flexible/coiled — which 
 ## Sheet 3 — Direct-wired keys *(locked)*
 
 - **No matrix, no diodes.** Each switch: one terminal to a dedicated **GPIO**, the other to **GND**. Firmware enables the internal pull-up and reads the pin low = pressed (QMK `DIRECT_PINS`).
-- 19 keys per half: 15 finger (3 rows × 5 cols) + 1 Shift (bottom of the ring column) + 3 thumb.
-- **Shift key.** The 19th key is a single hotswap socket at the bottom of the ring column, on a normal GPIO like any other key — no breakaway, no special treatment. It maps to Shift.
+- 18 keys per half: 15 finger (3 rows × 5 cols) + 3 thumb.
 - **Hotswap:** Kailh hotswap sockets, hand-soldered (two pads each); a **switch plate** is required so switch-swap pull-out force loads the plate, not the solder joints.
 - Roller push is just another direct key GPIO (Sheet 5).
 
