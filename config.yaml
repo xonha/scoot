@@ -52,9 +52,9 @@ points:
       key.tags:
         - helper
       anchor:
-        - ref: thumbfan_t3_r0
-          shift: [u/2 + 9, -3]
-          rotate: -35
+        - ref: matrix_c5_r3
+          shift: [16, -8]
+          rotate: -30
     sensor:                    # PMW3360 desk-mouse sensor — face-down, peripheral build only
       key.tags:
         - helper
@@ -177,6 +177,10 @@ outlines:
     - what: rectangle
       where: [mcu]
       size: [18,33]
+    - what: rectangle
+      where: [roller]
+      size: [15,25]
+      fillet: 4
     - what: polygon
       points:
         - ref: matrix_c1_r3
