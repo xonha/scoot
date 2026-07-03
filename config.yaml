@@ -1,0 +1,323 @@
+# Scoot Keyboard — ergogen source (one reversible half; flip to build the mirror half).
+#
+# Layout: Corne 3x5+3 (18 keys/half) + a roller encoder in the inner pocket and,
+# on the peripheral build only, a face-down PMW3360 desk-mouse sensor. See README.md.
+#
+# Electrically this is DIRECT-WIRED, no diodes: every switch pulls one MCU GPIO to GND
+# (QMK DIRECT_PINS). There is no matrix and no per-key diode.
+#
+# Footprints use the ceoloide library (reversible/hotswap). Validate in the ergogen web
+# UI (app.ergogen.xyz) with the ceoloide footprints injected — the plain CLI ships only
+# built-in footprints. Geometry (points/outlines) renders on the CLI as-is.
+#
+# THREE FOOTPRINT GAPS are marked `TODO` below — no drop-in ceoloide/built-in footprint
+# exists for them, so each is a real sourcing decision:
+#   1. MCU     — Scoot uses an RP2040 "Pro Micro"; placeholder is the nRF52840 supermini.
+#   2. roller  — Scoot uses an EVQWGD001 low-profile roller; placeholder is an EC11.
+#   3. sensor  — PMW3360/3389 breakout; no footprint yet (optional, peripheral-only).
+points:
+  key.tags:
+    - key
+  zones:
+    matrix:
+      anchor:
+        shift: [150, -150] # Fix KiCad placement
+      columns:
+        c1:                    # outer / pinky
+        c2.key.stagger: u/4    # ring
+        c3.key.stagger: u/8    # middle
+        c4.key.stagger: -u/8   # index
+        c5.key.stagger: -u/8   # inner index
+      rows:
+        r3:
+        r2:
+        r1:
+    thumbfan:
+      anchor:
+        - ref: matrix_c3_r3
+          shift: [9.5,-22]
+      columns:
+        t1:
+        t2.key:
+          splay: -15
+          stagger: -2.7
+          spread: u + 2
+        t3.key:
+          splay: 75
+          stagger: 2
+          spread: u + 3.5
+          tags:
+            - key_1_5u
+      rows:
+        r0:
+    roller:                    # EVQWGD001 roller, inner pocket beside the index key
+      key.tags:
+        - helper
+      anchor:
+        - ref: thumbfan_t3_r0
+          shift: [u/2 + 9, -3]
+          rotate: -35
+    sensor:                    # PMW3360 desk-mouse sensor — face-down, peripheral build only
+      key.tags:
+        - helper
+      anchor:
+        - ref: matrix_c3_r3
+          shift: [u/2, u/2]
+    mcu:
+      key.tags:
+        - helper
+      anchor:
+        - ref: matrix_c5_r1
+          shift: [u/2+18/2+1.6,u/2-33/2]
+    screw_1:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: matrix_c1_r1
+          - ref: matrix_c2_r1
+          - ref: matrix_c1_r2
+          - ref: matrix_c2_r2
+    screw_2:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: matrix_c4_r1
+          - ref: matrix_c4_r2
+          - ref: matrix_c5_r1
+          - ref: matrix_c5_r2
+    screw_3:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: matrix_c1_r2
+          - ref: matrix_c1_r3
+          - ref: matrix_c2_r2
+          - ref: matrix_c2_r3
+    screw_4:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: matrix_c2_r3
+          - ref: thumbfan_t1_r0
+        shift: [0.4,-2.675]
+    screw_5:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        ref: thumbfan_t3_r0
+        shift: [0,12]
+outlines:
+  _keycaps:
+    - what: rectangle
+      where: [key]
+      size: 18
+      fillet: 3
+    - what: rectangle
+      where: [key_1_5u]
+      size: [18*1.5,18]
+      fillet: 3
+  _mcu:
+    - what: rectangle
+      where: [mcu]
+      size: [17.78,33]
+      fillet: 1
+    - what: rectangle
+      where: [mcu]
+      size: [8.94,7.35]
+      fillet: 0.1
+      operation: stack
+      adjust:
+        shift: [0,33/2-7.35/2+0.7]
+  _roller:
+    - what: rectangle
+      where: [roller]
+      size: [11,20]
+      fillet: 0.5
+  _sensor:
+    - what: circle
+      where: [sensor]
+      radius: 11
+  _keys:
+    - what: rectangle
+      where: /matrix/
+      size: u
+    - what: polygon
+      points:
+        - ref: matrix_c2_r1
+          shift: [u/2,-u/2]
+        - ref: thumbfan_t1_r0
+          shift: [-u/2,u/2]
+          affect: [x]
+        - ref: thumbfan_t1_r0
+          shift: [-u/2,u/2]
+          affect: [y]
+        - ref: thumbfan_t2_r0
+          shift: [u/2,u/2]
+          affect: [x,y]
+        - ref: matrix_c5_r3
+          shift: [u/2,-u]
+        - ref: matrix_c5_r3
+          shift: [u/2,-u/2]
+  _screw_heads:
+    - what: circle
+      where: [screw]
+      radius: 4.3/2
+  scoot:
+    - what: rectangle
+      where: [key]
+      size: u
+    - what: rectangle
+      where: [matrix_c5_r1]
+      size: [1.6,3u]
+      adjust:
+        shift: [u/2+1.6/2,-u]
+    - what: rectangle
+      where: [mcu]
+      size: [18,33]
+    - what: polygon
+      points:
+        - ref: matrix_c1_r3
+          shift: [u/2,-u/2]
+        - ref: matrix_c2_r3
+          shift: [u/2,-u/2-u/4]
+        - ref: thumbfan_t1_r0
+          shift: [-u/2,-u/2]
+          affect: [x,y]
+        - ref: thumbfan_t2_r0
+          shift: [u/2,-u/2]
+          affect: [x,y]
+        - ref: thumbfan_t3_r0
+          shift: [-1.5u/2,-u/2]
+          affect: [x,y]
+        - ref: thumbfan_t3_r0
+          shift: [1.5u/2,-u/2]
+          affect: [x,y]
+        - ref: mcu
+          shift: [0,33/2]
+          affect: [y]
+        - ref: matrix_c5_r2
+          shift: [-u/2,0]
+          affect: [x]
+        - ref: matrix_c1_r2
+          shift: [u/2,u/2]
+          affect: [x,y]
+  preview:
+    - what: outline
+      name: scoot
+    - what: outline
+      name: _keycaps
+      operation: stack
+    - what: outline
+      name: _mcu
+      operation: stack
+    - what: outline
+      name: _roller
+      operation: stack
+    - what: outline
+      name: _sensor
+      operation: stack
+    - what: outline
+      name: _screw_heads
+      operation: stack
+pcbs:
+  scoot_pcb:
+    template: kicad8
+    outlines:
+      board:
+        outline: scoot
+    footprints:
+      m2_screws:
+        what: ceoloide/mounting_hole_npth
+        where: /screw/
+        params:
+          hole_size: 4.6
+          hole_drill: 2.2
+      # DIRECT-WIRED switches: one GPIO per key, pulled to GND. No matrix, no diodes.
+      # Each key's net is its own point name (e.g. "matrix_c1_r1"); the MCU pin map below
+      # connects those nets to GPIOs.
+      switches:
+        what: ceoloide/switch_choc_v1_v2
+        where:
+          - /matrix_c[1-5]_r[1-3]/
+          - /thumbfan_t[1-3]_r0/
+        params:
+          from: "{{name}}"
+          to: GND
+          choc_v1_support: false
+          include_plated_holes: false
+          hotswap: true
+          reversible: true
+          include_stabilizer_pad: false
+        adjust:
+          rotate: 180
+      # TODO(footprint): Scoot uses an RP2040 "Pro Micro", not this nRF52840 supermini.
+      # Swap for a reversible RP2040 Pro Micro footprint (community lib) with the SAME pin
+      # labels, or remap below. Pins P0..P21 carry the 18 direct-wired keys; the roller,
+      # LED, sensor SPI and inter-half UART go on the RP2040's extra pins (P101/102/107 here).
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        where: mcu
+        params:
+          reversible: true
+          only_required_jumpers: true
+          P0:  "matrix_c1_r1"
+          P1:  "matrix_c1_r2"
+          P2:  "matrix_c1_r3"
+          P3:  "matrix_c2_r1"
+          P4:  "matrix_c2_r2"
+          P5:  "matrix_c2_r3"
+          P6:  "matrix_c3_r1"
+          P7:  "matrix_c3_r2"
+          P8:  "matrix_c3_r3"
+          P9:  "matrix_c4_r1"
+          P10: "matrix_c4_r2"
+          P14: "matrix_c4_r3"
+          P15: "matrix_c5_r1"
+          P16: "matrix_c5_r2"
+          P18: "matrix_c5_r3"
+          P19: "thumbfan_t1_r0"
+          P20: "thumbfan_t2_r0"
+          P21: "thumbfan_t3_r0"
+          # extra pins → roller / LED / sensor / tether (see TODOs below)
+          P101: "ROLLER_A"
+          P102: "ROLLER_B"
+          P107: "LED_DI"
+      # TODO(footprint): Scoot's roller is an EVQWGD001 (low-profile scroll encoder).
+      # This EC11 is a stand-in for placement/nets only — swap the footprint.
+      roller:
+        what: ceoloide/rotary_encoder_ec11_ec12
+        where: roller
+        params:
+          reversible: true
+          A: "ROLLER_A"
+          B: "ROLLER_B"
+          C: GND
+      # LED chain (SK6812 MINI-E). Placement (per-key vs underglow) still open — this is a
+      # single stub at the MCU; expand into a chain once placement is decided.
+      led:
+        what: ceoloide/led_sk6812mini-e
+        where: mcu
+        params:
+          P1: VCC
+          P2: "LED_DI"
+          P3: GND
+          P4: "LED_DO"
+      reset_switch:
+        what: ceoloide/reset_switch_tht_top
+        where: mcu
+        params:
+          reversible: true
+        adjust:
+          shift: [0,-33/2 - 4]
+      # TODO(footprint): PMW3360/3389 desk-mouse sensor breakout — no ergogen footprint yet.
+      # It is a face-down, bottom-side, PERIPHERAL-ONLY optional part (SPI: SCK/MOSI/MISO/CS
+      # + MOT on the RP2040's spare pins). Add its breakout header footprint at `where: sensor`.
