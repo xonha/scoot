@@ -4,6 +4,7 @@
 .vscode/
 
 # Build / export artifacts (PCB, firmware) — add as the project grows
+output/
 *.uf2
 *.bin
 *.hex

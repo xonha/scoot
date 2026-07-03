@@ -6,15 +6,15 @@
 # Electrically this is DIRECT-WIRED, no diodes: every switch pulls one MCU GPIO to GND
 # (QMK DIRECT_PINS). There is no matrix and no per-key diode.
 #
-# Footprints use the ceoloide library (reversible/hotswap). Validate in the ergogen web
-# UI (app.ergogen.xyz) with the ceoloide footprints injected — the plain CLI ships only
-# built-in footprints. Geometry (points/outlines) renders on the CLI as-is.
+# Footprints: the RP2040 MCU uses the custom footprints/mcu_rp2040_pro_micro.js (in this
+# repo); the rest use the ceoloide library (reversible/hotswap). Validate in the ergogen
+# web UI (app.ergogen.xyz) with both injected — the plain CLI ships only built-in
+# footprints. Geometry (points/outlines) renders on the CLI as-is.
 #
-# THREE FOOTPRINT GAPS are marked `TODO` below — no drop-in ceoloide/built-in footprint
-# exists for them, so each is a real sourcing decision:
-#   1. MCU     — Scoot uses an RP2040 "Pro Micro"; placeholder is the nRF52840 supermini.
-#   2. roller  — Scoot uses an EVQWGD001 low-profile roller; placeholder is an EC11.
-#   3. sensor  — PMW3360/3389 breakout; no footprint yet (optional, peripheral-only).
+# TWO FOOTPRINT GAPS remain, marked `TODO` below — no drop-in footprint exists, so each is
+# a real sourcing decision:
+#   1. roller  — Scoot uses an EVQWGD001 low-profile roller; placeholder is an EC11.
+#   2. sensor  — PMW3360/3389 breakout; no footprint yet (optional, peripheral-only).
 points:
   key.tags:
     - key
@@ -259,16 +259,17 @@ pcbs:
           include_stabilizer_pad: false
         adjust:
           rotate: 180
-      # TODO(footprint): Scoot uses an RP2040 "Pro Micro", not this nRF52840 supermini.
-      # Swap for a reversible RP2040 Pro Micro footprint (community lib) with the SAME pin
-      # labels, or remap below. Pins P0..P21 carry the 18 direct-wired keys; the roller,
-      # LED, sensor SPI and inter-half UART go on the RP2040's extra pins (P101/102/107 here).
+      # RP2040 "Pro Micro" — custom footprint in footprints/mcu_rp2040_pro_micro.js.
+      # Reversible THT (mount on either face; firmware/QMK handles the L/R pin mirror when
+      # the board is flipped for the other half). P0..P21 are the 18 direct-wired keys;
+      # P100..P107 are the RP2040's extra broken-out GPIO carrying roller/LED/sensor/tether.
+      # NOTE: extra-pin positions are vendor-specific — verify against your actual module.
       mcu:
-        what: ceoloide/mcu_supermini_nrf52840
+        what: scoot/mcu_rp2040_pro_micro
         where: mcu
         params:
           reversible: true
-          only_required_jumpers: true
+          include_extra_pins: true
           P0:  "matrix_c1_r1"
           P1:  "matrix_c1_r2"
           P2:  "matrix_c1_r3"
@@ -287,10 +288,15 @@ pcbs:
           P19: "thumbfan_t1_r0"
           P20: "thumbfan_t2_r0"
           P21: "thumbfan_t3_r0"
-          # extra pins → roller / LED / sensor / tether (see TODOs below)
-          P101: "ROLLER_A"
-          P102: "ROLLER_B"
-          P107: "LED_DI"
+          # extra pins → roller / LED / sensor SPI / inter-half tether
+          P100: "ROLLER_A"
+          P101: "ROLLER_B"
+          P102: "LED_DI"
+          P103: "SENSOR_SCK"
+          P104: "SENSOR_MOSI"
+          P105: "SENSOR_MISO"
+          P106: "SENSOR_CS"
+          P107: "TETHER_UART"
       # TODO(footprint): Scoot's roller is an EVQWGD001 (low-profile scroll encoder).
       # This EC11 is a stand-in for placement/nets only — swap the footprint.
       roller:
