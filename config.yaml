@@ -45,9 +45,7 @@ points:
         t3.key:
           splay: 75
           stagger: 2
-          spread: u + 3.5
-          tags:
-            - key_1_5u
+          spread: u + 2
       rows:
         r0:
     roller:                    # EVQWGD001 roller, inner pocket beside the index key
@@ -121,10 +119,6 @@ outlines:
       where: [key]
       size: 18
       fillet: 3
-    - what: rectangle
-      where: [key_1_5u]
-      size: [18*1.5,18]
-      fillet: 3
   _mcu:
     - what: rectangle
       where: [mcu]
@@ -196,10 +190,10 @@ outlines:
           shift: [u/2,-u/2]
           affect: [x,y]
         - ref: thumbfan_t3_r0
-          shift: [-1.5u/2,-u/2]
+          shift: [-u/2,-u/2]
           affect: [x,y]
         - ref: thumbfan_t3_r0
-          shift: [1.5u/2,-u/2]
+          shift: [u/2,-u/2]
           affect: [x,y]
         - ref: mcu
           shift: [0,33/2]
