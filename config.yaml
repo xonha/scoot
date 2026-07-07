@@ -180,8 +180,8 @@ outlines:
     - what: rectangle
       where: [roller]
       size: [15,25]
-      fillet: 4
     - what: polygon
+      fillet: 1   # single uniform fillet on the whole board (last part); keeps corners squared
       points:
         - ref: matrix_c1_r3
           shift: [u/2,-u/2]
