@@ -113,6 +113,40 @@ points:
       anchor:
         ref: thumbfan_t3_r0
         shift: [0,12]
+    # Underglow LEDs — a short ring near the board perimeter, on the SAME SK6812 chain as the
+    # per-key LEDs (see the `led_*` footprints below). Tagged `led`/`helper` so they are NOT
+    # picked up as keys (no keycap, no switch, no matrix net). Positions are PROVISIONAL —
+    # nudge along the final board edge once the outline is locked.
+    ug1:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c2_r1
+          shift: [0, u/2+2]
+    ug2:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c4_r1
+          shift: [0, u/2+2]
+    ug3:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c5_r2
+          shift: [u/2+2, 0]
+    ug4:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c4_r3
+          shift: [0, -u/2-2]
+    ug5:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c2_r3
+          shift: [0, -u/2-2]
+    ug6:
+      key.tags: [helper, led]
+      anchor:
+        - ref: matrix_c1_r2
+          shift: [-u/2-2, 0]
 outlines:
   _keycaps:
     - what: rectangle
@@ -305,16 +339,45 @@ pcbs:
           A: "ROLLER_A"
           B: "ROLLER_B"
           C: GND
-      # LED chain (SK6812 MINI-E). Placement (per-key vs underglow) still open — this is a
-      # single stub at the MCU; expand into a chain once placement is decided.
-      led:
-        what: ceoloide/led_sk6812mini-e
-        where: mcu
-        params:
-          P1: VCC
-          P2: "LED_DI"
-          P3: GND
-          P4: "LED_DO"
+      # ── RGB: per-key + underglow, ONE SK6812 MINI-E daisy-chain (decided; see README) ──
+      # Addressable RGB, WS2812 protocol → QMK RGB Matrix (per-key reactive effects like
+      # splash, plus the ambient underglow). The whole chain is ONE data line: it costs
+      # exactly 1 GPIO (LED_DI) regardless of LED count — count only scales 5 V current, a
+      # non-issue on the wired rail.
+      #
+      # Footprint pin map (ceoloide/led_sk6812mini-e): P1=VCC, P3=GND, P4=Data-IN, P2=Data-OUT.
+      # Chaining: each LED's DIN (P4) takes the previous LED's DOUT (P2) via the `led_NN`
+      # nets; a LED's DOUT is named `led_(N+1)`, so the chain reads top-to-bottom. Order is a
+      # serpentine over the keys (c1↓ c2↑ c3↓ c4↑ c5↓, then the thumb fan), then out to the
+      # underglow ring ug1..ug6. `reverse_mount: true` = per-key (LED faces up through the
+      # switch); underglow uses `reverse_mount: false`. The two halves light INDEPENDENTLY —
+      # this chain never crosses the tether (RGB sync between halves is a documented non-goal).
+      # `where` can't thread a series chain, so every LED is an explicit block (expected).
+      # NOTE(build): confirm the per-key LED faces/clears your Choc + hotswap stack.
+      led_key_01: { what: ceoloide/led_sk6812mini-e, where: [matrix_c1_r1], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: LED_DI, P2: led_02 } }
+      led_key_02: { what: ceoloide/led_sk6812mini-e, where: [matrix_c1_r2], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_02, P2: led_03 } }
+      led_key_03: { what: ceoloide/led_sk6812mini-e, where: [matrix_c1_r3], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_03, P2: led_04 } }
+      led_key_04: { what: ceoloide/led_sk6812mini-e, where: [matrix_c2_r3], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_04, P2: led_05 } }
+      led_key_05: { what: ceoloide/led_sk6812mini-e, where: [matrix_c2_r2], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_05, P2: led_06 } }
+      led_key_06: { what: ceoloide/led_sk6812mini-e, where: [matrix_c2_r1], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_06, P2: led_07 } }
+      led_key_07: { what: ceoloide/led_sk6812mini-e, where: [matrix_c3_r1], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_07, P2: led_08 } }
+      led_key_08: { what: ceoloide/led_sk6812mini-e, where: [matrix_c3_r2], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_08, P2: led_09 } }
+      led_key_09: { what: ceoloide/led_sk6812mini-e, where: [matrix_c3_r3], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_09, P2: led_10 } }
+      led_key_10: { what: ceoloide/led_sk6812mini-e, where: [matrix_c4_r3], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_10, P2: led_11 } }
+      led_key_11: { what: ceoloide/led_sk6812mini-e, where: [matrix_c4_r2], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_11, P2: led_12 } }
+      led_key_12: { what: ceoloide/led_sk6812mini-e, where: [matrix_c4_r1], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_12, P2: led_13 } }
+      led_key_13: { what: ceoloide/led_sk6812mini-e, where: [matrix_c5_r1], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_13, P2: led_14 } }
+      led_key_14: { what: ceoloide/led_sk6812mini-e, where: [matrix_c5_r2], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_14, P2: led_15 } }
+      led_key_15: { what: ceoloide/led_sk6812mini-e, where: [matrix_c5_r3], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_15, P2: led_16 } }
+      led_key_16: { what: ceoloide/led_sk6812mini-e, where: [thumbfan_t1_r0], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_16, P2: led_17 } }
+      led_key_17: { what: ceoloide/led_sk6812mini-e, where: [thumbfan_t2_r0], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_17, P2: led_18 } }
+      led_key_18: { what: ceoloide/led_sk6812mini-e, where: [thumbfan_t3_r0], params: { reversible: true, reverse_mount: true, P1: VCC, P3: GND, P4: led_18, P2: led_19 } }
+      led_ug_19:  { what: ceoloide/led_sk6812mini-e, where: [ug1], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_19, P2: led_20 } }
+      led_ug_20:  { what: ceoloide/led_sk6812mini-e, where: [ug2], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_20, P2: led_21 } }
+      led_ug_21:  { what: ceoloide/led_sk6812mini-e, where: [ug3], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_21, P2: led_22 } }
+      led_ug_22:  { what: ceoloide/led_sk6812mini-e, where: [ug4], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_22, P2: led_23 } }
+      led_ug_23:  { what: ceoloide/led_sk6812mini-e, where: [ug5], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_23, P2: led_24 } }
+      led_ug_24:  { what: ceoloide/led_sk6812mini-e, where: [ug6], params: { reversible: true, reverse_mount: false, P1: VCC, P3: GND, P4: led_24, P2: LED_DO } }
       reset_switch:
         what: ceoloide/reset_switch_tht_top
         where: mcu
