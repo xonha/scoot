@@ -89,32 +89,11 @@ The pointing method is committed, so these are the problems that decide whether 
 
 The board is **reversible**, so the peripheral (mouse) half can be built for either hand: a right-handed build puts the peripheral under the right hand and the central (typing/USB) half on the left; a left-handed build simply mirrors that. Firmware handedness (QMK) and the concrete pointing-device side are set per build. The **case/bottom-plate is the only half-specific part** (the peripheral needs the optical window + ~10 mm standoff), so a left- vs right-handed build differs only in the enclosure, not the PCB.
 
-## Building the PCB (ergogen)
-
-The board is generated from [`config.yaml`](config.yaml) with [ergogen](https://ergogen.xyz) v4. It models **one reversible half** (fabricate twice and flip for the mirror half) as a Corne 3×5+3 + roller + optional desk-mouse sensor, direct-wired with no diodes.
-
-Footprints live under `footprints/`, and ergogen resolves each `what:` from the path beneath that folder (so `footprints/ceoloide/foo.js` → `ceoloide/foo`):
-
-| Path | Source |
-| --- | --- |
-| `footprints/scoot/mcu_rp2040_pro_micro.js` | Custom reversible RP2040 "Pro Micro" footprint (this repo) |
-| `footprints/ceoloide/` | [ceoloide/ergogen-footprints](https://github.com/ceoloide/ergogen-footprints) — git submodule |
-
-```sh
-git clone --recurse-submodules <this repo>   # or: git submodule update --init
-npx ergogen@4 . -o output --clean            # NB: the DIRECTORY (.), not config.yaml —
-                                             # only then does ergogen scan ./footprints/
-```
-
-Outputs land in `output/` (git-ignored): `pcbs/scoot_pcb.kicad_pcb` and the outline SVG/DXF.
-
-> The ergogen **web UI** only exposes its bundled libraries, so it can't see the custom `scoot/` footprint — build locally with the command above. Two footprints are still placeholders pending a real part footprint (see the `TODO`s in `config.yaml`): the **EVQWGD001 roller** (an EC11 stands in) and the **PMW3360 sensor** breakout.
-
 ## Roadmap (rough)
 
 1. **Concept** — core architecture settled (this README).
 2. **Corne prototype** — prove the firmware and *pointing-over-split* on an existing XIAO/RP2040 Corne + a sensor breakout: hold-to-mouse, click remapping, sensor on the peripheral half reporting to the central. ([docs/breadboard.md](docs/breadboard.md)) ← we are here.
-3. **Standalone PCB** — a custom board holding the modules + breakout; net-level capture in [docs/schematic.md](docs/schematic.md). Validates the *physical* desk-mouse: case, standoff, glide, re-homing, the roaming tether. Likely the finish line for a personal build.
+3. **Standalone PCB** — a custom board holding the modules + breakout. Validates the *physical* desk-mouse: case, standoff, glide, re-homing, the roaming tether. Likely the finish line for a personal build.
 4. **Bare PCB (optional)** — only if Scoot Keyboard becomes a product: a fab-assembled revision (bare RP2040s, embedded sensor). Reuses ~90% of the standalone design.
 5. Case / bottom-plate design (sensor window, glide surface) — alongside step 3.
 6. Firmware — a QMK split with `DIRECT_PINS`, the PMW33xx pointing driver, split pointing, and the hold-to-mouse layer.

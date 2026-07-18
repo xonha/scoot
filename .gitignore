@@ -3,8 +3,7 @@
 *.swp
 .vscode/
 
-# Build / export artifacts (PCB, firmware) — add as the project grows
-output/
+# Build / export artifacts (firmware) — add as the project grows
 *.uf2
 *.bin
 *.hex
