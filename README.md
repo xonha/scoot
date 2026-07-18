@@ -30,7 +30,7 @@ A Corne 3×5+3 layout (36 keys) — **two RP2040 "Pro Micro" modules (~18 × 33 
 
 | Part | Role |
 | --- | --- |
-| RP2040 "Pro Micro" module (×2) | One controller per half (e.g. TENSTAR RP2040 Pro Micro, ~29 GPIO) |
+| RP2040 "Pro Micro" module (×2) | One controller per half — TENSTAR RP2040 Pro Micro, **28 usable GPIO** (full pinout, flash/boot/VBUS notes, and quirks in [docs/mcu.md](docs/mcu.md)) |
 | PMW3360 / PMW3389 breakout (lens included) | Desk-mouse sensor, peripheral half, face-down, read by the peripheral MCU |
 | EVQWGD001 roller encoder (×2) | Both halves — clickable rollers: central = volume / play-pause, peripheral = scroll / middle-click |
 | USB-C tether (UART + power) | Carries the split link + power between halves — ~4 conductors; USB-C connector per half (non-USB pinout) |
