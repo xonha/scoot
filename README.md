@@ -5,7 +5,7 @@ A wired, low-latency, 36-key split ergonomic keyboard where **the entire periphe
 A Corne 3×5+3 layout (36 keys) — **two RP2040 "Pro Micro" modules (~18 × 33 mm each), one per half** (a true split), wired together over a thin serial tether. The two halves are the **central** half (wired to the computer over USB, stays planted as the typing anchor) and the **peripheral** half (carries its own MCU plus the pointing sensor and *is* the desk mouse). The peripheral half reads its MCU, keys, and sensor locally; only its key/pointer reports cross the cable. Built to be **hand-soldered and repairable** from off-the-shelf modules — and the board is reversible, so the peripheral (mouse) half can be built for either hand.
 
 <p align="center">
-  <img src="docs/scoot-layout.svg" width="100%"
+  <img src="misc/scoot-layout.svg" width="100%"
        alt="Scoot Keyboard physical layout — a Corne 3×5+3 split: two mirrored halves, each with three rows of five staggered finger keys, a three-key fanned thumb cluster, and a roller encoder in the inner pocket beside the index key. There is no detachable column. Accent markers show the internal parts: an RP2040 'Pro Micro' module on each half (green), the USB-C tether port (blue), the reset button (red), a dedicated layer/status LED just below it (yellow), and the roller encoder (purple). The PMW3360 pointing sensor is implicit — mounted under the peripheral (mouse) half's module.">
 
 

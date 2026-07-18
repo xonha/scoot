@@ -13,7 +13,7 @@ and the community survey **[bgkendall/keyboard_mcu_list](https://github.com/bgke
 Vendor pinout image, added for reference (source:
 [keycapsss.com](https://keycapsss.com/media/da/b2/b3/1762952293/rp2040-pro-micro-controller-16mb-pinout.png)):
 
-![Tenstar RP2040 Pro Micro pinout — the board this project uses](rp2040-pro-micro-pinout.png)
+![Tenstar RP2040 Pro Micro pinout — the board this project uses](../misc/rp2040-pro-micro-pinout.png)
 
 > **Heads-up — the LED is NOT RGB.** The image labels GP17 as `RGB_LED`, but the on-board
 > LED on this module is a **single-color red LED**, not an addressable RGB. It cannot drive
