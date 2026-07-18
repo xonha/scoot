@@ -2,9 +2,10 @@
 
 Scoot's lighting is a single-wire addressable chain (SK6812 MINI-E, WS2812 protocol):
 **18 per-key + 1 status + 6 underglow = 25 LEDs per half**, all on one data GPIO. Not
-everyone wants all of it — some builders want per-key only, some want underglow only, some
-want nothing. This page is the PCB precaution that makes every subset buildable **without a
-board respin**, plus the firmware caveat that comes with it.
+everyone wants all of it. This page is the PCB precaution that lets a builder populate a
+**subset** without a board respin, plus the firmware caveat that comes with it.
+
+The design keeps this deliberately simple — **one bypass jumper, one decision.**
 
 ## The problem — an addressable chain is wired in series
 
@@ -19,64 +20,59 @@ bits and forwards the rest to the next one.
 So "optional LED" is not simply "don't solder it": skip a group in the middle of the chain
 and you kill every group after it. That is what the PCB has to plan for.
 
-## The solution — segment the chain + bypass jumpers
+## The solution — one bypass jumper on the per-key block
 
-Split the chain into logical blocks and, **between blocks, place a solder jumper** (two
-copper pads, bridged with solder — or an optional 0 Ω) that shorts that block's `DIN → DOUT`.
-
-- Block **populated** → jumper **open**, data flows through the LEDs.
-- Block **empty** → jumper **closed**, data hops over the block untouched to the next one.
-
-A solder jumper is ~free (bare copper + a solder blob), so full flexibility is cheap.
-
-## Canonical order — `status → per-key → underglow`
+Chain order and the single jumper:
 
 ```
 MCU ─→ [ status (1) ] ─→ [ per-key (18) ] ─→ [ underglow (6) ] ─→ end
-          │ J_S │            │ J_P │
+                            │ J_P │
 ```
 
-- **J_S** — bypass the status block
-- **J_P** — bypass the per-key block
-- **underglow** — it is the tail, so it needs **no** jumper (not populating it just ends the
-  chain early)
+- **status** — first, **always populated** (it's one cheap LED and the anchor of the chain).
+- **per-key** — the middle block; **J_P** shorts its `DIN → DOUT` so it can be skipped while
+  the underglow after it still lights.
+- **underglow** — the tail, so it needs **no** jumper (not populating it just ends the chain
+  early).
 
-Two jumpers cover **all eight** subsets.
+A solder jumper is two copper pads bridged with solder (or an optional 0 Ω) — near-zero cost.
 
-## Every combination
+## Every supported combination
 
-| Config | Populate | Close jumper |
+| Config | Populate | Close J_P? |
 | --- | --- | --- |
-| Nothing | — | none |
-| Status | S | none |
-| Per-key | P | **J_S** |
-| Underglow | U | **J_S + J_P** |
-| Status + per-key | S, P | none |
-| Status + underglow | S, U | **J_P** |
-| Per-key + underglow | P, U | **J_S** |
-| Everything | S, P, U | none |
+| Nothing | — | no |
+| Status only | S | no |
+| Status + per-key | S, P | no |
+| Status + underglow | S, U | **yes** |
+| Everything | S, P, U | no |
 
-**The rule:** close the jumper of every empty block that still has a populated block after
-it. The underglow block, being last, never counts toward that.
+**The one rule a builder needs:** *close J_P only if you want underglow but not the per-key
+LEDs.* Everything else is just "solder what you want" — the status LED is always in, and the
+underglow at the tail drops off for free.
 
-Because the status block comes first, the zero-jumper configs are the ones that **include the
-status LED** (`status`, `status + per-key`, `everything`) — and status is one cheap LED, so
-those are the common builds. The configs that *skip* status pay a jumper, and those are the
-niche ones.
+### What this trades away (on purpose)
 
-## Why status goes first — two firmware bonuses
+Skipping the status LED is **not** supported — you cannot build per-key-only or
+underglow-only *without* the status LED. That's the simplification: dropping the second jumper
+removes three niche configs (per-key only, underglow only, per-key + underglow, all sans
+status) in exchange for a single, obvious instruction for new builders. Since the status LED
+is one ~$0.10 part, treating it as "always present when the board has any LEDs" costs nothing
+real. (A fully dark board is still fine — see *No LEDs at all* below.)
 
-When the status LED is populated (the common case), putting it first buys:
+## Why status is first — two firmware bonuses, now unconditional
 
-1. **Status is LED index 0, fixed.** Its index does not shift with how many per-key/underglow
-   LEDs follow, so `rgb_matrix_indicators_user()` can address the indicator with a constant
-   instead of a per-build number.
-2. **The head of the chain is deterministic.** The first LED after the MCU — the one that has
-   to read 3.3 V logic and is the level-shifter candidate — is always the status LED, in the
-   same physical spot. You settle the level-shift question once and it holds across builds.
+Because the status LED is always populated and always first:
 
-(In the niche configs that *skip* status, the head becomes the next populated block — but that
-build's firmware already knows its own layout, so it is not a problem.)
+1. **Status is LED index 0, always.** Its index never shifts with how many per-key/underglow
+   LEDs follow, so `rgb_matrix_indicators_user()` addresses the indicator with a constant `0`
+   in every build.
+2. **The head of the chain is fixed.** The first LED after the MCU — the one that has to read
+   3.3 V logic and is the level-shifter candidate — is always the status LED, in the same
+   physical spot. You settle the level-shift question once and it holds across every build.
+
+Both bonuses used to depend on "if status is populated"; with the single-jumper scheme they
+are unconditional.
 
 ## Power — parallel, so size for the maximum
 
@@ -104,21 +100,21 @@ the `g_led_config` X/Y map **must match the populated set** — mismatch and the
 the wrong LEDs.
 
 Consequence: **each hardware config needs its own firmware build** (a `#define` per config, a
-build target, or an EEPROM-selectable set). This cannot be avoided with addressable LEDs. Plan
-to ship a few named builds — e.g. `full`, `per_key`, `underglow_only` — matching the table
-above.
+build target, or an EEPROM-selectable set). This cannot be avoided with addressable LEDs. With
+the single-jumper scheme there are only three lit configs to ship — e.g. `full` (25),
+`status_perkey` (19), and `status_underglow` (7) — plus a dark build.
 
 ## No LEDs at all — nothing to do on the PCB
 
 If a builder wants **zero** LEDs, the hardware needs nothing: don't populate any LED (or the
-head-of-chain passives), leave every jumper **open** — the data GPIO simply drives an open
-trace, which is harmless because there is no downstream to break. The only change is in
-firmware: build with `RGB_MATRIX_ENABLE = no` (QMK expects `RGB_MATRIX_LED_COUNT ≥ 1`, so a
-zero-LED config won't build cleanly with the feature on), which also frees that GPIO for reuse.
+head-of-chain passives), leave J_P **open** — the data GPIO simply drives an open trace, which
+is harmless because there is no downstream to break. The only change is in firmware: build
+with `RGB_MATRIX_ENABLE = no` (QMK expects `RGB_MATRIX_LED_COUNT ≥ 1`, so a zero-LED config
+won't build cleanly with the feature on), which also frees that GPIO for reuse.
 
 ## Fabrication details
 
 - **Test points** on the data line at the block boundaries — if the chain breaks, probe to
   find the guilty block instead of guessing.
-- **Clear silk** on each jumper, e.g. *"close if per-key not fitted"* — the logic is inverted
+- **Clear silk** on J_P, e.g. *"close if per-key LEDs not fitted"* — the logic is inverted
   (closed = skip), so it must be spelled out or nobody will guess it.
