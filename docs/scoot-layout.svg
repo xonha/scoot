@@ -496,6 +496,14 @@
          id="rect-usbc-right-6"
          style="fill:#ea5c53;fill-opacity:1;stroke:none;stroke-width:0.714035"
          transform="scale(-1)" />
+      <rect
+         x="645.36"
+         y="242"
+         width="16"
+         height="16"
+         rx="4"
+         id="rect-led-status-right"
+         style="fill:#e3b341;fill-opacity:1;stroke:none" />
     </g>
     <g
        id="g45-6"
@@ -720,6 +728,14 @@
          id="rect-usbc-right-6-4"
          style="fill:#ea5c53;fill-opacity:1;stroke:none;stroke-width:0.714035"
          transform="scale(-1)" />
+      <rect
+         x="645.36"
+         y="242"
+         width="16"
+         height="16"
+         rx="4"
+         id="rect-led-status-left"
+         style="fill:#e3b341;fill-opacity:1;stroke:none" />
     </g>
   </g>
 </svg>
