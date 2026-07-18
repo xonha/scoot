@@ -15,6 +15,10 @@ Vendor pinout image, added for reference (source:
 
 ![Tenstar RP2040 Pro Micro pinout — the board this project uses](rp2040-pro-micro-pinout.png)
 
+> **Heads-up — the LED is NOT RGB.** The image labels GP17 as `RGB_LED`, but the on-board
+> LED on this module is a **single-color red LED**, not an addressable RGB. It cannot drive
+> our SK6812 chain (and GP17 has no exposed pad anyway — see below).
+
 A simplified, function-oriented view of the same board (schematic, not mechanical —
 `GP18/GP24` are the center pads, `GP25` sits at the bottom-left, `GP12–GP16` the bottom row):
 
