@@ -51,13 +51,6 @@ pads** (normal pads, not castellated edges — GP25 is the isolated one, GP18/GP
 `GP17` and `GP19` are **internal only, no pad** (see below). Positions are schematic, not
 mechanical — verify against your physical module before laying out a board.
 
-> **Scoot board choice — GP25 is left off the PCB.** Even the busier peripheral half wires up
-> with a GPIO to spare, so the lone center pad **GP25** is surplus. It is also the fiddliest of
-> the three center pads — isolated, not part of the GP18/GP24 pair — and the most awkward to
-> release when a module sits in a socket. So Scoot's PCB **does not break GP25 out**: the
-> peripheral spends the pins it needs on edge pads plus the socket-friendly GP18/GP24 pair, and
-> a socketed MCU pulls cleanly. This supersedes any GP25 use in the pre-`cd4b118` pin map.
-
 ## Usable GPIO = 28 (not the "26" the listing claims)
 
 The RP2040 has **30 GPIO** (GP0–GP29). This module exposes all but two:
