@@ -10,6 +10,14 @@ and the community survey **[bgkendall/keyboard_mcu_list](https://github.com/bgke
 
 ## Pinout (top view, USB at top)
 
+Vendor pinout image, added for reference (source:
+[keycapsss.com](https://keycapsss.com/media/da/b2/b3/1762952293/rp2040-pro-micro-controller-16mb-pinout.png)):
+
+![Tenstar RP2040 Pro Micro pinout — the board this project uses](rp2040-pro-micro-pinout.png)
+
+A simplified, function-oriented view of the same board (schematic, not mechanical —
+`GP18/GP24` are the center pads, `GP25` sits at the bottom-left, `GP12–GP16` the bottom row):
+
 ```
                         ┌───────────────┐
                  BOOT ● │     USB-C     │
