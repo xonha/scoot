@@ -41,11 +41,11 @@ A solder jumper is two copper pads bridged with solder (or an optional 0 Ω) —
 
 | Config | Populate | Close J_P? |
 | --- | --- | --- |
-| Nothing | — | no |
-| Status only | S | no |
-| Status + per-key | S, P | no |
-| Status + underglow | S, U | **yes** |
-| Everything | S, P, U | no |
+| Nothing | — | — |
+| Status only | S | — |
+| Status + per-key | S, P | — |
+| Status + underglow | S, U |  ✅ |
+| Everything | S, P, U | — |
 
 **The one rule a builder needs:** *close J_P only if you want underglow but not the per-key
 LEDs.* Everything else is just "solder what you want" — the status LED is always in, and the
