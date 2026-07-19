@@ -1,56 +1,34 @@
 units:
-  # Proxy Spacing Variables
-  kx: cx #choc spaced
+  kx: cx
   ky: cy
-  # Padding Variables
   px: kx + 2
   py: ky + 2
-
-  # vertical offset of mcu area items
-  voff: 7
-
-  # pinky splay angles
-  spang: 8
-  pinksprd: 0.5
-
-  standoff_size: 5 #size for standoff holes on pcb
-  screen_standoff_size: 2
-
+  voff: 7 # vertical offset of the MCU-area footprints
+  standoff_size: 5
   hole1_x: -0.5 kx - 1
   hole1_y: -0.5 ky + 0.5
-
   hole2_x: -0.52 kx
   hole2_y: -0.35 ky
-
   hole3_x: 0.5 kx + 1
   hole3_y: 0. ky - 0.5
-
   hole4_x: 0.5 kx - 5
   hole4_y: -0.5 ky - 2.1
-
   hole5_x: -0.5 kx - 0.6
   hole5_y: -0.6 ky + 1.5
-
-  wall_thickness: 1.2 # account for the thickness in 3D printed case/plate
-  print_fit_tolerance: 0.2 # give the case some overlap beyond pcb
-
-  # display correct choc sizing
+  wall_thickness: 1.2
+  print_fit_tolerance: 0.2
   $default_width: 18
   $default_height: 17
 
 points:
   zones:
     main:
-      anchor.shift: [50, -100] # Fix KiCad placement
+      anchor.shift: [50, -100]
       key:
-        padding: 1ky # is this extra spacing necessary or will 1 allow spacing for keycaps?
+        padding: 1ky
         spread: 1kx
-      # Direct wiring: each key gets its own MCU pin as its net (no matrix, no diodes).
-      # The nice!nano footprint exposes each pin as a net named after it, so pointing a key's
-      # column_net at "P0" wires that key straight to pin P0.
-      #
-      # Per-key SK6812 LED chain: each key also carries led_din/led_dout, where one LED's DOUT
-      # is the next LED's DIN. The chain runs LED_DATA → (18 per-key LEDs) → LED_DOUT.
+      # Each key carries its own MCU pin (column_net, direct-wired to GND) and its slot in the
+      # LED chain (led_din/led_dout, where one LED's DOUT feeds the next LED's DIN).
       columns:
         pinky:
           rows:
@@ -116,42 +94,32 @@ points:
         thumb-cluster:
 
 outlines:
-  # just the keys
   raw:
     - what: rectangle
       where: true
       size: [px, py]
-
-  # keys without padding
   keys:
     - what: rectangle
       where: true
       size: [kx-0.5, ky-0.5]
-
-  # keys without padding
   key-plug:
     - what: rectangle
       where: true
       size: [13.8, 13.8]
-
   mcu:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -20 - voff] # v2 - Creates more space between inner key col and mcu (issue #4)
+          shift: [19.5, -20 - voff]
       size: [22, 62]
-
-  # draw thumb cluster outline
   thumb_outline:
     - what: polygon
       operation: stack
-      # bound: true
       points:
         - ref: thumb_near
           shift: [-0.5px, 0.75py]
         - ref: main_inner_bottom
           shift: [0.45px, -0.5py]
-
         - ref: thumb_far
           shift: [-0.5px, 0.5py]
         - ref: thumb_far
@@ -160,36 +128,26 @@ outlines:
           shift: [0.5px, -0.5py]
         - ref: thumb_far
           shift: [-0.5px, -0.5075py]
-
         - ref: thumb_near
           shift: [0.5px, -0.5py]
         - ref: thumb_near
           shift: [-0.5px, -0.5py]
-
-  # combine keys with thumb cluster
   key_section: [raw, thumb_outline]
   key_thumb_mcu: [key_section, mcu]
-
-  top_plate_cutouts: [key-plug] #, mcu_key_shave]
-
+  top_plate_cutouts: [key-plug]
   top_plate:
     - name: key_section
-      # expand: print_fit_tolerance + wall_thickness
     - operation: subtract
       name: top_plate_cutouts
       fillet: 1
-
   board_outline:
     - name: key_thumb_mcu
-      expand: 0.1 # padding on outer edge or board
+      expand: 0.1
       fillet: 1
-
   back_plate:
     - name: board_outline
       expand: wall_thickness + print_fit_tolerance
       fillet: 1
-
-  # Combination preview showing outline and keys.
   all_key_outline:
     - name: board_outline
     - operation: subtract
@@ -216,9 +174,6 @@ pcbs:
           hotswap: true
           choc_v2_support: false
 
-      # Per-key SK6812 MINI-E, one under each key (reverse_mount = shines through the PCB).
-      # DIN/DOUT come from each key's led_din/led_dout, forming the daisy chain; VCC/GND are
-      # shared nets by default.
       per_key_led:
         what: ceoloide/led_sk6812mini-e
         where: true
@@ -228,16 +183,13 @@ pcbs:
           P4: "{{led_din}}"
           P2: "{{led_dout}}"
         adjust:
-          shift: [0, -4.7] # below the switch center (Choc per-key position) — verified in KiCad
+          shift: [0, -4.7] # below the switch center (Choc per-key position)
 
-      # Status/indicator LED — head of the chain (canonical order status -> per-key ->
-      # underglow, per led-options.md), placed just below the reset button. The chain now runs
-      # LED_DATA -> status -> led_s -> the 18 per-key LEDs -> LED_DOUT.
-      status_led:
+      status_led: # head of the chain, below the reset button
         what: ceoloide/led_sk6812mini-e
         where:
           - ref: main_inner_home
-            shift: [28.3, -15 - voff] # a few mm below the reset (which is at -10.2 - voff)
+            shift: [28.3, -15 - voff]
         params:
           reversible: true
           reverse_mount: true
@@ -248,19 +200,16 @@ pcbs:
         what: ceoloide/mcu_nice_nano
         where:
           - ref: main_inner_home
-            shift: [19.8, 10.8 - voff] # v2 - creates more space between mcu and key colums (issue #5) : v1:18.8
+            shift: [19.8, 10.8 - voff]
         params:
           reversible: true
           reverse_mount: true
           show_silk_labels: false
-          # only_required_jumpers: hardware jumpers only on the power/reset rows; GPIO
-          # handedness is done in firmware. This is what exposes the extra pins (P101/P102)
-          # on a reversible board — we route the LED chain's data line to P101.
+          # only_required_jumpers exposes the extra pins (P101/P102) on a reversible board;
+          # GPIO handedness then moves to firmware. P101 carries the LED chain's data line.
           only_required_jumpers: true
           include_extra_pins: true
           P101: LED_DATA
-          # Other pins default to a net named after each pin (P0 → net "P0" …); the keys point
-          # their column_net at those names, so no further pin map is needed.
 
       reset:
         what: ceoloide/reset_switch_smd_side
@@ -297,7 +246,6 @@ pcbs:
         where:
           - ref: thumb_far
             shift: [0, -3]
-            # rotate: 30
         params:
           text: "by xonha"
           side: "B"
@@ -308,7 +256,6 @@ pcbs:
         where:
           - ref: main_middle_top
             shift: [hole1_x, hole1_y]
-
         params:
           hole_size: standoff_size
           hole_drill: standoff_size
@@ -345,8 +292,7 @@ pcbs:
           hole_size: standoff_size
           hole_drill: standoff_size
 
-  ## these are not used in v.1.1, but they might be useful down the road for better case building, or fabricating FR4 plates
-  ##### BACKPLATE PCB
+  # Optional FR4 plates for case fabrication (not part of the main PCB).
   scoot-back-plate:
     template: kicad8
     outlines:
@@ -379,7 +325,6 @@ pcbs:
           - ref: main_ring_home
             shift: [hole5_x, hole5_y]
 
-  ###### TOPPLATE
   scoot-top-plate:
     template: kicad8
     outlines:
