@@ -48,36 +48,39 @@ points:
       # Direct wiring: each key gets its own MCU pin as its net (no matrix, no diodes).
       # The nice!nano footprint exposes each pin as a net named after it, so pointing a key's
       # column_net at "P0" wires that key straight to pin P0.
+      #
+      # Per-key SK6812 LED chain: each key also carries led_din/led_dout, where one LED's DOUT
+      # is the next LED's DIN. The chain runs LED_DATA → (18 per-key LEDs) → LED_DOUT.
       columns:
         pinky:
           rows:
-            top: { column_net: P0 }
-            home: { column_net: P1 }
-            bottom: { column_net: P2 }
+            top:    { column_net: P0, led_din: LED_DATA, led_dout: led1 }
+            home:   { column_net: P1, led_din: led1, led_dout: led2 }
+            bottom: { column_net: P2, led_din: led2, led_dout: led3 }
         ring:
           key.stagger: 0.7ky
           rows:
-            top: { column_net: P3 }
-            home: { column_net: P4 }
-            bottom: { column_net: P5 }
+            top:    { column_net: P3, led_din: led3, led_dout: led4 }
+            home:   { column_net: P4, led_din: led4, led_dout: led5 }
+            bottom: { column_net: P5, led_din: led5, led_dout: led6 }
         middle:
           key.stagger: 0.25ky
           rows:
-            top: { column_net: P6 }
-            home: { column_net: P7 }
-            bottom: { column_net: P8 }
+            top:    { column_net: P6, led_din: led6, led_dout: led7 }
+            home:   { column_net: P7, led_din: led7, led_dout: led8 }
+            bottom: { column_net: P8, led_din: led8, led_dout: led9 }
         index:
           key.stagger: -0.2ky
           rows:
-            top: { column_net: P9 }
-            home: { column_net: P10 }
-            bottom: { column_net: P14 }
+            top:    { column_net: P9, led_din: led9, led_dout: led10 }
+            home:   { column_net: P10, led_din: led10, led_dout: led11 }
+            bottom: { column_net: P14, led_din: led11, led_dout: led12 }
         inner:
           key.stagger: -0.15ky
           rows:
-            top: { column_net: P15 }
-            home: { column_net: P16 }
-            bottom: { column_net: P18 }
+            top:    { column_net: P15, led_din: led12, led_dout: led13 }
+            home:   { column_net: P16, led_din: led13, led_dout: led14 }
+            bottom: { column_net: P18, led_din: led14, led_dout: led15 }
       rows:
         bottom:
         home:
@@ -93,16 +96,22 @@ points:
         near:
           key.name: thumb_near
           key.column_net: P19
+          key.led_din: led15
+          key.led_dout: led16
         mid:
           key.splay: -15
           key.origin: [-0.5kx, -0.5ky]
           key.name: thumb_mid
           key.column_net: P20
+          key.led_din: led16
+          key.led_dout: led17
         far:
           key.splay: -15
           key.origin: [-0.5kx, -0.5ky]
           key.name: thumb_far
           key.column_net: P21
+          key.led_din: led17
+          key.led_dout: LED_DOUT
       rows:
         thumb-cluster:
 
@@ -206,6 +215,18 @@ pcbs:
           reversible: true
           hotswap: true
           choc_v2_support: false
+
+      # Per-key SK6812 MINI-E, one under each key (reverse_mount = shines through the PCB).
+      # DIN/DOUT come from each key's led_din/led_dout, forming the daisy chain; VCC/GND are
+      # shared nets by default.
+      per_key_led:
+        what: ceoloide/led_sk6812mini-e
+        where: true
+        params:
+          reversible: true
+          reverse_mount: true
+          P4: "{{led_din}}"
+          P2: "{{led_dout}}"
 
       mcu:
         what: ceoloide/mcu_nice_nano
