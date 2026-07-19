@@ -24,6 +24,8 @@ module.exports = {
     show_labels: true,
     include_boot: true, // BOOT pad — module has an on-board BOOT button, so often unneeded
     include_gp25: true, // GP25 — the isolated pad; drop it for easier socketing/repair
+    reversible: false,  // duplicate the asymmetric center pads (GP18/GP24) on both X sides,
+                        //   so the module can seat in either orientation on a reversible board
     GP0:  { type: 'net', value: 'GP0'  },
     GP1:  { type: 'net', value: 'GP1'  },
     GP2:  { type: 'net', value: 'GP2'  },
@@ -88,10 +90,15 @@ module.exports = {
     const shown = pads.filter(([k]) =>
       (k !== 'BOOT' || p.include_boot) && (k !== 'GP25' || p.include_gp25))
 
-    const pad_str = shown.map(([key, x, y, size]) => {
+    const pad_str = shown.flatMap(([key, x, y, size]) => {
       const s = size || 1.8
-      return `
-    (pad "${key}" thru_hole circle (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`
+      // Center pads GP18/GP24 are off-axis, so when reversible they get BOTH X positions
+      // (normal + mirrored) on the same net; every other pad follows reverse_mount's mirror.
+      const xs = (p.reversible && (key === 'GP18' || key === 'GP24'))
+        ? [x - CX, -(x - CX)]
+        : [mx * (x - CX)]
+      return xs.map(px => `
+    (pad "${key}" thru_hole circle (at ${px.toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`)
     }).join('')
 
     const label_str = p.show_labels ? shown.map(([key, x, y]) => `
