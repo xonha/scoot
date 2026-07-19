@@ -209,17 +209,15 @@ pcbs:
             shift: [28.3, -10.2 - voff]
 
       roller:
-        what: ceoloide/rotary_encoder_ec11_ec12
+        what: roller_evqwgd001
         where:
           - ref: thumb_far
             shift: [0, ky] # above the outer thumb, inheriting its -30° angle
         params:
-          reversible: true
-          A: RE_A
-          B: GND
-          C: RE_C
-          S1: RE_PUSH
-          S2: GND
+          A: RE_A # encoder channel A -> GPIO
+          B: RE_B # encoder channel B -> GPIO
+          C: GND  # common
+          D: GND  # common
 
       hole_1:
         what: ceoloide/mounting_hole_npth
