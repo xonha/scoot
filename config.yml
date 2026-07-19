@@ -201,13 +201,12 @@ pcbs:
           P101: LED_DATA
 
       reset:
-        what: ceoloide/reset_switch_smd_side
+        what: ceoloide/reset_switch_tht_top
         params:
           reversible: true
         where:
           - ref: main_inner_home
             shift: [28.3, -10.2 - voff]
-            rotate: -90
 
       hole_1:
         what: ceoloide/mounting_hole_npth
