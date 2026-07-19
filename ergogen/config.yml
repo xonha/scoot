@@ -32,32 +32,32 @@ points:
       columns:
         pinky:
           rows:
-            top:    { column_net: P0, led_din: led_s, led_dout: led1 }
-            home:   { column_net: P1, led_din: led1, led_dout: led2 }
+            top: { column_net: P0, led_din: led_s, led_dout: led1 }
+            home: { column_net: P1, led_din: led1, led_dout: led2 }
             bottom: { column_net: P2, led_din: led2, led_dout: led3 }
         ring:
           key.stagger: 0.7ky
           rows:
-            top:    { column_net: P3, led_din: led3, led_dout: led4 }
-            home:   { column_net: P4, led_din: led4, led_dout: led5 }
+            top: { column_net: P3, led_din: led3, led_dout: led4 }
+            home: { column_net: P4, led_din: led4, led_dout: led5 }
             bottom: { column_net: P5, led_din: led5, led_dout: led6 }
         middle:
           key.stagger: 0.25ky
           rows:
-            top:    { column_net: P6, led_din: led6, led_dout: led7 }
-            home:   { column_net: P7, led_din: led7, led_dout: led8 }
+            top: { column_net: P6, led_din: led6, led_dout: led7 }
+            home: { column_net: P7, led_din: led7, led_dout: led8 }
             bottom: { column_net: P8, led_din: led8, led_dout: led9 }
         index:
           key.stagger: -0.2ky
           rows:
-            top:    { column_net: P9, led_din: led9, led_dout: led10 }
-            home:   { column_net: P10, led_din: led10, led_dout: led11 }
+            top: { column_net: P9, led_din: led9, led_dout: led10 }
+            home: { column_net: P10, led_din: led10, led_dout: led11 }
             bottom: { column_net: P14, led_din: led11, led_dout: led12 }
         inner:
           key.stagger: -0.15ky
           rows:
-            top:    { column_net: P15, led_din: led12, led_dout: led13 }
-            home:   { column_net: P16, led_din: led13, led_dout: led14 }
+            top: { column_net: P15, led_din: led12, led_dout: led13 }
+            home: { column_net: P16, led_din: led13, led_dout: led14 }
             bottom: { column_net: P18, led_din: led14, led_dout: led15 }
       rows:
         bottom:
@@ -69,7 +69,7 @@ points:
         spread: 1kx
       anchor:
         ref: main_index_bottom
-        shift: [-0.4kx, -1.25ky]
+        shift: [-0.4kx, -1.1ky]
       columns:
         near:
           key.name: thumb_near
