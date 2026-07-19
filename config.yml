@@ -184,19 +184,34 @@ pcbs:
           shift: [0, -4.7] # below the switch center (Choc per-key position)
 
       mcu:
-        what: ceoloide/mcu_nice_nano
+        what: xonha/mcu_rp2040_pro_micro
         where:
           - ref: main_inner_home
             shift: [19.8, 15.75 - voff]
         params:
-          reversible: true
-          reverse_mount: true
-          show_silk_labels: false
-          # only_required_jumpers exposes the extra pins (P101/P102) on a reversible board;
-          # GPIO handedness then moves to firmware. P101 carries the LED chain's data line.
-          only_required_jumpers: true
-          include_extra_pins: true
-          P101: LED_DATA
+          # Map each RP2040 GPIO pad to the net the keys / LED chain / roller already use.
+          # (18 keys on GP0–GP16+GP18, LED data on GP20, roller A/B on GP21/GP22.)
+          GP0: P0
+          GP1: P1
+          GP2: P2
+          GP3: P3
+          GP4: P4
+          GP5: P5
+          GP6: P6
+          GP7: P7
+          GP8: P8
+          GP9: P9
+          GP10: P10
+          GP11: P14
+          GP12: P15
+          GP13: P16
+          GP14: P18
+          GP15: P19
+          GP16: P20
+          GP18: P21
+          GP20: LED_DATA
+          GP21: RE_A
+          GP22: RE_B
 
       reset:
         what: ceoloide/reset_switch_tht_top
