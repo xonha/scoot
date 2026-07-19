@@ -108,8 +108,8 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -18 - voff]
-      size: [18.5, 69]
+          shift: [17.9, -18 - voff]
+      size: [21.7, 69]
   thumb_outline:
     - what: polygon
       operation: stack
@@ -141,7 +141,7 @@ outlines:
   board_outline:
     - name: key_thumb_mcu
       expand: 0.1
-      fillet: 1
+      fillet: 0
   back_plate:
     - name: board_outline
       expand: wall_thickness + print_fit_tolerance
