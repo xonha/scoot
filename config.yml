@@ -67,7 +67,7 @@ points:
         spread: 1kx
       anchor:
         ref: main_index_bottom
-        shift: [-0.4kx, -1.1ky]
+        shift: [-0.18kx, -1.2ky]
       columns:
         near:
           key.name: thumb_near
@@ -108,8 +108,8 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -25.5 - voff] # grown downward to reach the thumb_far area
-      size: [22, 84]
+          shift: [19.5, -18 - voff] # grown downward to reach the thumb_far area
+      size: [22, 69]
   thumb_outline:
     - what: polygon
       operation: stack
@@ -192,7 +192,7 @@ pcbs:
           reverse_mount: true # mirror: components face the PCB (protected)
           include_boot: false # BOOT button is on-board — no pad on the PCB
           include_gp25: false # drop the isolated GP25 pad
-          reversible: true    # GP18/GP24 center pads on both sides (reversible board)
+          reversible: true # GP18/GP24 center pads on both sides (reversible board)
           GP0: P0
           GP1: P1
           GP2: P2
@@ -228,7 +228,7 @@ pcbs:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-3, ky] # above the outer thumb, inheriting its -30° angle
+            shift: [-8, ky] # above the outer thumb, inheriting its -30° angle
         params:
           A: RE_A # encoder channel A -> GPIO
           B: RE_B # encoder channel B -> GPIO
