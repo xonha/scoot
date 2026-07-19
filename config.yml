@@ -110,7 +110,7 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -20 - voff]
+          shift: [19.5, -14.5 - voff]
       size: [22, 62]
   thumb_outline:
     - what: polygon
@@ -189,7 +189,7 @@ pcbs:
         what: ceoloide/mcu_nice_nano
         where:
           - ref: main_inner_home
-            shift: [19.8, 10.8 - voff]
+            shift: [19.8, 15.75 - voff]
         params:
           reversible: true
           reverse_mount: true
@@ -250,7 +250,6 @@ pcbs:
           hole_size: standoff_size
           hole_drill: standoff_size
 
-  # Optional FR4 plates for case fabrication (not part of the main PCB).
   scoot-back-plate:
     template: kicad8
     outlines:
