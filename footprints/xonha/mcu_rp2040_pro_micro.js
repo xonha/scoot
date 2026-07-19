@@ -20,6 +20,7 @@ module.exports = {
   params: {
     designator: 'MCU',
     side: 'F',
+    reverse_mount: false, // mirror the pinout (components face the PCB, protected)
     show_labels: true,
     GP0:  { type: 'net', value: 'GP0'  },
     GP1:  { type: 'net', value: 'GP1'  },
@@ -57,7 +58,8 @@ module.exports = {
   },
   body: p => {
     // Re-center rroels' coordinates (pad-array center) onto the footprint origin.
-    const CX = 8.87, CY = -16.5
+    // reverse_mount mirrors X, so the module sits component-side-down (pinout flips L<->R).
+    const CX = 8.87, CY = -16.5, mx = p.reverse_mount ? -1 : 1
 
     // [param key, raw x, raw y, pad size]  (raw coords from rroels' kicad_pro_micro_rp2040)
     const pads = [
@@ -83,11 +85,11 @@ module.exports = {
     const pad_str = pads.map(([key, x, y, size]) => {
       const s = size || 1.8
       return `
-    (pad "${key}" thru_hole circle (at ${(x - CX).toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`
+    (pad "${key}" thru_hole circle (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`
     }).join('')
 
     const label_str = p.show_labels ? pads.map(([key, x, y]) => `
-    (fp_text user "${key}" (at ${(x - CX).toFixed(3)} ${(y - CY - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
+    (fp_text user "${key}" (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
       (effects (font (size 0.5 0.5) (thickness 0.08))))`).join('') : ''
 
     // module body outline (USB at top, -Y)

@@ -189,6 +189,7 @@ pcbs:
           - ref: main_inner_home
             shift: [19.8, 15.75 - voff]
         params:
+          reverse_mount: true # mirror: components face the PCB (protected)
           GP0: P0
           GP1: P1
           GP2: P2
