@@ -22,6 +22,8 @@ module.exports = {
     side: 'F',
     reverse_mount: false, // mirror the pinout (components face the PCB, protected)
     show_labels: true,
+    include_boot: true, // BOOT pad — module has an on-board BOOT button, so often unneeded
+    include_gp25: true, // GP25 — the isolated pad; drop it for easier socketing/repair
     GP0:  { type: 'net', value: 'GP0'  },
     GP1:  { type: 'net', value: 'GP1'  },
     GP2:  { type: 'net', value: 'GP2'  },
@@ -82,13 +84,17 @@ module.exports = {
       ['BOOT', 4.00, -24.93],
     ]
 
-    const pad_str = pads.map(([key, x, y, size]) => {
+    // The footprint defines every pad; a board can drop BOOT / GP25 via the params above.
+    const shown = pads.filter(([k]) =>
+      (k !== 'BOOT' || p.include_boot) && (k !== 'GP25' || p.include_gp25))
+
+    const pad_str = shown.map(([key, x, y, size]) => {
       const s = size || 1.8
       return `
     (pad "${key}" thru_hole circle (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`
     }).join('')
 
-    const label_str = p.show_labels ? pads.map(([key, x, y]) => `
+    const label_str = p.show_labels ? shown.map(([key, x, y]) => `
     (fp_text user "${key}" (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
       (effects (font (size 0.5 0.5) (thickness 0.08))))`).join('') : ''
 

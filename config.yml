@@ -190,6 +190,8 @@ pcbs:
             shift: [19.8, 16 - voff]
         params:
           reverse_mount: true # mirror: components face the PCB (protected)
+          include_boot: false # BOOT button is on-board — no pad on the PCB
+          include_gp25: false # drop the isolated GP25 pad
           GP0: P0
           GP1: P1
           GP2: P2
