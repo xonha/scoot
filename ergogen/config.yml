@@ -228,7 +228,7 @@ pcbs:
           P4: "{{led_din}}"
           P2: "{{led_dout}}"
         adjust:
-          shift: [0, 4.7] # south of the switch center (below); sign is flipped by reverse_mount
+          shift: [0, -4.7] # below the switch center (Choc per-key position) — verified in KiCad
 
       mcu:
         what: ceoloide/mcu_nice_nano
