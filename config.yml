@@ -1,0 +1,427 @@
+units:
+  # Proxy Spacing Variables
+  kx: cx #choc spaced
+  ky: cy
+  # Padding Variables
+  px: kx + 2
+  py: ky + 2
+
+  # vertical offset of mcu area items
+  voff: 7
+
+  # pinky splay angles
+  spang: 8
+  pinksprd: 0.5
+
+  standoff_size: 5 #size for standoff holes on pcb
+  screen_standoff_size: 2
+
+  hole1_x: -0.5 kx - 1
+  hole1_y: -0.5 ky + 0.5
+
+  hole2_x: -0.52 kx
+  hole2_y: -0.35 ky
+
+  hole3_x: 0.5 kx + 1
+  hole3_y: 0. ky - 0.5
+
+  hole4_x: 0.5 kx - 5
+  hole4_y: -0.5 ky - 2.1
+
+  hole5_x: -0.5 kx - 0.6
+  hole5_y: -0.6 ky + 1.5
+
+  wall_thickness: 1.2 # account for the thickness in 3D printed case/plate
+  print_fit_tolerance: 0.2 # give the case some overlap beyond pcb
+
+  # display correct choc sizing
+  $default_width: 18
+  $default_height: 17
+
+points:
+  zones:
+    main:
+      anchor.shift: [50, -100] # Fix KiCad placement
+      key:
+        padding: 1ky # is this extra spacing necessary or will 1 allow spacing for keycaps?
+        spread: 1kx
+      columns:
+        pinky:
+        ring:
+          key.stagger: 0.7ky
+          key.column_net: col_ring
+        middle:
+          key.stagger: 0.25ky
+          key.column_net: col_middle
+        index:
+          key.stagger: -0.2ky
+          key.column_net: col_index
+        inner:
+          key.stagger: -0.15ky
+          key.column_net: col_inner
+      rows:
+        bottom:
+          row_net: row_bottom
+        home:
+          row_net: row_home
+        top:
+          row_net: row_top
+    thumb:
+      key:
+        padding: 1ky
+        spread: 1kx
+      anchor:
+        ref: main_index_bottom
+        shift: [-0.4kx, -1.25ky]
+      columns:
+        near:
+          key.name: thumb_near
+          key.column_net: col_middle
+        mid:
+          key.splay: -15
+          key.origin: [-0.5kx, -0.5ky]
+          key.name: thumb_mid
+          key.column_net: col_index
+        far:
+          key.splay: -15
+          key.origin: [-0.5kx, -0.5ky]
+          key.name: thumb_far
+          key.column_net: col_inner
+      rows:
+        thumb-cluster:
+          row_net: row_thumb
+
+outlines:
+  # just the keys
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+
+  # keys without padding
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5, ky-0.5]
+
+  # keys without padding
+  key-plug:
+    - what: rectangle
+      where: true
+      size: [13.8, 13.8]
+
+  mcu:
+    - what: rectangle
+      where:
+        - ref: main_inner_top
+          shift: [19.5, -20 - voff] # v2 - Creates more space between inner key col and mcu (issue #4)
+      size: [22, 62]
+
+  # draw thumb cluster outline
+  thumb_outline:
+    - what: polygon
+      operation: stack
+      # bound: true
+      points:
+        - ref: thumb_near
+          shift: [-0.5px, 0.75py]
+        - ref: main_inner_bottom
+          shift: [0.45px, -0.5py]
+
+        - ref: thumb_far
+          shift: [-0.5px, 0.5py]
+        - ref: thumb_far
+          shift: [0.5px, 0.5py]
+        - ref: thumb_far
+          shift: [0.5px, -0.5py]
+        - ref: thumb_far
+          shift: [-0.5px, -0.5075py]
+
+        - ref: thumb_near
+          shift: [0.5px, -0.5py]
+        - ref: thumb_near
+          shift: [-0.5px, -0.5py]
+
+  # combine keys with thumb cluster
+  key_section: [raw, thumb_outline]
+  key_thumb_mcu: [key_section, mcu]
+
+  top_plate_cutouts: [key-plug] #, mcu_key_shave]
+
+  top_plate:
+    - name: key_section
+      # expand: print_fit_tolerance + wall_thickness
+    - operation: subtract
+      name: top_plate_cutouts
+      fillet: 1
+
+  board_outline:
+    - name: key_thumb_mcu
+      expand: 0.1 # padding on outer edge or board
+      fillet: 1
+
+  back_plate:
+    - name: board_outline
+      expand: wall_thickness + print_fit_tolerance
+      fillet: 1
+
+  # Combination preview showing outline and keys.
+  all_key_outline:
+    - name: board_outline
+    - operation: subtract
+      name: keys
+
+pcbs:
+  tempest-pcb:
+    template: kicad8
+    outlines:
+      main:
+        outline: board_outline
+    footprints:
+      choc_hotswap:
+        what: ceoloide/switch_choc_v1_v2
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+          include_corner_marks: true
+          include_keycap: true
+          keycap_height: 16.5
+          keycap_width: 17.5
+          reversible: true
+          hotswap: true
+          choc_v2_support: false
+
+      diode:
+        what: ceoloide/diode_tht_sod123
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          include_tht: false
+          reversible: true
+        adjust:
+          # rotate: -90
+          # shift: [8.25,4.2]
+          shift: [0, -5]
+          # resist: true
+
+      mcu:
+        what: ceoloide/mcu_nice_nano
+        where:
+          - ref: main_inner_home
+            shift: [19.8, 10.8 - voff] # v2 - creates more space between mcu and key colums (issue #5) : v1:18.8
+        params:
+          reversible: true
+          reverse_mount: true
+          show_silk_labels: false
+          P4: row_top
+          P5: row_home
+          P6: row_bottom
+          P7: row_thumb
+          P14: col_inner
+          P15: col_index
+          P18: col_middle
+          P19: col_ring
+          P20: col_pinky
+          P21: col_extra
+          P8: MOSI
+          P9: SCK
+          P10: CS
+          # TODO: these pins are all fucked up: reorganise them, use defaults for nice!view
+
+      # v2 - fixes display alignment and corrects connection with mcu... hopefully (fixes issues #6 and #7)
+      display:
+        what: ceoloide/display_nice_view
+        params:
+          reversible: true
+          include_labels: false
+        where:
+          - ref: main_inner_home
+            shift: [19.8, 7.5 - voff] # v1 = 18.8
+
+      battery:
+        what: ceoloide/battery_connector_jst_ph_2
+        params:
+          reversible: true
+        where:
+          - ref: main_inner_home
+            shift: [23.5, -14.5 - voff]
+            rotate: -90
+
+      power:
+        what: ceoloide/power_switch_smd_side
+        params:
+          reversible: true
+        where:
+          - ref: main_inner_home
+            shift: [27.9, -18.5 - voff]
+            rotate: 0
+
+      reset:
+        what: ceoloide/reset_switch_smd_side
+        params:
+          reversible: true
+        where:
+          - ref: main_inner_home
+            shift: [28.3, -10.2 - voff]
+            rotate: -90
+
+      tempest:
+        what: ceoloide/utility_text
+        where:
+          - ref: main_index_home
+            shift: [0, -0.5ky +1.45]
+        params:
+          text: "TEMPEST"
+          height: 2
+          width: 2
+          knockout: true
+          reversible: true
+
+      ver:
+        what: ceoloide/utility_text
+        where:
+          - ref: main_index_home
+            shift: [0.5kx, -0.5ky +1.45]
+        params:
+          text: "v 2"
+          reversible: true
+
+      thrly:
+        what: ceoloide/utility_text
+        where:
+          - ref: thumb_far
+            shift: [0, -3]
+            # rotate: 30
+        params:
+          text: "by thrly"
+          side: "B"
+          reversible: true
+
+      hole_1:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_middle_top
+            shift: [hole1_x, hole1_y]
+
+        params:
+          hole_size: standoff_size
+          hole_drill: standoff_size
+      hole_2:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_inner_top
+            shift: [hole2_x, hole2_y]
+        params:
+          hole_size: standoff_size
+          hole_drill: standoff_size
+      hole_3:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: thumb_mid
+            shift: [hole3_x, hole3_y]
+        params:
+          hole_size: standoff_size
+          hole_drill: standoff_size
+      hole_4:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_index_bottom
+            shift: [hole4_x, hole4_y]
+        params:
+          hole_size: standoff_size
+          hole_drill: standoff_size
+      hole_5:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_ring_home
+            shift: [hole5_x, hole5_y]
+        params:
+          hole_size: standoff_size
+          hole_drill: standoff_size
+
+      ### mcu cover holes - v2 moves these
+      hole_screen_L:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_inner_bottom
+            shift: [0.5 kx + 4 + 0, -0.5 ky - 0]
+        params:
+          hole_size: screen_standoff_size
+          hole_drill: screen_standoff_size
+      hole_screen_R:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_inner_bottom
+            shift: [0.5 kx + 4 + 14, -0.5 ky - 6.5 - 0]
+        params:
+          hole_size: screen_standoff_size
+          hole_drill: screen_standoff_size
+
+  ## these are not used in v.1.1, but they might be useful down the road for better case building, or fabricating FR4 plates
+  ##### BACKPLATE PCB
+  tempest-back-plate:
+    template: kicad8
+    outlines:
+      main:
+        outline: back_plate
+    footprints:
+      hole_1:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_middle_top
+            shift: [hole1_x, hole1_y]
+      hole_2:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_inner_top
+            shift: [hole2_x, hole2_y]
+      hole_3:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: thumb_mid
+            shift: [hole3_x, hole3_y]
+      hole_4:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_index_bottom
+            shift: [hole4_x, hole4_y]
+      hole_5:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_ring_home
+            shift: [hole5_x, hole5_y]
+
+  ###### TOPPLATE
+  tempest-top-plate:
+    template: kicad8
+    outlines:
+      main:
+        outline: top_plate
+    footprints:
+      hole_1:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_middle_top
+            shift: [hole1_x, hole1_y]
+      hole_2:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_inner_top
+            shift: [hole2_x, hole2_y]
+      hole_3:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: thumb_mid
+            shift: [hole3_x, hole3_y]
+      hole_4:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_index_bottom
+            shift: [hole4_x, hole4_y]
+      hole_5:
+        what: ceoloide/mounting_hole_npth
+        where:
+          - ref: main_ring_home
+            shift: [hole5_x, hole5_y]
