@@ -8,3 +8,6 @@
 *.bin
 *.hex
 *.elf
+
+# Ergogen build output (default output folder; we build elsewhere anyway)
+output/
