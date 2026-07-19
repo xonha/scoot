@@ -237,6 +237,7 @@ pcbs:
         where:
           - ref: main_inner_home
             shift: [15, -12 - voff] # near the reset — adjust by hand
+            rotate: 90
         params:
           VBUS: RAW # tether 5V rail
           GND: GND
