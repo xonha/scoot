@@ -89,7 +89,7 @@ points:
           key.name: thumb_far
           key.column_net: P21
           key.led_din: led17
-          key.led_dout: LED_DOUT
+          key.led_dout: led_u1
       rows:
         thumb-cluster:
 
@@ -195,6 +195,70 @@ pcbs:
           reverse_mount: true
           P4: LED_DATA
           P2: led_s
+
+      # Underglow — 6 SK6812 that shine away from the PCB (reverse_mount: false), spread across
+      # the finger field, at the tail of the chain: … → led18 → underglow ×6 → LED_DOUT.
+      # Positions are a starting spread in the inter-column gaps; nudge them in KiCad.
+      underglow_1:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_pinky_home
+            shift: [0.5kx, 0]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u1
+          P2: led_u2
+      underglow_2:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_ring_home
+            shift: [0.5kx, 0]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u2
+          P2: led_u3
+      underglow_3:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_middle_home
+            shift: [0.5kx, 0]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u3
+          P2: led_u4
+      underglow_4:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_index_home
+            shift: [0.5kx, 0]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u4
+          P2: led_u5
+      underglow_5:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_middle_top
+            shift: [0, 0.5ky]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u5
+          P2: led_u6
+      underglow_6:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: thumb_near
+            shift: [0.5kx, 0]
+        params:
+          reversible: true
+          reverse_mount: false
+          P4: led_u6
+          P2: LED_DOUT
 
       mcu:
         what: ceoloide/mcu_nice_nano
