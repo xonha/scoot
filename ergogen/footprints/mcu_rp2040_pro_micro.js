@@ -12,7 +12,7 @@
 // (2.54 mm pitch, columns at x = ±7.62 mm) and are reliable. The bottom row (GP12–GP16) and
 // the center pads (GP18/GP24/GP25) are placed at PROVISIONAL positions — this module has no
 // public mechanical drawing, so verify these against the physical board (calipers) before
-// fabricating. Reversible jumpers come in a later step; see docs/mcu.md and led-options.md.
+// fabricating. Reversible jumpers come in a later step; see docs/mcu.md.
 //
 // Pads exposed: 28 usable GPIO + RAW(5V) + VCC(3V3) + GND + RST. GP17 (on-board LED) and GP19
 // (VBUS detect) have no pad and are intentionally absent.

@@ -492,16 +492,7 @@
        rx="2.1421061"
        id="rect-usbc-right-6"
        style="fill:#ea5c53;fill-opacity:1;stroke:none;stroke-width:0.714035"
-       transform="rotate(90)" />
-    <rect
-       x="647.74988"
-       y="205.80336"
-       width="16"
-       height="16"
-       rx="4"
-       id="rect-led-status-right"
-       style="fill:#e3b341;fill-opacity:1;stroke:none" />
-  </g>
+       transform="rotate(90)" />  </g>
   <g
      id="g1-6"
      transform="matrix(-1,0,0,1,1143.6334,-2.85e-5)">
@@ -724,14 +715,5 @@
        rx="2.1421061"
        id="rect-usbc-right-6-3"
        style="fill:#ea5c53;fill-opacity:1;stroke:none;stroke-width:0.714035"
-       transform="rotate(90)" />
-    <rect
-       x="647.74988"
-       y="205.80336"
-       width="16"
-       height="16"
-       rx="4"
-       id="rect-led-status-right-7"
-       style="fill:#e3b341;fill-opacity:1;stroke:none" />
-  </g>
+       transform="rotate(90)" />  </g>
 </svg>
