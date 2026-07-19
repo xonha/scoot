@@ -1,15 +1,18 @@
 # ergogen — Scoot PCB source
 
 Ergogen source for the Scoot PCB. The layout, outlines, and footprint placement live in
-[`config.yml`](config.yml); ergogen turns them into KiCad PCBs.
+[`config.yml`](../config.yml) at the repo root; ergogen turns them into KiCad PCBs. `config.yml`
+and `footprints/` sit at the root (not in a subfolder) so the repo can be imported directly
+into [ergogen.xyz](https://ergogen.xyz/) — ergogen looks for `config.*` and `footprints/` at the
+root of whatever you give it.
 
 ```
-ergogen/
-├── config.yml              # the board definition (tracked)
+<repo root>
+├── config.yml                    # the board definition (tracked)
 ├── footprints/
 │   ├── ceoloide/                 # external library — NOT tracked (git-ignored, fetch locally)
 │   └── mcu_rp2040_pro_micro.js   # our own footprint(s) (tracked)
-└── output/                 # build artifacts (git-ignored)
+└── output/                       # build artifacts (git-ignored)
 ```
 
 ## Footprint dependency — ceoloide (not committed)
@@ -22,8 +25,8 @@ version control** — fetch it locally into `footprints/ceoloide/` before buildi
 # from the repo root — clone and drop the .js files in (no nested .git)
 tmp=$(mktemp -d)
 git clone --depth 1 https://github.com/ceoloide/ergogen-footprints "$tmp"
-mkdir -p ergogen/footprints/ceoloide
-cp "$tmp"/*.js "$tmp"/LICENSE ergogen/footprints/ceoloide/
+mkdir -p footprints/ceoloide
+cp "$tmp"/*.js "$tmp"/LICENSE footprints/ceoloide/
 rm -rf "$tmp"
 ```
 
@@ -32,12 +35,12 @@ changes upstream, pin to that commit instead of the default branch.
 
 ## Building
 
-Point ergogen at this folder (it finds `config.yml` and injects everything under
+Point ergogen at the repo root (it finds `config.yml` and injects everything under
 `footprints/`):
 
 ```sh
-npx ergogen ergogen/ -o ergogen/output --svg --clean
+npx ergogen . -o output --svg --clean
 ```
 
-Outputs land in `ergogen/output/` (git-ignored): `pcbs/scoot.kicad_pcb` plus the top/back
-plates, and `outlines/*.svg` for a quick visual check.
+Outputs land in `output/` (git-ignored): `pcbs/scoot.kicad_pcb` plus the top/back plates, and
+`outlines/*.svg` for a quick visual check.

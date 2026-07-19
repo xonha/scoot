@@ -13,6 +13,6 @@
 output/
 
 # Vendored external footprint library — fetched locally for the build, not tracked
-# (see ergogen/README.md for how to fetch). Our own footprints (directly in
-# ergogen/footprints/) stay tracked.
-ergogen/footprints/ceoloide/
+# (see docs/ergogen.md for how to fetch). Our own footprints (directly in
+# footprints/) stay tracked.
+footprints/ceoloide/
