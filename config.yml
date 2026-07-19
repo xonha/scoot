@@ -67,7 +67,7 @@ points:
         spread: 1kx
       anchor:
         ref: main_index_bottom
-        shift: [-0.18kx, -1.2ky]
+        shift: [-0.285kx, -1.238ky]
       columns:
         near:
           key.name: thumb_near
@@ -109,7 +109,7 @@ outlines:
       where:
         - ref: main_inner_top
           shift: [19.5, -18 - voff]
-      size: [22, 69]
+      size: [18.5, 69]
   thumb_outline:
     - what: polygon
       operation: stack
@@ -187,7 +187,7 @@ pcbs:
         what: xonha/mcu_rp2040_pro_micro
         where:
           - ref: main_inner_home
-            shift: [19.8, 16 - voff]
+            shift: [19.8, 17 - voff]
         params:
           reverse_mount: true
           include_boot: false
@@ -222,13 +222,15 @@ pcbs:
           reversible: true
         where:
           - ref: main_inner_home
-            shift: [15, -4 - voff]
+            shift: [13.5, -4.5 - voff]
+            rotate: 90
 
       roller:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-8, ky]
+            shift: [-6, ky]
+            rotate: 15
         params:
           A: RE_A
           B: RE_B
@@ -239,8 +241,8 @@ pcbs:
         what: ceoloide/trrs_pj320a
         where:
           - ref: main_inner_home
-            shift: [28.7, -6.5 - voff]
-            rotate: 90
+            shift: [28.8, -4.5 - voff]
+            rotate: -90
         params:
           reversible: true
           TP: UART
