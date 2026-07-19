@@ -7,8 +7,8 @@ Ergogen source for the Scoot PCB. The layout, outlines, and footprint placement 
 ergogen/
 ├── config.yml              # the board definition (tracked)
 ├── footprints/
-│   ├── ceoloide/           # external library — NOT tracked (git-ignored, fetch locally)
-│   └── scoot/              # our own custom footprints (tracked) — e.g. the RP2040 module
+│   ├── ceoloide/                 # external library — NOT tracked (git-ignored, fetch locally)
+│   └── mcu_rp2040_pro_micro.js   # our own footprint(s) (tracked)
 └── output/                 # build artifacts (git-ignored)
 ```
 

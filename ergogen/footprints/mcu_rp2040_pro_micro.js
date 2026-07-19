@@ -2,9 +2,11 @@
 //
 // Scoot — RP2040 "Pro Micro" (Tenstar / generic) MCU footprint
 //
-// The controller Scoot uses, one per half. See ../../../docs/mcu.md for the pinout and the
+// The controller Scoot uses, one per half. See ../../docs/mcu.md for the pinout and the
 // 28-usable-GPIO derivation. This is our own footprint (the ceoloide library has nice!nano /
-// SuperMini, but not this 28-pad RP2040 Pro Micro), so it lives under footprints/scoot/.
+// SuperMini, but not this 28-pad RP2040 Pro Micro), so it lives in footprints/ (versioned,
+// alongside the git-ignored ceoloide/ fetch). Licensed MIT — written from the pinout, not
+// derived from ceoloide's CC-BY-NC-SA MCU footprints.
 //
 // STATUS: v1 — NON-REVERSIBLE. The two main side columns use the standard Pro Micro geometry
 // (2.54 mm pitch, columns at x = ±7.62 mm) and are reliable. The bottom row (GP12–GP16) and
