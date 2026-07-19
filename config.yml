@@ -27,8 +27,6 @@ points:
       key:
         padding: 1ky
         spread: 1kx
-      # Each key carries its own MCU pin (column_net, direct-wired to GND) and its slot in the
-      # LED chain (led_din/led_dout, where one LED's DOUT feeds the next LED's DIN).
       columns:
         pinky:
           rows:
@@ -209,15 +207,15 @@ pcbs:
             shift: [28.3, -10.2 - voff]
 
       roller:
-        what: roller_evqwgd001
+        what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
             shift: [0, ky] # above the outer thumb, inheriting its -30° angle
         params:
           A: RE_A # encoder channel A -> GPIO
           B: RE_B # encoder channel B -> GPIO
-          C: GND  # common
-          D: GND  # common
+          C: GND # common
+          D: GND # common
 
       hole_1:
         what: ceoloide/mounting_hole_npth

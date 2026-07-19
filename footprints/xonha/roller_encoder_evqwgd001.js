@@ -27,45 +27,45 @@
 
 module.exports = {
   params: {
-    designator: 'RE',
-    side: 'F',
-    A:  { type: 'net', value: 'RE_A' },
-    B:  { type: 'net', value: 'RE_B' },
-    C:  { type: 'net', value: 'GND' },
-    D:  { type: 'net', value: 'GND' },
-    S1: { type: 'net', value: '' },
-    S2: { type: 'net', value: '' },
+    designator: "RE",
+    side: "F",
+    A: { type: "net", value: "RE_A" },
+    B: { type: "net", value: "RE_B" },
+    C: { type: "net", value: "GND" },
+    D: { type: "net", value: "GND" },
+    S1: { type: "net", value: "" },
+    S2: { type: "net", value: "" },
   },
-  body: p => {
+  body: (p) => {
     const pad = (name, net, x, y) => `
-    (pad "${name}" thru_hole circle (at ${x} ${y} ${p.r}) (size 1.6 1.6) (drill 0.9) (layers "*.Cu" "*.Mask") ${net})`
+    (pad "${name}" thru_hole circle (at ${x} ${y} ${p.r}) (size 1.6 1.6) (drill 0.9) (layers "*.Cu" "*.Mask") ${net})`;
 
-    const silk = p.side + '.SilkS'
+    const silk = p.side + ".SilkS";
     return `
-  (footprint "scoot:roller_evqwgd001"
+  (footprint "xonha:roller_encoder_evqwgd001"
     (layer "${p.side}.Cu")
     ${p.at}
     (property "Reference" "${p.ref}" (at 0 0 ${p.r}) (layer "${silk}") ${p.ref_hide}
       (effects (font (size 1 1) (thickness 0.15))))
     (attr through_hole)
 
-    ${''/* body outline */}
+    ${"" /* body outline */}
     (fp_line (start -8.4 -6.4) (end 8.4 -6.4) (layer "Dwgs.User") (stroke (width 0.12) (type solid)))
     (fp_line (start -8.4 7.4) (end -8.4 -6.4) (layer "Dwgs.User") (stroke (width 0.12) (type solid)))
     (fp_line (start 8.4 -6.4) (end 8.4 7.4) (layer "Dwgs.User") (stroke (width 0.12) (type solid)))
     (fp_line (start 8.4 7.4) (end -8.4 7.4) (layer "Dwgs.User") (stroke (width 0.12) (type solid)))
 
-    ${''/* silkscreen (open on the terminal side) */}
+    ${"" /* silkscreen (open on the terminal side) */}
     (fp_line (start -8.5 -6.5) (end -8.5 -4.5) (layer "${silk}") (stroke (width 0.2) (type solid)))
     (fp_line (start -8.5 5.5) (end -8.5 7.5) (layer "${silk}") (stroke (width 0.2) (type solid)))
     (fp_line (start -8.5 7.5) (end 6.9 7.5) (layer "${silk}") (stroke (width 0.2) (type solid)))
     (fp_line (start -7.9 -6.5) (end -8.5 -6.5) (layer "${silk}") (stroke (width 0.2) (type solid)))
     (fp_line (start 6.9 -6.5) (end -4 -6.5) (layer "${silk}") (stroke (width 0.2) (type solid)))
 
-    ${''/* non-plated mounting hole */}
+    ${"" /* non-plated mounting hole */}
     (pad "" np_thru_hole circle (at -5.625 6.3 ${p.r}) (size 1.5 1.5) (drill 1.5) (layers "*.Cu" "*.Mask"))
 
-    ${''/* encoder + switch terminals */}${pad('A', p.A.str, -5.625, -3.81)}${pad('B', p.B.str, -5.625, -1.27)}${pad('C', p.C.str, -5.625, 1.27)}${pad('D', p.D.str, -5.625, 3.81)}${pad('S1', p.S1.str, -6.85, -6.2)}${pad('S2', p.S2.str, -5, -6.2)}
-  )`
-  }
-}
+    ${"" /* encoder + switch terminals */}${pad("A", p.A.str, -5.625, -3.81)}${pad("B", p.B.str, -5.625, -1.27)}${pad("C", p.C.str, -5.625, 1.27)}${pad("D", p.D.str, -5.625, 3.81)}${pad("S1", p.S1.str, -6.85, -6.2)}${pad("S2", p.S2.str, -5, -6.2)}
+  )`;
+  },
+};

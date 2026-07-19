@@ -10,8 +10,8 @@ root of whatever you give it.
 <repo root>
 ├── config.yml                    # the board definition (tracked)
 ├── footprints/
-│   ├── ceoloide/                 # external library — NOT tracked (git-ignored, fetch locally)
-│   └── mcu_rp2040_pro_micro.js   # our own footprint(s) (tracked)
+│   ├── ceoloide/     # external library — NOT tracked (git-ignored, fetch locally)
+│   └── xonha/        # our own footprints (tracked) — mcu_rp2040_pro_micro, roller_encoder_evqwgd001
 └── output/                       # build artifacts (git-ignored)
 ```
 
