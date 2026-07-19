@@ -209,37 +209,6 @@ pcbs:
             shift: [28.3, -10.2 - voff]
             rotate: -90
 
-      label_name:
-        what: ceoloide/utility_text
-        where:
-          - ref: main_index_home
-            shift: [0, -0.5ky +1.45]
-        params:
-          text: "SCOOT"
-          height: 2
-          width: 2
-          knockout: true
-          reversible: true
-
-      ver:
-        what: ceoloide/utility_text
-        where:
-          - ref: main_index_home
-            shift: [0.5kx, -0.5ky +1.45]
-        params:
-          text: "v0.1"
-          reversible: true
-
-      label_by:
-        what: ceoloide/utility_text
-        where:
-          - ref: thumb_far
-            shift: [0, -3]
-        params:
-          text: "by xonha"
-          side: "B"
-          reversible: true
-
       hole_1:
         what: ceoloide/mounting_hole_npth
         where:
