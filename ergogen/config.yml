@@ -54,7 +54,7 @@ points:
       columns:
         pinky:
           rows:
-            top:    { column_net: P0, led_din: LED_DATA, led_dout: led1 }
+            top:    { column_net: P0, led_din: led_s, led_dout: led1 }
             home:   { column_net: P1, led_din: led1, led_dout: led2 }
             bottom: { column_net: P2, led_din: led2, led_dout: led3 }
         ring:
@@ -229,6 +229,20 @@ pcbs:
           P2: "{{led_dout}}"
         adjust:
           shift: [0, -4.7] # below the switch center (Choc per-key position) — verified in KiCad
+
+      # Status/indicator LED — head of the chain (canonical order status -> per-key ->
+      # underglow, per led-options.md), placed just below the reset button. The chain now runs
+      # LED_DATA -> status -> led_s -> the 18 per-key LEDs -> LED_DOUT.
+      status_led:
+        what: ceoloide/led_sk6812mini-e
+        where:
+          - ref: main_inner_home
+            shift: [28.3, -15 - voff] # a few mm below the reset (which is at -10.2 - voff)
+        params:
+          reversible: true
+          reverse_mount: true
+          P4: LED_DATA
+          P2: led_s
 
       mcu:
         what: ceoloide/mcu_nice_nano
