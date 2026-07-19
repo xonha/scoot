@@ -172,7 +172,7 @@ outlines:
       name: keys
 
 pcbs:
-  tempest-pcb:
+  scoot:
     template: kicad8
     outlines:
       main:
@@ -230,34 +230,6 @@ pcbs:
           P10: CS
           # TODO: these pins are all fucked up: reorganise them, use defaults for nice!view
 
-      # v2 - fixes display alignment and corrects connection with mcu... hopefully (fixes issues #6 and #7)
-      display:
-        what: ceoloide/display_nice_view
-        params:
-          reversible: true
-          include_labels: false
-        where:
-          - ref: main_inner_home
-            shift: [19.8, 7.5 - voff] # v1 = 18.8
-
-      battery:
-        what: ceoloide/battery_connector_jst_ph_2
-        params:
-          reversible: true
-        where:
-          - ref: main_inner_home
-            shift: [23.5, -14.5 - voff]
-            rotate: -90
-
-      power:
-        what: ceoloide/power_switch_smd_side
-        params:
-          reversible: true
-        where:
-          - ref: main_inner_home
-            shift: [27.9, -18.5 - voff]
-            rotate: 0
-
       reset:
         what: ceoloide/reset_switch_smd_side
         params:
@@ -267,13 +239,13 @@ pcbs:
             shift: [28.3, -10.2 - voff]
             rotate: -90
 
-      tempest:
+      label_name:
         what: ceoloide/utility_text
         where:
           - ref: main_index_home
             shift: [0, -0.5ky +1.45]
         params:
-          text: "TEMPEST"
+          text: "SCOOT"
           height: 2
           width: 2
           knockout: true
@@ -285,17 +257,17 @@ pcbs:
           - ref: main_index_home
             shift: [0.5kx, -0.5ky +1.45]
         params:
-          text: "v 2"
+          text: "v0.1"
           reversible: true
 
-      thrly:
+      label_by:
         what: ceoloide/utility_text
         where:
           - ref: thumb_far
             shift: [0, -3]
             # rotate: 30
         params:
-          text: "by thrly"
+          text: "by xonha"
           side: "B"
           reversible: true
 
@@ -341,27 +313,9 @@ pcbs:
           hole_size: standoff_size
           hole_drill: standoff_size
 
-      ### mcu cover holes - v2 moves these
-      hole_screen_L:
-        what: ceoloide/mounting_hole_npth
-        where:
-          - ref: main_inner_bottom
-            shift: [0.5 kx + 4 + 0, -0.5 ky - 0]
-        params:
-          hole_size: screen_standoff_size
-          hole_drill: screen_standoff_size
-      hole_screen_R:
-        what: ceoloide/mounting_hole_npth
-        where:
-          - ref: main_inner_bottom
-            shift: [0.5 kx + 4 + 14, -0.5 ky - 6.5 - 0]
-        params:
-          hole_size: screen_standoff_size
-          hole_drill: screen_standoff_size
-
   ## these are not used in v.1.1, but they might be useful down the road for better case building, or fabricating FR4 plates
   ##### BACKPLATE PCB
-  tempest-back-plate:
+  scoot-back-plate:
     template: kicad8
     outlines:
       main:
@@ -394,7 +348,7 @@ pcbs:
             shift: [hole5_x, hole5_y]
 
   ###### TOPPLATE
-  tempest-top-plate:
+  scoot-top-plate:
     template: kicad8
     outlines:
       main:
