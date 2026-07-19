@@ -108,8 +108,8 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -14.5 - voff]
-      size: [22, 62]
+          shift: [19.5, -25.5 - voff] # grown downward to reach the thumb_far area
+      size: [22, 84]
   thumb_outline:
     - what: polygon
       operation: stack
