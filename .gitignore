@@ -11,3 +11,7 @@
 
 # Ergogen build output (default output folder; we build elsewhere anyway)
 output/
+
+# Vendored external footprint library — fetched locally for the build, not tracked
+# (see ergogen/README.md for how to fetch). Our own footprints/scoot/ stays tracked.
+ergogen/footprints/ceoloide/

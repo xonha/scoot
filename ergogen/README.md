@@ -1,0 +1,43 @@
+# ergogen — Scoot PCB source
+
+Ergogen source for the Scoot PCB. The layout, outlines, and footprint placement live in
+[`config.yml`](config.yml); ergogen turns them into KiCad PCBs.
+
+```
+ergogen/
+├── config.yml              # the board definition (tracked)
+├── footprints/
+│   ├── ceoloide/           # external library — NOT tracked (git-ignored, fetch locally)
+│   └── scoot/              # our own custom footprints (tracked) — e.g. the RP2040 module
+└── output/                 # build artifacts (git-ignored)
+```
+
+## Footprint dependency — ceoloide (not committed)
+
+The build uses the **[ceoloide/ergogen-footprints](https://github.com/ceoloide/ergogen-footprints)**
+library (MIT © 2023 Marco Massarelli). It's an external repo, so we **don't vendor it into
+version control** — fetch it locally into `footprints/ceoloide/` before building:
+
+```sh
+# from the repo root — clone and drop the .js files in (no nested .git)
+tmp=$(mktemp -d)
+git clone --depth 1 https://github.com/ceoloide/ergogen-footprints "$tmp"
+mkdir -p ergogen/footprints/ceoloide
+cp "$tmp"/*.js "$tmp"/LICENSE ergogen/footprints/ceoloide/
+rm -rf "$tmp"
+```
+
+Validated against commit `48935f54b456ff1503d78d6b17d9d146b54e8ade`. If a footprint API
+changes upstream, pin to that commit instead of the default branch.
+
+## Building
+
+Point ergogen at this folder (it finds `config.yml` and injects everything under
+`footprints/`):
+
+```sh
+npx ergogen ergogen/ -o ergogen/output --svg --clean
+```
+
+Outputs land in `ergogen/output/` (git-ignored): `pcbs/scoot.kicad_pcb` plus the top/back
+plates, and `outlines/*.svg` for a quick visual check.
