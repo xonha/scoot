@@ -3,7 +3,7 @@ units:
   ky: cy
   px: kx + 2
   py: ky + 2
-  voff: 7 # vertical offset of the MCU-area footprints
+  voff: 7
   standoff_size: 5
   hole1_x: -0.5 kx - 1
   hole1_y: -0.5 ky + 0.5
@@ -108,7 +108,7 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [19.5, -18 - voff] # grown downward to reach the thumb_far area
+          shift: [19.5, -18 - voff]
       size: [22, 69]
   thumb_outline:
     - what: polygon
@@ -181,7 +181,7 @@ pcbs:
           P4: "{{led_din}}"
           P2: "{{led_dout}}"
         adjust:
-          shift: [0, -4.7] # below the switch center (Choc per-key position)
+          shift: [0, -4.7]
 
       mcu:
         what: xonha/mcu_rp2040_pro_micro
@@ -189,10 +189,10 @@ pcbs:
           - ref: main_inner_home
             shift: [19.8, 16 - voff]
         params:
-          reverse_mount: true # mirror: components face the PCB (protected)
-          include_boot: false # BOOT button is on-board — no pad on the PCB
-          include_gp25: false # drop the isolated GP25 pad
-          reversible: true # GP18/GP24 center pads on both sides (reversible board)
+          reverse_mount: true
+          include_boot: false
+          include_gp25: false
+          reversible: true
           GP0: P0
           GP1: P1
           GP2: P2
@@ -214,7 +214,7 @@ pcbs:
           GP20: LED_DATA
           GP21: RE_A
           GP22: RE_B
-          GP23: UART # single-wire tether UART (from the USB-C CC pins)
+          GP23: UART
 
       reset:
         what: ceoloide/reset_switch_tht_top
@@ -228,25 +228,25 @@ pcbs:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-8, ky] # above the outer thumb, inheriting its -30° angle
+            shift: [-8, ky]
         params:
-          A: RE_A # encoder channel A -> GPIO
-          B: RE_B # encoder channel B -> GPIO
-          C: GND # common
-          D: GND # common
+          A: RE_A
+          B: RE_B
+          C: GND
+          D: GND
 
-      usb_c:
-        what: xonha/usb_c_power
+      trrs:
+        what: ceoloide/trrs_pj320a
         where:
           - ref: main_inner_home
-            shift: [28.7, -6.5 - voff] # near the reset — adjust by hand
+            shift: [28.7, -6.5 - voff]
             rotate: 90
         params:
-          VBUS: RAW # tether 5V rail
-          GND: GND
-          CC1: UART # single-wire UART; CC1+CC2 tied -> works in both plug orientations
-          CC2: UART
-          SHIELD: GND
+          reversible: true
+          TP: UART
+          R1: RAW
+          R2: GND
+          SL: GND
 
       hole_1:
         what: ceoloide/mounting_hole_npth
