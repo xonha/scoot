@@ -211,6 +211,7 @@ pcbs:
           GP20: LED_DATA
           GP21: RE_A
           GP22: RE_B
+          GP23: UART # single-wire tether UART (from the USB-C CC pins)
 
       reset:
         what: ceoloide/reset_switch_tht_top
@@ -230,6 +231,18 @@ pcbs:
           B: RE_B # encoder channel B -> GPIO
           C: GND # common
           D: GND # common
+
+      usb_c:
+        what: xonha/usb_c_power
+        where:
+          - ref: main_inner_home
+            shift: [15, -12 - voff] # near the reset — adjust by hand
+        params:
+          VBUS: RAW # tether 5V rail
+          GND: GND
+          CC1: UART # single-wire UART; CC1+CC2 tied -> works in both plug orientations
+          CC2: UART
+          SHIELD: GND
 
       hole_1:
         what: ceoloide/mounting_hole_npth
