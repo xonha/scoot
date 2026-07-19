@@ -239,8 +239,14 @@ pcbs:
           reversible: true
           reverse_mount: true
           show_silk_labels: false
-          # Pins default to a net named after each pin (P0 → net "P0" …), and the keys point
-          # their column_net at those names — so no explicit pin map is needed here anymore.
+          # only_required_jumpers: hardware jumpers only on the power/reset rows; GPIO
+          # handedness is done in firmware. This is what exposes the extra pins (P101/P102)
+          # on a reversible board — we route the LED chain's data line to P101.
+          only_required_jumpers: true
+          include_extra_pins: true
+          P101: LED_DATA
+          # Other pins default to a net named after each pin (P0 → net "P0" …); the keys point
+          # their column_net at those names, so no further pin map is needed.
 
       reset:
         what: ceoloide/reset_switch_smd_side
