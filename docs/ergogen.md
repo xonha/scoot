@@ -11,7 +11,8 @@ root of whatever you give it.
 ├── config.yml                    # the board definition (tracked)
 ├── footprints/
 │   ├── ceoloide/     # external library — NOT tracked (git-ignored, fetch locally)
-│   └── xonha/        # our own footprints (tracked) — mcu_rp2040_pro_micro, roller_encoder_evqwgd001
+│   └── xonha/        # our own footprints (tracked) — mcu_rp2040_pro_micro,
+│                     #   roller_encoder_evqwgd001, usb_c_power
 └── output/                       # build artifacts (git-ignored)
 ```
 
