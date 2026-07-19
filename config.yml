@@ -187,7 +187,7 @@ pcbs:
         what: xonha/mcu_rp2040_pro_micro
         where:
           - ref: main_inner_home
-            shift: [19.8, 15.75 - voff]
+            shift: [19.8, 16 - voff]
         params:
           reverse_mount: true # mirror: components face the PCB (protected)
           GP0: P0
@@ -236,7 +236,7 @@ pcbs:
         what: xonha/usb_c_power
         where:
           - ref: main_inner_home
-            shift: [15, -12 - voff] # near the reset — adjust by hand
+            shift: [28.7, -6.5 - voff] # near the reset — adjust by hand
             rotate: 90
         params:
           VBUS: RAW # tether 5V rail
