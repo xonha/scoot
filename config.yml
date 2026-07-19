@@ -208,6 +208,19 @@ pcbs:
           - ref: main_inner_home
             shift: [28.3, -10.2 - voff]
 
+      roller:
+        what: ceoloide/rotary_encoder_ec11_ec12
+        where:
+          - ref: thumb_far
+            shift: [0, ky] # above the outer thumb, inheriting its -30° angle
+        params:
+          reversible: true
+          A: RE_A
+          B: GND
+          C: RE_C
+          S1: RE_PUSH
+          S2: GND
+
       hole_1:
         what: ceoloide/mounting_hole_npth
         where:
