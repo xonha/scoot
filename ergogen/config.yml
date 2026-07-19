@@ -45,27 +45,43 @@ points:
       key:
         padding: 1ky # is this extra spacing necessary or will 1 allow spacing for keycaps?
         spread: 1kx
+      # Direct wiring: each key gets its own MCU pin as its net (no matrix, no diodes).
+      # The nice!nano footprint exposes each pin as a net named after it, so pointing a key's
+      # column_net at "P0" wires that key straight to pin P0.
       columns:
         pinky:
+          rows:
+            top: { column_net: P0 }
+            home: { column_net: P1 }
+            bottom: { column_net: P2 }
         ring:
           key.stagger: 0.7ky
-          key.column_net: col_ring
+          rows:
+            top: { column_net: P3 }
+            home: { column_net: P4 }
+            bottom: { column_net: P5 }
         middle:
           key.stagger: 0.25ky
-          key.column_net: col_middle
+          rows:
+            top: { column_net: P6 }
+            home: { column_net: P7 }
+            bottom: { column_net: P8 }
         index:
           key.stagger: -0.2ky
-          key.column_net: col_index
+          rows:
+            top: { column_net: P9 }
+            home: { column_net: P10 }
+            bottom: { column_net: P14 }
         inner:
           key.stagger: -0.15ky
-          key.column_net: col_inner
+          rows:
+            top: { column_net: P15 }
+            home: { column_net: P16 }
+            bottom: { column_net: P18 }
       rows:
         bottom:
-          row_net: row_bottom
         home:
-          row_net: row_home
         top:
-          row_net: row_top
     thumb:
       key:
         padding: 1ky
@@ -76,20 +92,19 @@ points:
       columns:
         near:
           key.name: thumb_near
-          key.column_net: col_middle
+          key.column_net: P19
         mid:
           key.splay: -15
           key.origin: [-0.5kx, -0.5ky]
           key.name: thumb_mid
-          key.column_net: col_index
+          key.column_net: P20
         far:
           key.splay: -15
           key.origin: [-0.5kx, -0.5ky]
           key.name: thumb_far
-          key.column_net: col_inner
+          key.column_net: P21
       rows:
         thumb-cluster:
-          row_net: row_thumb
 
 outlines:
   # just the keys
@@ -182,8 +197,8 @@ pcbs:
         what: ceoloide/switch_choc_v1_v2
         where: true
         params:
-          from: "{{colrow}}"
-          to: "{{column_net}}"
+          from: "{{column_net}}"
+          to: GND
           include_corner_marks: true
           include_keycap: true
           keycap_height: 16.5
@@ -191,20 +206,6 @@ pcbs:
           reversible: true
           hotswap: true
           choc_v2_support: false
-
-      diode:
-        what: ceoloide/diode_tht_sod123
-        where: true
-        params:
-          from: "{{colrow}}"
-          to: "{{row_net}}"
-          include_tht: false
-          reversible: true
-        adjust:
-          # rotate: -90
-          # shift: [8.25,4.2]
-          shift: [0, -5]
-          # resist: true
 
       mcu:
         what: ceoloide/mcu_nice_nano
@@ -215,20 +216,8 @@ pcbs:
           reversible: true
           reverse_mount: true
           show_silk_labels: false
-          P4: row_top
-          P5: row_home
-          P6: row_bottom
-          P7: row_thumb
-          P14: col_inner
-          P15: col_index
-          P18: col_middle
-          P19: col_ring
-          P20: col_pinky
-          P21: col_extra
-          P8: MOSI
-          P9: SCK
-          P10: CS
-          # TODO: these pins are all fucked up: reorganise them, use defaults for nice!view
+          # Pins default to a net named after each pin (P0 → net "P0" …), and the keys point
+          # their column_net at those names — so no explicit pin map is needed here anymore.
 
       reset:
         what: ceoloide/reset_switch_smd_side
