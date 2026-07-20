@@ -130,8 +130,14 @@ outlines:
           shift: [0.5px, -0.5py]
         - ref: thumb_near
           shift: [-0.5px, -0.5py]
+  ring_bridge:
+    - what: rectangle
+      where:
+        - ref: main_ring_bottom
+          shift: [2.5kx, -0.7ky]
+      size: [5.5kx, 1.6ky]
   key_section: [raw, thumb_outline]
-  key_thumb_mcu: [key_section, mcu]
+  key_thumb_mcu: [key_section, mcu, ring_bridge]
   top_plate_cutouts: [key-plug]
   top_plate:
     - name: key_section
