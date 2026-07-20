@@ -1,22 +1,22 @@
 units:
-  kx: cx
-  ky: cy
-  px: kx + 2
-  py: ky + 2
-  voff: 7
-  standoff_size: 5
-  hole1_x: -0.5 kx - 1
-  hole1_y: -0.5 ky + 0.5
-  hole2_x: -0.52 kx
-  hole2_y: -0.35 ky
-  hole3_x: 0.5 kx + 1
-  hole3_y: 0. ky - 0.5
-  hole4_x: 0.5 kx - 5
-  hole4_y: -0.5 ky - 2.1
-  hole5_x: -0.5 kx - 0.6
-  hole5_y: -0.6 ky + 1.5
-  wall_thickness: 1.2
-  print_fit_tolerance: 0.2
+  KeyX: cx
+  KeyY: cy
+  PlateX: KeyX + 2
+  PlateY: KeyY + 2
+  ControllerOffset: 7
+  StandoffSize: 5
+  Hole1X: -0.5 KeyX - 1
+  Hole1Y: -0.5 KeyY + 0.5
+  Hole2X: -0.52 KeyX
+  Hole2Y: -0.35 KeyY
+  Hole3X: 0.5 KeyX + 1
+  Hole3Y: 0. KeyY - 0.5
+  Hole4X: 0.5 KeyX - 5
+  Hole4Y: -0.5 KeyY - 2.1
+  Hole5X: -0.5 KeyX - 0.6
+  Hole5Y: -0.6 KeyY + 1.5
+  WallThickness: 1.2
+  PrintFitTolerance: 0.2
   $default_width: 18
   $default_height: 17
 
@@ -25,34 +25,34 @@ points:
     main:
       anchor.shift: [50, -100]
       key:
-        padding: 1ky
-        spread: 1kx
+        padding: 1KeyY
+        spread: 1KeyX
       columns:
-        pinky:
+        pinKeyY:
           rows:
             top: { column_net: P0, led_din: LED_DATA, led_dout: led1 }
             home: { column_net: P1, led_din: led1, led_dout: led2 }
             bottom: { column_net: P2, led_din: led2, led_dout: led3 }
         ring:
-          key.stagger: 0.7ky
+          key.stagger: 0.7KeyY
           rows:
             top: { column_net: P3, led_din: led3, led_dout: led4 }
             home: { column_net: P4, led_din: led4, led_dout: led5 }
             bottom: { column_net: P5, led_din: led5, led_dout: led6 }
         middle:
-          key.stagger: 0.25ky
+          key.stagger: 0.25KeyY
           rows:
             top: { column_net: P6, led_din: led6, led_dout: led7 }
             home: { column_net: P7, led_din: led7, led_dout: led8 }
             bottom: { column_net: P8, led_din: led8, led_dout: led9 }
         index:
-          key.stagger: -0.2ky
+          key.stagger: -0.2KeyY
           rows:
             top: { column_net: P9, led_din: led9, led_dout: led10 }
             home: { column_net: P10, led_din: led10, led_dout: led11 }
             bottom: { column_net: P14, led_din: led11, led_dout: led12 }
         inner:
-          key.stagger: -0.15ky
+          key.stagger: -0.15KeyY
           rows:
             top: { column_net: P15, led_din: led12, led_dout: led13 }
             home: { column_net: P16, led_din: led13, led_dout: led14 }
@@ -63,11 +63,11 @@ points:
         top:
     thumb:
       key:
-        padding: 1ky
-        spread: 1kx
+        padding: 1KeyY
+        spread: 1KeyX
       anchor:
         ref: main_index_bottom
-        shift: [-0.285kx, -1.238ky]
+        shift: [-0.285KeyX, -1.238KeyY]
       columns:
         near:
           key.name: thumb_near
@@ -76,14 +76,14 @@ points:
           key.led_dout: led16
         mid:
           key.splay: -15
-          key.origin: [-0.5kx, -0.5ky]
+          key.origin: [-0.5KeyX, -0.5KeyY]
           key.name: thumb_mid
           key.column_net: P20
           key.led_din: led16
           key.led_dout: led17
         far:
           key.splay: -15
-          key.origin: [-0.5kx, -0.5ky]
+          key.origin: [-0.5KeyX, -0.5KeyY]
           key.name: thumb_far
           key.column_net: P21
           key.led_din: led17
@@ -95,11 +95,11 @@ outlines:
   raw:
     - what: rectangle
       where: true
-      size: [px, py]
+      size: [PlateX, PlateY]
   keys:
     - what: rectangle
       where: true
-      size: [kx-0.5, ky-0.5]
+      size: [KeyX-0.5, KeyY-0.5]
   key-plug:
     - what: rectangle
       where: true
@@ -108,34 +108,34 @@ outlines:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [17.9, -18 - voff]
+          shift: [17.9, -18 - ControllerOffset]
       size: [21.7, 69]
   thumb_outline:
     - what: polygon
       operation: stack
       points:
         - ref: thumb_near
-          shift: [-0.5px, 0.75py]
+          shift: [-0.5PlateX, 0.75PlateY]
         - ref: main_inner_bottom
-          shift: [0.45px, -0.5py]
+          shift: [0.45PlateX, -0.5PlateY]
         - ref: thumb_far
-          shift: [-0.5px, 0.5py]
+          shift: [-0.5PlateX, 0.5PlateY]
         - ref: thumb_far
-          shift: [0.5px, 0.5py]
+          shift: [0.5PlateX, 0.5PlateY]
         - ref: thumb_far
-          shift: [0.5px, -0.5py]
+          shift: [0.5PlateX, -0.5PlateY]
         - ref: thumb_far
-          shift: [-0.5px, -0.5075py]
+          shift: [-0.5PlateX, -0.5075PlateY]
         - ref: thumb_near
-          shift: [0.5px, -0.5py]
+          shift: [0.5PlateX, -0.5PlateY]
         - ref: thumb_near
-          shift: [-0.5px, -0.5py]
+          shift: [-0.5PlateX, -0.5PlateY]
   ring_bridge:
     - what: rectangle
       where:
         - ref: main_ring_bottom
-          shift: [1.5kx, 4.1]
-      size: [5.5kx, 1.6ky]
+          shift: [1.5KeyX, 4.1]
+      size: [5.5KeyX, 1.6KeyY]
   key_section: [raw, thumb_outline]
   key_thumb_mcu: [key_section, mcu, ring_bridge]
   top_plate_cutouts: [key-plug]
@@ -150,7 +150,7 @@ outlines:
       fillet: 0
   back_plate:
     - name: board_outline
-      expand: wall_thickness + print_fit_tolerance
+      expand: WallThickness + PrintFitTolerance
       fillet: 1
   all_key_outline:
     - name: board_outline
@@ -193,7 +193,7 @@ pcbs:
         what: xonha/mcu_rp2040_pro_micro
         where:
           - ref: main_inner_home
-            shift: [19.8, 17 - voff]
+            shift: [19.8, 17 - ControllerOffset]
         params:
           reverse_mount: true
           include_boot: false
@@ -228,14 +228,14 @@ pcbs:
           reversible: true
         where:
           - ref: main_inner_home
-            shift: [13.5, -4.5 - voff]
+            shift: [13.5, -4.5 - ControllerOffset]
             rotate: 90
 
       roller:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-7, ky]
+            shift: [-7, KeyY]
         params:
           A: RE_A
           B: RE_B
@@ -246,7 +246,7 @@ pcbs:
         what: ceoloide/trrs_pj320a
         where:
           - ref: main_inner_home
-            shift: [28.8, -4.5 - voff]
+            shift: [28.8, -4.5 - ControllerOffset]
             rotate: -90
         params:
           reversible: true
@@ -259,39 +259,39 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_middle_top
-            shift: [hole1_x, hole1_y]
+            shift: [Hole1X, Hole1Y]
         params:
-          hole_size: standoff_size
-          hole_drill: standoff_size
+          hole_size: StandoffSize
+          hole_drill: StandoffSize
       hole_2:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_inner_top
-            shift: [hole2_x, hole2_y]
+            shift: [Hole2X, Hole2Y]
         params:
-          hole_size: standoff_size
-          hole_drill: standoff_size
+          hole_size: StandoffSize
+          hole_drill: StandoffSize
       hole_3:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: thumb_mid
-            shift: [hole3_x, hole3_y]
+            shift: [Hole3X, Hole3Y]
         params:
-          hole_size: standoff_size
-          hole_drill: standoff_size
+          hole_size: StandoffSize
+          hole_drill: StandoffSize
       hole_4:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_index_bottom
-            shift: [hole4_x, hole4_y]
+            shift: [Hole4X, Hole4Y]
         params:
-          hole_size: standoff_size
-          hole_drill: standoff_size
+          hole_size: StandoffSize
+          hole_drill: StandoffSize
       hole_5:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_ring_home
-            shift: [hole5_x, hole5_y]
+            shift: [Hole5X, Hole5Y]
         params:
-          hole_size: standoff_size
-          hole_drill: standoff_size
+          hole_size: StandoffSize
+          hole_drill: StandoffSize
