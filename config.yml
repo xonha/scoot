@@ -134,7 +134,7 @@ outlines:
     - what: rectangle
       where:
         - ref: main_ring_bottom
-          shift: [2.5kx, -0.7ky]
+          shift: [1.5kx, 4.1]
       size: [5.5kx, 1.6ky]
   key_section: [raw, thumb_outline]
   key_thumb_mcu: [key_section, mcu, ring_bridge]
