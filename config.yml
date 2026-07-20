@@ -206,9 +206,9 @@ pcbs:
             rotate: -90
         params:
           reversible: true
-          TP: UART
-          R1: RAW
-          R2: GND
+          symmetric: true
+          TP: RAW
+          R2: UART
           SL: GND
 
       hole_1:
