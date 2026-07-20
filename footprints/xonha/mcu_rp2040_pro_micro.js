@@ -189,10 +189,17 @@ module.exports = {
       })
     })
 
-    // Build instruction, centered in the empty strip, on both silk sides.
+    // Build instruction, centered in the empty strip. Each face names the hand it's for:
+    // front = RIGHT, back = LEFT (convention — flip if it doesn't match your handedness).
+    const instr_line = (front, back, y) => `
+    (fp_text user "${front}" (at 0 ${y.toFixed(1)} ${p.r}) (layer "F.SilkS")
+      (effects (font (size 0.6 0.6) (thickness 0.1))))
+    (fp_text user "${back}" (at 0 ${y.toFixed(1)} ${p.r}) (layer "B.SilkS")
+      (effects (font (size 0.6 0.6) (thickness 0.1)) (justify mirror)))`
     const instructions = p.reversible
-      ? ['JUMPERS', 'CLOSE ON', 'MCU PIN', 'SOLDER', 'SIDE ONLY']
-          .map((t, k) => silk(t, 0, 4.0 + k * 1.0, 0.6)).join('')
+      ? instr_line('SOLDER', 'SOLDER', 4.5)
+        + instr_line('JUMPERS IF', 'JUMPERS IF', 5.5)
+        + instr_line('RIGHT SIDE', 'LEFT SIDE', 6.5)
       : ''
 
     const outline = `
