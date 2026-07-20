@@ -78,28 +78,28 @@ points:
         thumb-cluster:
 
 outlines:
-  raw:
-    - what: rectangle
-      where: true
-      size: [PlateX, PlateY]
   mcu:
     - what: rectangle
       where:
         - ref: main_inner_top
-          shift: [17.9, -18 - ControllerOffset]
-      size: [21.7, 69]
-  thumb_outline:
+          shift: [17.9, -16.75 - ControllerOffset]
+      size: [24.5, 66.5]
+  keys:
+    - what: rectangle
+      where: true
+      size: [PlateX, PlateY]
+  thumbs:
     - what: polygon
       operation: stack
       points:
         - ref: thumb_near
-          shift: [-0.5PlateX, 0.75PlateY]
+          shift: [-0.5PlateX, 0.85PlateY]
         - ref: main_inner_bottom
           shift: [0.45PlateX, -0.5PlateY]
         - ref: thumb_far
           shift: [-0.5PlateX, 0.5PlateY]
         - ref: thumb_far
-          shift: [0.5PlateX, 0.5PlateY]
+          shift: [0.5PlateX, 0.65PlateY]
         - ref: thumb_far
           shift: [0.5PlateX, -0.5PlateY]
         - ref: thumb_far
@@ -108,18 +108,10 @@ outlines:
           shift: [0.5PlateX, -0.5PlateY]
         - ref: thumb_near
           shift: [-0.5PlateX, -0.5PlateY]
-  ring_bridge:
-    - what: rectangle
-      where:
-        - ref: main_ring_bottom
-          shift: [1.5KeyX, 4.1]
-      size: [5.5KeyX, 1.6KeyY]
-  key_section: [raw, thumb_outline]
-  key_thumb_mcu: [key_section, mcu, ring_bridge]
+  combined: [keys, thumbs, mcu]
   board_outline:
-    - name: key_thumb_mcu
+    - name: combined
       expand: 0.1
-      fillet: 0
 
 pcbs:
   scoot:
@@ -157,7 +149,7 @@ pcbs:
         what: xonha/mcu_rp2040_pro_micro
         where:
           - ref: main_inner_home
-            shift: [19.8, 17 - ControllerOffset]
+            shift: [19.8, 15.6 - ControllerOffset]
         params:
           reverse_mount: true
           include_boot: false
@@ -192,7 +184,7 @@ pcbs:
           reversible: true
         where:
           - ref: main_inner_home
-            shift: [13.5, -4.5 - ControllerOffset]
+            shift: [13.5, -6.5 - ControllerOffset]
             rotate: 90
 
       roller:
@@ -210,7 +202,7 @@ pcbs:
         what: ceoloide/trrs_pj320a
         where:
           - ref: main_inner_home
-            shift: [28.8, -4.5 - ControllerOffset]
+            shift: [28.8, -6.5 - ControllerOffset]
             rotate: -90
         params:
           reversible: true
