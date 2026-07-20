@@ -18,14 +18,20 @@
 // @benvallack; the reference implementation we studied is 50an6xy06r6n/keyboard_reversible.pretty
 // (MIT © 2021). The code and geometry here are our own.
 //
-// Only the 4 power/reset rows need jumpers. Every other row is a pure GPIO pair, reversed in
-// firmware (QMK per-hand pin map) — a flipped GPIO pin simply lands on the mirror hole, whose
-// net firmware knows about. But the rail rows (GP0/RAW, GP1/GND, GND/RST, GND/VCC) mix a GPIO
-// or ground with a power/reset rail; if flipped without a jumper a GPIO would short onto 5 V /
-// reset / VCC. So each rail row gets: two socket holes on LOCAL nets, two inner vias on the
-// REAL nets, and front/back jumper pads that bridge socket→via straight (front build) or
-// crossed (back build). The two back crossover traces run on B.Cu offset ±0.6 mm in Y so they
-// pass without shorting.
+// By default only the 4 power/reset rows get jumpers (only_required_jumpers). Every other row
+// is a pure GPIO pair, reversed in firmware (QMK per-hand pin map) — a flipped GPIO pin simply
+// lands on the mirror hole, whose net firmware knows about. But the rail rows (GP0/RAW, GP1/GND,
+// GND/RST, GND/VCC) mix a GPIO or ground with a power/reset rail; if flipped without a jumper a
+// GPIO would short onto 5 V / reset / VCC. So each rail row gets: two socket holes on LOCAL
+// nets, two inner vias on the REAL nets, and front/back jumper pads that bridge socket→via
+// straight (front build) or crossed (back build). The two back crossover traces run on B.Cu
+// offset ±0.9 mm in Y so they pass without shorting.
+//
+// Set only_required_jumpers: false to jumper ALL main-column rows (like nice!nano's default),
+// so every main-column hole always maps to its printed label and the firmware pin map is the
+// same on both hands. Costs far more solder joints. Note the bottom row (GP12–16) and center
+// pads are NOT part of the column rows, so they stay firmware-reversed / duplicated either way
+// (same as nice!nano's extra pins) — so this mode isn't fully "identical firmware" for us.
 //
 // The center pads (GP18/GP24/GP25) are duplicated on both X sides (same net) when reversible;
 // the bottom row (GP12–GP16) is symmetric, so its plain holes work in both orientations.
@@ -43,6 +49,7 @@ module.exports = {
     include_boot: true,
     include_gp25: true,
     include_traces: true,
+    only_required_jumpers: true,
     show_labels: true,
     via_size: 0.8,
     via_drill: 0.4,
@@ -123,8 +130,9 @@ module.exports = {
       const y = row_y(i)
       const xl = col_x(i, -1), xr = col_x(i, 1)
       const nl = p[lk].str, nr = p[rk].str
+      const jumpered = p.reversible && (jump_rows.has(i) || !p.only_required_jumpers)
 
-      if (!p.reversible || !jump_rows.has(i)) {
+      if (!jumpered) {
         // Plain GPIO / top row: sockets carry the real nets (firmware handles the flip).
         pads += socket(lk, xl, y, nl, 1.8)
         pads += socket(rk, xr, y, nr, 1.8)
