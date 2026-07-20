@@ -1,31 +1,51 @@
 // SPDX-License-Identifier: MIT
 //
-// Scoot — RP2040 "Pro Micro" (Tenstar / MiniPico) MCU footprint
+// Scoot — RP2040 "Pro Micro" (Tenstar / MiniPico) MCU footprint, reversible ("pretty")
 //
 // The controller Scoot uses, one per half. See ../../docs/mcu.md for the pinout and the
 // 28-usable-GPIO derivation. This is our own footprint (the ceoloide library has nice!nano /
-// SuperMini, but not this 28-pad RP2040 Pro Micro), so it lives in footprints/xonha/. Licensed MIT.
+// SuperMini, but not this 28-pad RP2040 Pro Micro), so it lives in footprints/xonha/. MIT.
 //
 // The pad LAND PATTERN (mm positions/sizes) is taken from Reinout Roels'
-// kicad_pro_micro_rp2040 footprint (https://github.com/rroels/kicad_pro_micro_rp2040, MIT ©
-// 2023 Reinout Roels), re-centered so the origin sits at the middle of the pad array (columns
-// land at the standard Pro Micro ±7.62 mm). Only the dimensions are reused; the code is ours.
+// kicad_pro_micro_rp2040 (https://github.com/rroels/kicad_pro_micro_rp2040, MIT © 2023
+// Reinout Roels), re-centered so the origin sits at the middle of the pad array (columns land
+// at the standard Pro Micro ±7.62 mm).
 //
-// Pads: 28 usable GPIO + RAW(5V) + VCC(3V3) + GND×3 + RST + a broken-out BOOT pad. GP17
-// (on-board LED) and GP19 (VBUS detect) have no pad and are intentionally absent.
+// # Reversibility ("pretty", jumper-based)
 //
-// STATUS: non-reversible (single side). A reversible jumper variant is a later step.
+// One PCB serves both hands: build the MCU on the front for one hand, on the back (flipped)
+// for the other. The technique is the "promicro_pretty" solder-jumper scheme popularized by
+// @benvallack; the reference implementation we studied is 50an6xy06r6n/keyboard_reversible.pretty
+// (MIT © 2021). The code and geometry here are our own.
+//
+// Only the 4 power/reset rows need jumpers. Every other row is a pure GPIO pair, reversed in
+// firmware (QMK per-hand pin map) — a flipped GPIO pin simply lands on the mirror hole, whose
+// net firmware knows about. But the rail rows (GP0/RAW, GP1/GND, GND/RST, GND/VCC) mix a GPIO
+// or ground with a power/reset rail; if flipped without a jumper a GPIO would short onto 5 V /
+// reset / VCC. So each rail row gets: two socket holes on LOCAL nets, two inner vias on the
+// REAL nets, and front/back jumper pads that bridge socket→via straight (front build) or
+// crossed (back build). The two back crossover traces run on B.Cu offset ±0.6 mm in Y so they
+// pass without shorting.
+//
+// The center pads (GP18/GP24/GP25) are duplicated on both X sides (same net) when reversible;
+// the bottom row (GP12–GP16) is symmetric, so its plain holes work in both orientations.
+//
+// Params: reverse_mount mirrors X (MCU faces the PCB, components protected). reversible turns
+// on the jumper scheme. include_boot / include_gp25 drop those pads. via_size / via_drill size
+// the inner vias. include_traces emits the jumper traces.
 
 module.exports = {
   params: {
     designator: 'MCU',
     side: 'F',
-    reverse_mount: false, // mirror the pinout (components face the PCB, protected)
+    reverse_mount: false,
+    reversible: false,
+    include_boot: true,
+    include_gp25: true,
+    include_traces: true,
     show_labels: true,
-    include_boot: true, // BOOT pad — module has an on-board BOOT button, so often unneeded
-    include_gp25: true, // GP25 — the isolated pad; drop it for easier socketing/repair
-    reversible: false,  // duplicate the asymmetric center pads (GP18/GP24) on both X sides,
-                        //   so the module can seat in either orientation on a reversible board
+    via_size: 0.8,
+    via_drill: 0.4,
     GP0:  { type: 'net', value: 'GP0'  },
     GP1:  { type: 'net', value: 'GP1'  },
     GP2:  { type: 'net', value: 'GP2'  },
@@ -54,58 +74,110 @@ module.exports = {
     GP27: { type: 'net', value: 'GP27' },
     GP28: { type: 'net', value: 'GP28' },
     GP29: { type: 'net', value: 'GP29' },
-    RAW:  { type: 'net', value: 'RAW'  }, // 5V pad
-    VCC:  { type: 'net', value: 'VCC'  }, // 3V3 pad
+    RAW:  { type: 'net', value: 'RAW'  },
+    VCC:  { type: 'net', value: 'VCC'  },
     GND:  { type: 'net', value: 'GND'  },
     RST:  { type: 'net', value: 'RST'  },
-    BOOT: { type: 'net', value: 'BOOT' }, // broken-out BOOTSEL pad
+    BOOT: { type: 'net', value: 'BOOT' },
   },
   body: p => {
-    // Re-center rroels' coordinates (pad-array center) onto the footprint origin.
-    // reverse_mount mirrors X, so the module sits component-side-down (pinout flips L<->R).
-    const CX = 8.87, CY = -16.5, mx = p.reverse_mount ? -1 : 1
+    const mx = p.reverse_mount ? -1 : 1
+    const fx = x => (mx * x).toFixed(3)
 
-    // [param key, raw x, raw y, pad size]  (raw coords from rroels' kicad_pro_micro_rp2040)
-    const pads = [
-      // left column (top -> bottom)
-      ['GP10', 1.30, -31.74], ['GP0', 1.25, -29.20], ['GP1', 1.25, -26.66],
-      ['GND', 1.25, -24.12], ['GND', 1.25, -21.58], ['GP2', 1.25, -19.04],
-      ['GP3', 1.25, -16.50], ['GP4', 1.25, -13.96], ['GP5', 1.25, -11.42],
-      ['GP6', 1.25, -8.88], ['GP7', 1.25, -6.34], ['GP8', 1.25, -3.80], ['GP9', 1.25, -1.26],
-      // right column (top -> bottom)
-      ['GP11', 16.49, -31.74], ['RAW', 16.49, -29.20], ['GND', 16.49, -26.66],
-      ['RST', 16.49, -24.12], ['VCC', 16.49, -21.58], ['GP29', 16.49, -19.04],
-      ['GP28', 16.49, -16.50], ['GP27', 16.49, -13.96], ['GP26', 16.49, -11.42],
-      ['GP22', 16.49, -8.88], ['GP20', 16.49, -6.34], ['GP23', 16.49, -3.80], ['GP21', 16.49, -1.26],
-      // bottom row
-      ['GP12', 3.79, -1.26], ['GP13', 6.33, -1.26], ['GP14', 8.87, -1.26],
-      ['GP15', 11.41, -1.26], ['GP16', 13.95, -1.26],
-      // inner / center pads + BOOT
-      ['GP25', 3.79, -3.80],
-      ['GP18', 12.01, -15.70, 1.6], ['GP24', 14.00, -15.70, 1.6],
-      ['BOOT', 4.00, -24.93],
+    // [left key, right key] per row, top -> bottom (canonical: reverse_mount = false).
+    // Rows 1..4 are the rail rows that need jumpers.
+    const rows = [
+      ['GP10', 'GP11'],
+      ['GP0',  'RAW' ],
+      ['GP1',  'GND' ],
+      ['GND',  'RST' ],
+      ['GND',  'VCC' ],
+      ['GP2',  'GP29'],
+      ['GP3',  'GP28'],
+      ['GP4',  'GP27'],
+      ['GP5',  'GP26'],
+      ['GP6',  'GP22'],
+      ['GP7',  'GP20'],
+      ['GP8',  'GP23'],
+      ['GP9',  'GP21'],
     ]
+    const jump_rows = new Set([1, 2, 3, 4])
+    const row_y = i => -15.24 + i * 2.54
+    const col_x = (i, side) => (i === 0 && side < 0) ? -7.57 : 7.62 * side // GP10 is inset 0.05
 
-    // The footprint defines every pad; a board can drop BOOT / GP25 via the params above.
-    const shown = pads.filter(([k]) =>
-      (k !== 'BOOT' || p.include_boot) && (k !== 'GP25' || p.include_gp25))
+    const socket = (name, x, y, net, size) => `
+    (pad "${name}" thru_hole circle (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (size ${size} ${size}) (drill 0.95) (layers "*.Cu" "*.Mask") ${net})`
+    const via = (name, x, y, net) => `
+    (pad "${name}" thru_hole circle (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (size ${p.via_size} ${p.via_size}) (drill ${p.via_drill}) (layers "*.Cu" "*.Mask") ${net})`
+    const jpad = (name, x, y, net, layer) => `
+    (pad "${name}" smd rect (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (size 0.7 1.2) (layers "${layer}.Cu" "${layer}.Paste" "${layer}.Mask") ${net})`
+    const seg = (x1, y1, x2, y2, layer) => `
+  (segment (start ${p.eaxy(mx * x1, y1)}) (end ${p.eaxy(mx * x2, y2)}) (width 0.25) (layer "${layer}.Cu"))`
+    const fab = (txt, x, y) => `
+    (fp_text user "${txt}" (at ${fx(x)} ${(y - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
+      (effects (font (size 0.5 0.5) (thickness 0.08))))`
 
-    const pad_str = shown.flatMap(([key, x, y, size]) => {
-      const s = size || 1.8
-      // Center pads GP18/GP24 are off-axis, so when reversible they get BOTH X positions
-      // (normal + mirrored) on the same net; every other pad follows reverse_mount's mirror.
-      const xs = (p.reversible && (key === 'GP18' || key === 'GP24'))
-        ? [x - CX, -(x - CX)]
-        : [mx * (x - CX)]
-      return xs.map(px => `
-    (pad "${key}" thru_hole circle (at ${px.toFixed(3)} ${(y - CY).toFixed(3)} ${p.r}) (size ${s} ${s}) (drill 0.95) (layers "*.Cu" "*.Mask") ${p[key].str})`)
-    }).join('')
+    let pads = '', labels = '', traces = ''
 
-    const label_str = p.show_labels ? shown.map(([key, x, y]) => `
-    (fp_text user "${key}" (at ${(mx * (x - CX)).toFixed(3)} ${(y - CY - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
-      (effects (font (size 0.5 0.5) (thickness 0.08))))`).join('') : ''
+    rows.forEach(([lk, rk], i) => {
+      const y = row_y(i)
+      const xl = col_x(i, -1), xr = col_x(i, 1)
+      const nl = p[lk].str, nr = p[rk].str
 
-    // module body outline (USB at top, -Y)
+      if (!p.reversible || !jump_rows.has(i)) {
+        // Plain GPIO / top row: sockets carry the real nets (firmware handles the flip).
+        pads += socket(lk, xl, y, nl, 1.8)
+        pads += socket(rk, xr, y, nr, 1.8)
+        if (p.show_labels) { labels += fab(lk, xl, y); labels += fab(rk, xr, y) }
+      } else {
+        // Rail row: local-net sockets + real-net vias + jumpers.
+        const ll = p.local_net(10 + i).str, lr = p.local_net(30 + i).str
+        const sl = `S${i}L`, sr = `S${i}R`, vl = `V${i}L`, vr = `V${i}R`
+        pads += socket(sl, xl, y, ll, 1.8)
+        pads += socket(sr, xr, y, lr, 1.8)
+        pads += via(vl, -3.0, y, nl)
+        pads += via(vr, 3.0, y, nr)
+        // Front build: straight (socket -> same-side via).
+        pads += jpad(sl, -5.2, y, ll, 'F') + jpad(vl, -4.3, y, nl, 'F')
+        pads += jpad(sr, 5.2, y, lr, 'F') + jpad(vr, 4.3, y, nr, 'F')
+        // Back build: crossed (socket -> opposite via).
+        pads += jpad(sl, -5.2, y, ll, 'B') + jpad(vr, -4.3, y, nr, 'B')
+        pads += jpad(sr, 5.2, y, lr, 'B') + jpad(vl, 4.3, y, nl, 'B')
+        if (p.include_traces) {
+          // socket -> jumper (both layers; socket is through-hole)
+          traces += seg(xl, y, -5.2, y, 'F') + seg(xl, y, -5.2, y, 'B')
+          traces += seg(xr, y, 5.2, y, 'F') + seg(xr, y, 5.2, y, 'B')
+          // via -> front (straight) jumper
+          traces += seg(-3.0, y, -4.3, y, 'F') + seg(3.0, y, 4.3, y, 'F')
+          // via -> back (crossed) jumper, offset in Y so the two crossings clear each
+          // other and the opposite via (JLCPCB min copper clearance)
+          traces += seg(-3.0, y, -3.0, y + 0.9, 'B') + seg(-3.0, y + 0.9, 4.3, y + 0.9, 'B') + seg(4.3, y + 0.9, 4.3, y, 'B')
+          traces += seg(3.0, y, 3.0, y - 0.9, 'B') + seg(3.0, y - 0.9, -4.3, y - 0.9, 'B') + seg(-4.3, y - 0.9, -4.3, y, 'B')
+        }
+        if (p.show_labels) { labels += fab(lk, -6.4, y); labels += fab(rk, 6.4, y) }
+      }
+    })
+
+    // Bottom row (GP12..GP16), symmetric -> plain holes work both orientations.
+    const bottom = [['GP12', -5.08], ['GP13', -2.54], ['GP14', 0], ['GP15', 2.54], ['GP16', 5.08]]
+    bottom.forEach(([k, x]) => {
+      pads += socket(k, x, 15.24, p[k].str, 1.8)
+      if (p.show_labels) labels += fab(k, x, 15.24 + 0.6)
+    })
+
+    // Center / off-axis pads: duplicate on both X sides when reversible.
+    const center = [['GP18', 3.14, 0.80], ['GP24', 5.13, 0.80]]
+    if (p.include_gp25) center.push(['GP25', 5.08, 12.70]) // canonical -5.08; dup makes side moot
+    if (p.include_boot) center.push(['BOOT', 4.87, -8.43])
+    center.forEach(([k, x, y]) => {
+      const ax = Math.abs(x)
+      const xs = p.reversible ? [ax, -ax] : [(k === 'GP25' ? -ax : x)]
+      xs.forEach((cx, j) => {
+        pads += socket(`${k}${p.reversible ? (j ? 'b' : 'a') : ''}`, cx, y, p[k].str, 1.6)
+        if (p.show_labels && j === 0) labels += fab(k, cx, y)
+      })
+    })
+
     const outline = `
     (fp_line (start -9 -18) (end 9 -18) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
     (fp_line (start 9 -18) (end 9 17) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
@@ -120,8 +192,9 @@ module.exports = {
       (effects (font (size 1 1) (thickness 0.15))))
     (attr through_hole)
     ${outline}
-    ${pad_str}
-    ${label_str}
-  )`
+    ${pads}
+    ${labels}
+  )
+  ${p.reversible && p.include_traces ? traces : ''}`
   }
 }
