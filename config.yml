@@ -178,31 +178,32 @@ pcbs:
           GP22: RE_B
           GP23: UART
 
-      reset:
-        what: ceoloide/reset_switch_tht_top
-        params:
-          reversible: true
-        where:
-          - ref: main_inner_home
-            shift: [13.5, -6.5 - ControllerOffset]
-            rotate: 90
-
       roller:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-7, KeyY]
+            shift: [-6, KeyY + 1]
+            rotate: 20
         params:
           A: RE_A
           B: RE_B
           C: GND
           D: GND
 
+      reset:
+        what: ceoloide/reset_switch_tht_top
+        params:
+          reversible: true
+        where:
+          - ref: main_inner_home
+            shift: [12.25, -5.5 - ControllerOffset]
+            rotate: 90
+
       trrs:
         what: ceoloide/trrs_pj320a
         where:
           - ref: main_inner_home
-            shift: [28.8, -6.5 - ControllerOffset]
+            shift: [26.8, -5 - ControllerOffset]
             rotate: -90
         params:
           reversible: true
