@@ -248,8 +248,8 @@ pcbs:
       hole_1:
         what: ceoloide/mounting_hole_npth
         where:
-          - ref: main_middle_top
-            shift: [-0.5KeyX - 1, -0.5KeyY + 0.5]
+          - ref: main_ring_home
+            shift: [-0.5KeyX, -0.2KeyY]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
@@ -257,31 +257,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_inner_top
-            shift: [-0.52KeyX, -0.35KeyY]
-        params:
-          hole_size: StandoffSize
-          hole_drill: StandoffSize
-      hole_3:
-        what: ceoloide/mounting_hole_npth
-        where:
-          - ref: thumb_mid
-            shift: [0.5KeyX + 1, -0.5]
-        params:
-          hole_size: StandoffSize
-          hole_drill: StandoffSize
-      hole_4:
-        what: ceoloide/mounting_hole_npth
-        where:
-          - ref: main_index_bottom
-            shift: [0.5KeyX - 5, -0.5KeyY - 2.1]
-        params:
-          hole_size: StandoffSize
-          hole_drill: StandoffSize
-      hole_5:
-        what: ceoloide/mounting_hole_npth
-        where:
-          - ref: main_ring_home
-            shift: [-0.5KeyX - 0.6, -0.6KeyY + 1.5]
+            shift: [-0.5KeyX, -1.35KeyY]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
