@@ -120,9 +120,13 @@ module.exports = {
     (pad "${name}" smd rect (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (size 0.7 1.2) (layers "${layer}.Cu" "${layer}.Paste" "${layer}.Mask") ${net})`
     const seg = (x1, y1, x2, y2, layer) => `
   (segment (start ${p.eaxy(mx * x1, y1)}) (end ${p.eaxy(mx * x2, y2)}) (width 0.25) (layer "${layer}.Cu"))`
-    const fab = (txt, x, y) => `
-    (fp_text user "${txt}" (at ${fx(x)} ${(y - 1.0).toFixed(3)} ${p.r}) (layer "F.Fab")
-      (effects (font (size 0.5 0.5) (thickness 0.08))))`
+    // Net/pin labels on BOTH silk sides (mirrored on the back) so they read correctly from
+    // whichever face you solder — matches the module's own GPxx silk.
+    const silk = (txt, x, y, size = 0.6) => `
+    (fp_text user "${txt}" (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (layer "F.SilkS")
+      (effects (font (size ${size} ${size}) (thickness 0.1))))
+    (fp_text user "${txt}" (at ${fx(x)} ${y.toFixed(3)} ${p.r}) (layer "B.SilkS")
+      (effects (font (size ${size} ${size}) (thickness 0.1)) (justify mirror)))`
 
     let pads = '', labels = '', traces = ''
 
@@ -136,7 +140,7 @@ module.exports = {
         // Plain GPIO / top row: sockets carry the real nets (firmware handles the flip).
         pads += socket(lk, xl, y, nl, 1.8)
         pads += socket(rk, xr, y, nr, 1.8)
-        if (p.show_labels) { labels += fab(lk, xl, y); labels += fab(rk, xr, y) }
+        if (p.show_labels) { labels += silk(lk, xl + 2.2, y, 0.5); labels += silk(rk, xr - 2.2, y, 0.5) }
       } else {
         // Rail row: local-net sockets + real-net vias + jumpers.
         const ll = p.local_net(10 + i).str, lr = p.local_net(30 + i).str
@@ -162,7 +166,7 @@ module.exports = {
           traces += seg(-3.0, y, -3.0, y + 0.9, 'B') + seg(-3.0, y + 0.9, 4.3, y + 0.9, 'B') + seg(4.3, y + 0.9, 4.3, y, 'B')
           traces += seg(3.0, y, 3.0, y - 0.9, 'B') + seg(3.0, y - 0.9, -4.3, y - 0.9, 'B') + seg(-4.3, y - 0.9, -4.3, y, 'B')
         }
-        if (p.show_labels) { labels += fab(lk, -6.4, y); labels += fab(rk, 6.4, y) }
+        if (p.show_labels) { labels += silk(lk, -1.8, y, 0.5); labels += silk(rk, 1.8, y, 0.5) }
       }
     })
 
@@ -170,7 +174,7 @@ module.exports = {
     const bottom = [['GP12', -5.08], ['GP13', -2.54], ['GP14', 0], ['GP15', 2.54], ['GP16', 5.08]]
     bottom.forEach(([k, x]) => {
       pads += socket(k, x, 15.24, p[k].str, 1.8)
-      if (p.show_labels) labels += fab(k, x, 15.24 + 0.6)
+      if (p.show_labels) labels += silk(k, x, 16.4, 0.5)
     })
 
     // Center / off-axis pads: duplicate on both X sides when reversible.
@@ -182,9 +186,14 @@ module.exports = {
       const xs = p.reversible ? [ax, -ax] : [(k === 'GP25' ? -ax : x)]
       xs.forEach((cx, j) => {
         pads += socket(`${k}${p.reversible ? (j ? 'b' : 'a') : ''}`, cx, y, p[k].str, 1.6)
-        if (p.show_labels && j === 0) labels += fab(k, cx, y)
       })
     })
+
+    // Build instruction, centered in the empty strip, on both silk sides.
+    const instructions = p.reversible
+      ? ['JUMPERS', 'CLOSE ON', 'MCU PIN', 'SOLDER', 'SIDE ONLY']
+          .map((t, k) => silk(t, 0, 4.0 + k * 1.0, 0.6)).join('')
+      : ''
 
     const outline = `
     (fp_line (start -9 -18) (end 9 -18) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
@@ -202,6 +211,7 @@ module.exports = {
     ${outline}
     ${pads}
     ${labels}
+    ${instructions}
   )
   ${p.reversible && p.include_traces ? traces : ''}`
   }
