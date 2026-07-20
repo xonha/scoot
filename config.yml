@@ -5,10 +5,6 @@ units:
   PlateY: KeyY + 2
   ControllerOffset: 7
   StandoffSize: 5
-  WallThickness: 1.2
-  PrintFitTolerance: 0.2
-  $default_width: 18
-  $default_height: 17
 
 points:
   zones:
@@ -86,14 +82,6 @@ outlines:
     - what: rectangle
       where: true
       size: [PlateX, PlateY]
-  keys:
-    - what: rectangle
-      where: true
-      size: [KeyX - 0.5, KeyY - 0.5]
-  key-plug:
-    - what: rectangle
-      where: true
-      size: [13.8, 13.8]
   mcu:
     - what: rectangle
       where:
@@ -128,24 +116,10 @@ outlines:
       size: [5.5KeyX, 1.6KeyY]
   key_section: [raw, thumb_outline]
   key_thumb_mcu: [key_section, mcu, ring_bridge]
-  top_plate_cutouts: [key-plug]
-  top_plate:
-    - name: key_section
-    - operation: subtract
-      name: top_plate_cutouts
-      fillet: 1
   board_outline:
     - name: key_thumb_mcu
       expand: 0.1
       fillet: 0
-  back_plate:
-    - name: board_outline
-      expand: WallThickness + PrintFitTolerance
-      fillet: 1
-  all_key_outline:
-    - name: board_outline
-    - operation: subtract
-      name: keys
 
 pcbs:
   scoot:
