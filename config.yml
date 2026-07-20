@@ -235,8 +235,7 @@ pcbs:
         what: xonha/roller_encoder_evqwgd001
         where:
           - ref: thumb_far
-            shift: [-6, ky]
-            rotate: 15
+            shift: [-7, ky]
         params:
           A: RE_A
           B: RE_B
