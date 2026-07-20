@@ -5,16 +5,6 @@ units:
   PlateY: KeyY + 2
   ControllerOffset: 7
   StandoffSize: 5
-  Hole1X: -0.5 KeyX - 1
-  Hole1Y: -0.5 KeyY + 0.5
-  Hole2X: -0.52 KeyX
-  Hole2Y: -0.35 KeyY
-  Hole3X: 0.5 KeyX + 1
-  Hole3Y: 0. KeyY - 0.5
-  Hole4X: 0.5 KeyX - 5
-  Hole4Y: -0.5 KeyY - 2.1
-  Hole5X: -0.5 KeyX - 0.6
-  Hole5Y: -0.6 KeyY + 1.5
   WallThickness: 1.2
   PrintFitTolerance: 0.2
   $default_width: 18
@@ -99,7 +89,7 @@ outlines:
   keys:
     - what: rectangle
       where: true
-      size: [KeyX-0.5, KeyY-0.5]
+      size: [KeyX - 0.5, KeyY - 0.5]
   key-plug:
     - what: rectangle
       where: true
@@ -259,7 +249,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_middle_top
-            shift: [Hole1X, Hole1Y]
+            shift: [-0.5KeyX - 1, -0.5KeyY + 0.5]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
@@ -267,7 +257,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_inner_top
-            shift: [Hole2X, Hole2Y]
+            shift: [-0.52KeyX, -0.35KeyY]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
@@ -275,7 +265,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: thumb_mid
-            shift: [Hole3X, Hole3Y]
+            shift: [0.5KeyX + 1, -0.5]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
@@ -283,7 +273,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_index_bottom
-            shift: [Hole4X, Hole4Y]
+            shift: [0.5KeyX - 5, -0.5KeyY - 2.1]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
@@ -291,7 +281,7 @@ pcbs:
         what: ceoloide/mounting_hole_npth
         where:
           - ref: main_ring_home
-            shift: [Hole5X, Hole5Y]
+            shift: [-0.5KeyX - 0.6, -0.6KeyY + 1.5]
         params:
           hole_size: StandoffSize
           hole_drill: StandoffSize
