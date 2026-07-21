@@ -12,7 +12,7 @@ root of whatever you give it.
 ├── footprints/
 │   ├── ceoloide/     # external library — NOT tracked (git-ignored, fetch locally)
 │   └── xonha/        # our own footprints (tracked) — mcu_rp2040_pro_micro,
-│                     #   roller_encoder_evqwgd001, sensor_connector_jst_sh
+│                     #   roller_encoder_evqwgd001, sensor_connector_jst_sh_1x06
 │                     #   (usb_c_power is legacy/unused; the tether now uses
 │                     #   ceoloide/trrs_pj320a)
 └── output/                       # build artifacts (git-ignored)

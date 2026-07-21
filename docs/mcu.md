@@ -122,7 +122,7 @@ out GP26–GP29 at all).
 The live assignment lives in the ergogen [`config.yml`](../config.yml) (`mcu` footprint params).
 The 18 keys take GP0–GP16 + GP18; the roller (RE_A/RE_B) GP21/GP22, LED data GP20, UART tether
 GP23. The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
-JST-SH 8-pin header — `xonha/sensor_connector_jst_sh`) uses the remaining pins:
+JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
 
 | Sensor line | GPIO | RP2040 SPI1 |
 | --- | --- | --- |
@@ -130,10 +130,12 @@ JST-SH 8-pin header — `xonha/sensor_connector_jst_sh`) uses the remaining pins
 | MOSI | GP27 | TX |
 | MISO | GP28 | RX |
 | NCS  | GP29 | (CS driven as a plain GPIO) |
-| MOT (motion IRQ, optional) | GP24 | — |
-| RS (sensor reset, optional) | GP25 | — |
 
-SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can use hardware SPI. On the central build the
-connector footprint is unpopulated and these pins are free. The breakout mounts on the bottom
-plate at the glide surface; the cable keeps its Z-height decoupled from the main PCB (~10 mm
-standoff) and off the crowded bottom face — see the README "Decisions".
+Plus VCC (3V3) and GND — 6 conductors total. SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can
+use hardware SPI. **GP24 and GP25 stay free** (spare pins); they were reserved for the sensor's
+optional MOT/RS lines, dropped because QMK's PMW33xx driver polls motion over SPI and the sensor
+self-resets — add a sibling `1x08` footprint to bring them back (e.g. for a future battery/BLE
+revision where an interrupt-driven motion pin saves power). On the central build the connector
+footprint is unpopulated and these pins are free. The breakout mounts on the bottom plate at the
+glide surface; the cable keeps its Z-height decoupled from the main PCB (~10 mm standoff) and off
+the crowded bottom face — see the README "Decisions".

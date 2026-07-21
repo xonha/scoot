@@ -177,8 +177,6 @@ pcbs:
           GP21: RE_A
           GP22: RE_B
           GP23: UART
-          GP24: MOT
-          GP25: RS
           GP26: SCLK
           GP27: MOSI
           GP28: MISO
@@ -197,7 +195,7 @@ pcbs:
           D: GND
 
       sensor:
-        what: xonha/sensor_connector_jst_sh
+        what: xonha/sensor_connector_jst_sh_1x06
         where:
           - ref: main_inner_home
             shift: [3, -27.6]
@@ -210,8 +208,6 @@ pcbs:
           NCS: NCS
           VCC: VCC
           GND: GND
-          MOT: MOT
-          RS: RS
 
       reset:
         what: ceoloide/reset_switch_tht_top
