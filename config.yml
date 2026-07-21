@@ -198,8 +198,8 @@ pcbs:
         what: xonha/sensor_connector_jst_sh_1x06
         where:
           - ref: main_inner_home
-            shift: [3, -27.6]
-            rotate: 0
+            shift: [25.5, -35]
+            rotate: 270
         params:
           reversible: true
           SCLK: SCLK
