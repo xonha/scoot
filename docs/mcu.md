@@ -117,7 +117,23 @@ out GP26–GP29 at all).
 
 ---
 
-> A resolved Scoot pin assignment (keys / roller+click / LED / sensor SPI / tether, with the
-> center pads carrying the peripheral-only sensor lines) existed in the ergogen `config.yaml`
-> that was removed with the PCB tooling. Recover it from git history before `cd4b118` if the
-> board work resumes.
+## Resolved Scoot pin assignment
+
+The live assignment lives in the ergogen [`config.yml`](../config.yml) (`mcu` footprint params).
+The 18 keys take GP0–GP16 + GP18; the roller (RE_A/RE_B) GP21/GP22, LED data GP20, UART tether
+GP23. The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
+JST-SH 8-pin header — `xonha/sensor_connector_jst_sh`) uses the remaining pins:
+
+| Sensor line | GPIO | RP2040 SPI1 |
+| --- | --- | --- |
+| SCLK | GP26 | SCK |
+| MOSI | GP27 | TX |
+| MISO | GP28 | RX |
+| NCS  | GP29 | (CS driven as a plain GPIO) |
+| MOT (motion IRQ, optional) | GP24 | — |
+| RS (sensor reset, optional) | GP25 | — |
+
+SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can use hardware SPI. On the central build the
+connector footprint is unpopulated and these pins are free. The breakout mounts on the bottom
+plate at the glide surface; the cable keeps its Z-height decoupled from the main PCB (~10 mm
+standoff) and off the crowded bottom face — see the README "Decisions".

@@ -177,6 +177,12 @@ pcbs:
           GP21: RE_A
           GP22: RE_B
           GP23: UART
+          GP24: MOT
+          GP25: RS
+          GP26: SCLK
+          GP27: MOSI
+          GP28: MISO
+          GP29: NCS
 
       roller:
         what: xonha/roller_encoder_evqwgd001
@@ -189,6 +195,23 @@ pcbs:
           B: RE_B
           C: GND
           D: GND
+
+      sensor:
+        what: xonha/sensor_connector_jst_sh
+        where:
+          - ref: main_inner_home
+            shift: [3, -27.6]
+            rotate: 0
+        params:
+          reversible: true
+          SCLK: SCLK
+          MOSI: MOSI
+          MISO: MISO
+          NCS: NCS
+          VCC: VCC
+          GND: GND
+          MOT: MOT
+          RS: RS
 
       reset:
         what: ceoloide/reset_switch_tht_top
