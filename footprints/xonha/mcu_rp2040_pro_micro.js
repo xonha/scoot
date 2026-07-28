@@ -37,8 +37,10 @@
 // the bottom row (GP12–GP16) is symmetric, so its plain holes work in both orientations.
 //
 // Params: reverse_mount mirrors X (MCU faces the PCB, components protected). reversible turns
-// on the jumper scheme. include_boot / include_gp25 drop those pads. via_size / via_drill size
-// the inner vias. include_traces emits the jumper traces.
+// on the jumper scheme. include_boot / include_gp18 / include_gp24 / include_gp25 drop those pads
+// (Scoot drops all four: nothing lands on a center pad, so a reverse-mounted module has no hole
+// under its own body). via_size / via_drill size the inner vias. include_traces emits the jumper
+// traces.
 
 module.exports = {
   params: {
@@ -47,6 +49,8 @@ module.exports = {
     reverse_mount: false,
     reversible: false,
     include_boot: true,
+    include_gp18: true,
+    include_gp24: true,
     include_gp25: true,
     include_traces: true,
     only_required_jumpers: true,
@@ -178,7 +182,9 @@ module.exports = {
     })
 
     // Center / off-axis pads: duplicate on both X sides when reversible.
-    const center = [['GP18', 3.14, 0.80], ['GP24', 5.13, 0.80]]
+    const center = []
+    if (p.include_gp18) center.push(['GP18', 3.14, 0.80])
+    if (p.include_gp24) center.push(['GP24', 5.13, 0.80])
     if (p.include_gp25) center.push(['GP25', 5.08, 12.70]) // canonical -5.08; dup makes side moot
     if (p.include_boot) center.push(['BOOT', 4.87, -8.43])
     center.forEach(([k, x, y]) => {

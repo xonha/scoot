@@ -136,6 +136,8 @@ pcbs:
         params:
           reverse_mount: true
           include_boot: false
+          include_gp18: false
+          include_gp24: false
           include_gp25: false
           reversible: true
           GP0: P0

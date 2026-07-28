@@ -120,8 +120,9 @@ out GP26–GP29 at all).
 ## Resolved Scoot pin assignment
 
 The live assignment lives in the ergogen [`config.yml`](../config.yml) (`mcu` footprint params).
-It fits entirely in the module's **25 edge pads** — the 3 center pads stay unconnected, so a
-reverse-mounted module needs no solder joint underneath its own body:
+It fits entirely in the module's **25 edge pads**, and the footprint drops the 3 center pads
+outright (`include_gp18` / `include_gp24` / `include_gp25` all `false`), so a reverse-mounted
+module has no hole under its own body at all:
 
 | Subsystem | GPIO | Pads |
 | --- | --- | --- |
@@ -148,10 +149,13 @@ JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
 | NCS  | GP29 | (CS driven as a plain GPIO) |
 
 Plus VCC (3V3) and GND — 6 conductors total. SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can
-use hardware SPI. **All three center pads (GP18, GP24, GP25) stay free**, unrouted, as spare /
-repair pads: they are where a future revision would land the sensor's optional MOT/RS lines (add a
-sibling `1x08` footprint), or an addressable-LED data line if RGB ever comes back. On the central
-build the connector footprint is unpopulated and GP26–GP29 are free too. The breakout mounts on the
+use hardware SPI. **GP18, GP24 and GP25 are not emitted at all** — no pad, no drill. Besides
+removing solder joints that sit under a reverse-mounted module (impractical to reach after
+assembly), it removes unconnected copper pressed against the module's bottom face. The cost is that
+those three GPIO are now a **respin, not a solder-a-wire escape hatch**: a future revision wanting
+the sensor's optional MOT/RS lines (a sibling `1x08` footprint), an addressable-LED data line, or
+the roller's click switch has to flip the flags back on and re-route. On the central build the
+sensor connector is unpopulated, so GP26–GP29 are free there. The breakout mounts on the
 bottom plate at the glide surface; the cable keeps its Z-height decoupled from the main PCB
 (~10 mm standoff) and off the crowded bottom face — see the README "Decisions".
 
