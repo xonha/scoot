@@ -196,8 +196,8 @@ pcbs:
         what: xonha/encoder_alps_ec10e
         where:
           - ref: thumb_far
-            shift: [-6, KeyY + 1]
-            rotate: 20
+            shift: [-4, KeyY + 1]
+            rotate: 110
         params:
           reversible: true
           A: RE_A
