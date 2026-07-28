@@ -82,15 +82,18 @@ outlines:
     - what: rectangle
       where: true
       size: [PlateX, PlateY]
-  # covers the EC11/EC12 body (11.8 x 12) plus its side mounting pads and the
-  # encoder pads at y +-7.5 -- the old roller hung off the edge, a knob must not
+  # Guarantees board material under the EC10E. Its land pattern is only ~13.2 x 4.2 mm
+  # (terminals at +-2.5, lug holes at +-5.4), so this blob is deliberately generous until
+  # the placement is checked against a render -- see docs/open-items.md item 4.
+  # Unlike the EVQWGD001 roller this replaced, the wheel exits through the PLATE, not the
+  # board edge, so no Edge.Cuts slot is needed here.
   encoder:
     - what: rectangle
       where:
         - ref: thumb_far
           shift: [-6, KeyY + 1]
           rotate: 20
-      size: [14, 18]
+      size: [16, 12]
   thumbs:
     - what: polygon
       operation: stack
@@ -175,20 +178,31 @@ pcbs:
           GP28: MISO
           GP29: NCS
 
+      # Alps EC10E1220505 -- horizontal-axis hollow-shaft encoder: the wheel scrolls up/down
+      # like a mouse wheel, unlike an EC11/EC12 knob. Land pattern from the Alps catalog
+      # drawing; see the footprint header for the source and caveats.
+      #
+      # ⚠️ Two open items gate this block (docs/open-items.md):
+      #   2. C is the common only BY ELIMINATION -- the catalog defines A and B and leaves C
+      #      undefined. Confirm with a meter before fab; note the common is an END terminal
+      #      here, not the middle one like an EC11.
+      #   3. Because of that, mirroring the board lands GND on a signal hole. Needs either
+      #      solder jumpers on the two end holes or a fixed handedness for this component.
+      #      `reversible` below only mirrors the silkscreen -- it does NOT fix that.
+      #   4. `rotate` is functional now, not cosmetic: the wheel rolls along the footprint's
+      #      X axis, so this sets the scroll direction. The value 20 was inherited from the
+      #      EVQWGD001 roller and needs to be chosen deliberately.
       encoder:
-        what: ceoloide/rotary_encoder_ec11_ec12
+        what: xonha/encoder_alps_ec10e
         where:
           - ref: thumb_far
             shift: [-6, KeyY + 1]
             rotate: 20
         params:
           reversible: true
-          include_momentary_switch_pads: false
-          include_plate_hole_marking: true
-          mounting_holes_height: 2.8
           A: RE_A
-          B: GND
-          C: RE_B
+          B: RE_B
+          C: GND
 
       sensor:
         what: xonha/sensor_connector_jst_sh_1x06

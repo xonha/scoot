@@ -127,7 +127,7 @@ module has no hole under its own body at all:
 | Subsystem | GPIO | Pads |
 | --- | --- | --- |
 | 18 keys, direct to GPIO | GP0–GP16, GP20 | 18 |
-| Rotary encoder A/C (scroll only) | GP21, GP22 | 2 |
+| Encoder A/B (scroll only) | GP21, GP22 | 2 |
 | UART tether (single-wire half duplex) | GP23 | 1 |
 | Mouse sensor SPI (peripheral only) | GP26–GP29 | 4 |
 | **Total** | | **25 / 25 edge** |
@@ -138,13 +138,14 @@ addressable LEDs**, and the encoder is **scroll only, with no click**
 (`include_momentary_switch_pads: false`). The middle click it would have provided already exists as
 a remapped finger key in mouse mode.
 
-The encoder is an **Alps EC11 / EC12** (`ceoloide/rotary_encoder_ec11_ec12`), not the Panasonic
-EVQWGD001 roller the design started with — see the README "Decisions" for the trade. Its three
-rotation pins are A and C to GPIO plus B to GND, so the 2-pin budget is unchanged. **EC12
-(EC12E2440301) is the part to source**: short through-shaft, low profile, and it has no momentary
-switch at all, which is exactly what this design wants. The footprint is inherently reversible (all
-THT, no solder jumper), but **A and C swap between hands** — the firmware pin map has to invert them
-per hand or the wheel scrolls backwards on one half.
+The encoder is an **Alps EC10E1220505** (`xonha/encoder_alps_ec10e`), not the Panasonic EVQWGD001
+roller the design started with. It is a *horizontal-axis* hollow-shaft encoder — the shaft runs
+parallel to the PCB, so the wheel scrolls up and down like a mouse wheel, which a perpendicular-axis
+EC11/EC12 knob cannot do. Signals A and B go to GPIO and the common to GND, so the 2-pin budget is
+unchanged; H = 7.0 mm is the lowest mount height Alps offers with a mouse-standard 24 detents. Two
+caveats live in [open-items.md](open-items.md): the common is an **end** terminal (not the middle one
+like an EC11), which is only established by elimination from the catalog, and that in turn means
+mirroring the board lands GND on a signal hole. The wheel and shaft are not part of the component.
 
 The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
 JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
@@ -183,5 +184,6 @@ the two handedness options needs a fix:
 - **Or bitbang SPI**, which makes pin function irrelevant — not available in QMK core for the
   PMW33xx driver.
 
-This is the last unresolved item in the pin plan; nothing else in the assignment depends on a pin's
-alternate function, because every other net is a plain GPIO that a per-hand pin map handles.
+Nothing else in the pin assignment depends on a pin's alternate function — every other net is a
+plain GPIO that a per-hand pin map handles. This item, and everything else still pending on the
+board, is tracked in [open-items.md](open-items.md).

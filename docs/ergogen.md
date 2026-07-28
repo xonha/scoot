@@ -12,10 +12,10 @@ root of whatever you give it.
 ├── footprints/
 │   ├── ceoloide/     # external library — NOT tracked (git-ignored, fetch locally)
 │   └── xonha/        # our own footprints (tracked) — mcu_rp2040_pro_micro,
-│                     #   sensor_connector_jst_sh_1x06. usb_c_power and
-│                     #   roller_encoder_evqwgd001 are legacy/unused: the tether
-│                     #   uses ceoloide/trrs_pj320a, the encoder
-│                     #   ceoloide/rotary_encoder_ec11_ec12
+│                     #   sensor_connector_jst_sh_1x06, encoder_alps_ec10e.
+│                     #   usb_c_power and roller_encoder_evqwgd001 are
+│                     #   legacy/unused: the tether uses ceoloide/trrs_pj320a,
+│                     #   the encoder is now the Alps EC10E
 └── output/                       # build artifacts (git-ignored)
 ```
 
