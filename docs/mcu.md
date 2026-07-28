@@ -127,16 +127,24 @@ module has no hole under its own body at all:
 | Subsystem | GPIO | Pads |
 | --- | --- | --- |
 | 18 keys, direct to GPIO | GP0–GP16, GP20 | 18 |
-| Roller encoder A/B (scroll only) | GP21, GP22 | 2 |
+| Rotary encoder A/C (scroll only) | GP21, GP22 | 2 |
 | UART tether (single-wire half duplex) | GP23 | 1 |
 | Mouse sensor SPI (peripheral only) | GP26–GP29 | 4 |
 | **Total** | | **25 / 25 edge** |
 
 The peripheral build uses all 25; the central build uses 21 and leaves the 4 sensor pads idle.
 Two subsystems were dropped to make this fit (see the README "Decisions"): there are **no
-addressable LEDs**, and the roller's **click switch (S1/S2) is left unpopulated on both halves**
-— scroll only. The middle click it would have provided already exists as a remapped finger key in
-mouse mode.
+addressable LEDs**, and the encoder is **scroll only, with no click**
+(`include_momentary_switch_pads: false`). The middle click it would have provided already exists as
+a remapped finger key in mouse mode.
+
+The encoder is an **Alps EC11 / EC12** (`ceoloide/rotary_encoder_ec11_ec12`), not the Panasonic
+EVQWGD001 roller the design started with — see the README "Decisions" for the trade. Its three
+rotation pins are A and C to GPIO plus B to GND, so the 2-pin budget is unchanged. **EC12
+(EC12E2440301) is the part to source**: short through-shaft, low profile, and it has no momentary
+switch at all, which is exactly what this design wants. The footprint is inherently reversible (all
+THT, no solder jumper), but **A and C swap between hands** — the firmware pin map has to invert them
+per hand or the wheel scrolls backwards on one half.
 
 The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
 JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
