@@ -16,33 +16,33 @@ points:
       columns:
         pinKeyY:
           rows:
-            top: { column_net: P0, led_din: LED_DATA, led_dout: led1 }
-            home: { column_net: P1, led_din: led1, led_dout: led2 }
-            bottom: { column_net: P2, led_din: led2, led_dout: led3 }
+            top: { column_net: P0 }
+            home: { column_net: P1 }
+            bottom: { column_net: P2 }
         ring:
           key.stagger: 0.7KeyY
           rows:
-            top: { column_net: P3, led_din: led3, led_dout: led4 }
-            home: { column_net: P4, led_din: led4, led_dout: led5 }
-            bottom: { column_net: P5, led_din: led5, led_dout: led6 }
+            top: { column_net: P3 }
+            home: { column_net: P4 }
+            bottom: { column_net: P5 }
         middle:
           key.stagger: 0.25KeyY
           rows:
-            top: { column_net: P6, led_din: led6, led_dout: led7 }
-            home: { column_net: P7, led_din: led7, led_dout: led8 }
-            bottom: { column_net: P8, led_din: led8, led_dout: led9 }
+            top: { column_net: P6 }
+            home: { column_net: P7 }
+            bottom: { column_net: P8 }
         index:
           key.stagger: -0.2KeyY
           rows:
-            top: { column_net: P9, led_din: led9, led_dout: led10 }
-            home: { column_net: P10, led_din: led10, led_dout: led11 }
-            bottom: { column_net: P14, led_din: led11, led_dout: led12 }
+            top: { column_net: P9 }
+            home: { column_net: P10 }
+            bottom: { column_net: P14 }
         inner:
           key.stagger: -0.15KeyY
           rows:
-            top: { column_net: P15, led_din: led12, led_dout: led13 }
-            home: { column_net: P16, led_din: led13, led_dout: led14 }
-            bottom: { column_net: P18, led_din: led14, led_dout: led15 }
+            top: { column_net: P15 }
+            home: { column_net: P16 }
+            bottom: { column_net: P18 }
       rows:
         bottom:
         home:
@@ -58,22 +58,16 @@ points:
         near:
           key.name: thumb_near
           key.column_net: P19
-          key.led_din: led15
-          key.led_dout: led16
         mid:
           key.splay: -15
           key.origin: [-0.5KeyX, -0.5KeyY]
           key.name: thumb_mid
           key.column_net: P20
-          key.led_din: led16
-          key.led_dout: led17
         far:
           key.splay: -15
           key.origin: [-0.5KeyX, -0.5KeyY]
           key.name: thumb_far
           key.column_net: P21
-          key.led_din: led17
-          key.led_dout: LED_DOUT
       rows:
         thumb-cluster:
 
@@ -134,17 +128,6 @@ pcbs:
           hotswap: true
           choc_v2_support: false
 
-      per_key_led:
-        what: ceoloide/led_sk6812mini-e
-        where: true
-        params:
-          reversible: true
-          reverse_mount: true
-          P4: "{{led_din}}"
-          P2: "{{led_dout}}"
-        adjust:
-          shift: [0, -4.7]
-
       mcu:
         what: xonha/mcu_rp2040_pro_micro
         where:
@@ -172,8 +155,7 @@ pcbs:
           GP14: P18
           GP15: P19
           GP16: P20
-          GP18: P21
-          GP20: LED_DATA
+          GP20: P21
           GP21: RE_A
           GP22: RE_B
           GP23: UART

@@ -120,8 +120,24 @@ out GP26–GP29 at all).
 ## Resolved Scoot pin assignment
 
 The live assignment lives in the ergogen [`config.yml`](../config.yml) (`mcu` footprint params).
-The 18 keys take GP0–GP16 + GP18; the roller (RE_A/RE_B) GP21/GP22, LED data GP20, UART tether
-GP23. The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
+It fits entirely in the module's **25 edge pads** — the 3 center pads stay unconnected, so a
+reverse-mounted module needs no solder joint underneath its own body:
+
+| Subsystem | GPIO | Pads |
+| --- | --- | --- |
+| 18 keys, direct to GPIO | GP0–GP16, GP20 | 18 |
+| Roller encoder A/B (scroll only) | GP21, GP22 | 2 |
+| UART tether (single-wire half duplex) | GP23 | 1 |
+| Mouse sensor SPI (peripheral only) | GP26–GP29 | 4 |
+| **Total** | | **25 / 25 edge** |
+
+The peripheral build uses all 25; the central build uses 21 and leaves the 4 sensor pads idle.
+Two subsystems were dropped to make this fit (see the README "Decisions"): there are **no
+addressable LEDs**, and the roller's **click switch (S1/S2) is left unpopulated on both halves**
+— scroll only. The middle click it would have provided already exists as a remapped finger key in
+mouse mode.
+
+The **peripheral-only mouse sensor** (a PMW3360/3389 breakout, connected by cable to a
 JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
 
 | Sensor line | GPIO | RP2040 SPI1 |
@@ -132,10 +148,28 @@ JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
 | NCS  | GP29 | (CS driven as a plain GPIO) |
 
 Plus VCC (3V3) and GND — 6 conductors total. SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can
-use hardware SPI. **GP24 and GP25 stay free** (spare pins); they were reserved for the sensor's
-optional MOT/RS lines, dropped because QMK's PMW33xx driver polls motion over SPI and the sensor
-self-resets — add a sibling `1x08` footprint to bring them back (e.g. for a future battery/BLE
-revision where an interrupt-driven motion pin saves power). On the central build the connector
-footprint is unpopulated and these pins are free. The breakout mounts on the bottom plate at the
-glide surface; the cable keeps its Z-height decoupled from the main PCB (~10 mm standoff) and off
-the crowded bottom face — see the README "Decisions".
+use hardware SPI. **All three center pads (GP18, GP24, GP25) stay free**, unrouted, as spare /
+repair pads: they are where a future revision would land the sensor's optional MOT/RS lines (add a
+sibling `1x08` footprint), or an addressable-LED data line if RGB ever comes back. On the central
+build the connector footprint is unpopulated and GP26–GP29 are free too. The breakout mounts on the
+bottom plate at the glide surface; the cable keeps its Z-height decoupled from the main PCB
+(~10 mm standoff) and off the crowded bottom face — see the README "Decisions".
+
+### ⚠️ Open item — hardware SPI does not survive the mirror
+
+The reversible MCU footprint mirrors the column rows (`mcu_rp2040_pro_micro.js`), so on the flipped
+build the four sensor nets land on GP5/GP4/GP3/GP2 instead of GP26–GP29 — SPI0 CSn/RX/TX/SCK, i.e.
+the wrong roles. And no pad *pair* on this module is SPI-TX-capable at both ends, so **no 4-wire
+assignment works in both orientations**. Since the peripheral may be built for either hand, one of
+the two handedness options needs a fix:
+
+- **Solder-jumper the 4 sensor rows** so those holes keep their printed labels on both hands. The
+  footprint already implements this for all column rows via `only_required_jumpers: false`; doing
+  it for just those four rows wants a small `jumper_rows` param. Keeps one firmware image.
+- **Or build two firmware images**, one per peripheral handedness (`POINTING_DEVICE_LEFT` /
+  `_RIGHT` is compile-time anyway, so this is partly forced regardless).
+- **Or bitbang SPI**, which makes pin function irrelevant — not available in QMK core for the
+  PMW33xx driver.
+
+This is the last unresolved item in the pin plan; nothing else in the assignment depends on a pin's
+alternate function, because every other net is a plain GPIO that a per-hand pin map handles.
