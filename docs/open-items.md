@@ -63,6 +63,22 @@ that leave GP26–GP29 non-functional, and the sensor's whole SPI bus lives ther
 firmware that toggles/reads each pin and confirm before committing a layout. See
 [mcu.md](mcu.md#️-quality-caveat--verify-gp26gp29).
 
+### 5b. Are the module's center pads through-holes or blind pads?
+
+GP24 carries the LED data line and is the one pad under the module's body. Whether it can be
+soldered *after* the module is seated depends on something not yet verified on a physical unit:
+
+- **If the module's center pads are plated through-holes** (likely — most RP2040 Pro Micro clones
+  do this), a wire dropped through both the module's hole and the PCB's hole is soldered on two
+  faces that are both exposed, and it can be done at any point in the build.
+- **If they are blind SMD pads**, the joint has to be made *before* the module is seated —
+  pre-tin the PCB pad, tack a wire, then mount. Getting the build order wrong means desoldering
+  the module.
+
+**Verification needed:** look at the physical module. The answer becomes a line in the build
+instructions either way. This is not a fab blocker — the footprint and routing are the same — but
+it is a build blocker if discovered at the wrong moment.
+
 ### 6. Regenerate `output/`
 
 The committed `output/` (KiCad, gerbers, SVG, `drc.json`) predates the LED removal, the center-pad
@@ -81,6 +97,22 @@ of 4. Derived, not stated — confirm on the bench.
 
 Whatever resolves item 3, the two phases still land in mirrored holes on the flipped build, so the
 per-hand pin map has to swap them or the wheel scrolls backwards on one half.
+
+### 8b. LED current across the tether
+
+With the 18-LED per-key chain back in, all-white at full brightness is ~55 mA × 18 ≈ **1.0 A per
+half**, past a plain USB-2.0 budget — and the peripheral's share crosses the tether on a single
+TRRS GND conductor (sleeve contacts are typically rated 0.5–1 A). So:
+
+- `RGB_MATRIX_MAXIMUM_BRIGHTNESS` is **mandatory**, not advisory. Coloured effects at moderate
+  brightness draw a fraction of the worst case.
+- The spare **R1 conductor** in the tether becomes worth reconsidering as a second GND. It
+  currently has no pad at all, because the TRRS footprint runs `symmetric: true`, which reduces it
+  to three pads (TP/R2/SL). Going `symmetric: false` brings R1 back at the cost of a larger
+  footprint on the inner edge and a re-check of the case cutout.
+
+**Decision needed:** cap brightness and leave `symmetric: true`, or spend the board area to have
+a second GND available.
 
 ## Blocks sourcing / mechanical
 
@@ -118,16 +150,16 @@ footprint 1:1 and drop the part on it — that also double-checks the land patte
 
 - lines 26, 35 and 77 — "clickable roller wheel", "peripheral = scroll / middle-click",
   "press = middle-click"
-- lines 42–51 — the feasibility table (roller at 3 pins, an addressable-LED row, totals 23/28 and
-  27/28) and the paragraph under it
-- line 58 — "central **23/28**, peripheral **27/28** *including* an addressable-LED data line, so
-  LEDs are in without giving anything up"
-- lines 59–63 — the entire "Per-board addressable LEDs (SK6812 MINI-E), wired in" bullet and its
-  five sub-bullets
+- lines 42–51 — the feasibility table (roller at 3 pins, totals 23/28 and 27/28) and the paragraph
+  under it
+- line 58 — "central **23/28**, peripheral **27/28**"
+- lines 59–63 — the addressable-LED bullet survives in substance, but its pin claim ("costs 1 GPIO
+  per half and the budget absorbs it") now needs to say *which* pin and why: GP24, the one center
+  pad, chosen so the hardest joint on the board carries the only net whose loss is cosmetic
 - the roller/EVQWGD001 mentions throughout, now an Alps EC10E
 
-Current truth: 18 keys + encoder A/B + UART + (peripheral only) 4 sensor pins = **21/25 edge pads
-on the central, 25/25 on the peripheral**, no center pads, no LEDs, no encoder click. See
+Current truth: 18 keys + encoder A/B + UART + LED data + (peripheral only) 4 sensor pins =
+**22 pads on the central, 26 on the peripheral** — 25/25 edge plus GP24. No encoder click. See
 [mcu.md](mcu.md#resolved-scoot-pin-assignment).
 
 ### 13. `misc/scoot-layout.svg` art
