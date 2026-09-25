@@ -166,12 +166,12 @@ pcbs:
           reverse_mount: true
           include_boot: false
           include_gp18: false
-          # GP24 is the one center pad we take, and it carries LED_DATA on purpose:
-          # it sits under the module body, so it is the hardest joint on the board.
-          # Putting the cosmetic net there means a bad joint costs RGB, not a key.
-          # See docs/open-items.md.
-          include_gp24: true
-          include_gp25: false
+          # Decision: center pads are not used, to keep the module easy to solder.
+          # The single exception is GP25 carrying LED_DATA: it is the isolated center
+          # pad next to the bottom edge row (easiest to reach, no neighbour to bridge),
+          # and a bad joint there costs RGB, not a key. See docs/mcu.md.
+          include_gp24: false
+          include_gp25: true
           reversible: true
           GP0: P0
           GP1: P1
@@ -191,7 +191,7 @@ pcbs:
           GP15: P19
           GP16: P20
           GP20: P21
-          GP24: LED_DATA
+          GP25: LED_DATA
           GP21: RE_A
           GP22: RE_B
           GP23: UART

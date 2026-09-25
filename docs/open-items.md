@@ -65,7 +65,7 @@ firmware that toggles/reads each pin and confirm before committing a layout. See
 
 ### 5b. Are the module's center pads through-holes or blind pads?
 
-GP24 carries the LED data line and is the one pad under the module's body. Whether it can be
+GP25 carries the LED data line and is the one pad under the module's body. Whether it can be
 soldered *after* the module is seated depends on something not yet verified on a physical unit:
 
 - **If the module's center pads are plated through-holes** (likely — most RP2040 Pro Micro clones
@@ -144,25 +144,7 @@ footprint 1:1 and drop the part on it — that also double-checks the land patte
 
 ## Documentation debt
 
-### 12. README still describes removed features
-
-`README.md` predates three decisions and now contradicts `config.yml`:
-
-- lines 26, 35 and 77 — "clickable roller wheel", "peripheral = scroll / middle-click",
-  "press = middle-click"
-- lines 42–51 — the feasibility table (roller at 3 pins, totals 23/28 and 27/28) and the paragraph
-  under it
-- line 58 — "central **23/28**, peripheral **27/28**"
-- lines 59–63 — the addressable-LED bullet survives in substance, but its pin claim ("costs 1 GPIO
-  per half and the budget absorbs it") now needs to say *which* pin and why: GP24, the one center
-  pad, chosen so the hardest joint on the board carries the only net whose loss is cosmetic
-- the roller/EVQWGD001 mentions throughout, now an Alps EC10E
-
-Current truth: 18 keys + encoder A/B + UART + LED data + (peripheral only) 4 sensor pins =
-**22 pads on the central, 26 on the peripheral** — 25/25 edge plus GP24. No encoder click. See
-[mcu.md](mcu.md#resolved-scoot-pin-assignment).
-
-### 13. `misc/scoot-layout.svg` art
+### 12. `misc/scoot-layout.svg` art
 
 The layout SVG and its legend still show and name a roller encoder. The art needs regenerating
 for the new part and position once item 4 settles.

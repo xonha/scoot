@@ -23,7 +23,7 @@ A Corne 3×5+3 layout (36 keys) — **two RP2040 "Pro Micro" modules (~18 × 33 
 - **Two MCUs, a true split.** One RP2040 "Pro Micro" module (~18 × 33 mm) per half. The peripheral half reads its own keys, its roller, and the mouse sensor *locally*; only compact reports cross the tether. No timing-sensitive bus runs over the roaming cable.
 - **Direct-wired, no diodes.** Every key gets its own GPIO (switch → pin → GND). No matrix, no per-key diodes, no ghosting, free NKRO — and far less to hand-solder.
 - **Hand-built and repairable.** Off-the-shelf modules (RP2040 boards, a PMW3360/3389 sensor breakout) soldered onto a custom PCB. A dead controller or sensor unplugs and swaps; nothing is a fab-only QFN.
-- **Matching rollers, both halves.** Each half carries a clickable roller wheel: the peripheral roller is scroll + middle-click, the central roller is volume / play-pause.
+- **Matching rollers, both halves.** Each half carries a scroll-only roller wheel (no click, by design): the peripheral roller scrolls, the central roller is volume. Middle-click and play-pause live on keys instead.
 - **Wired and fast.** Targets 1000 Hz polling on the host link — favoring latency and simplicity over wireless.
 
 ## Hardware sketch
@@ -32,31 +32,32 @@ A Corne 3×5+3 layout (36 keys) — **two RP2040 "Pro Micro" modules (~18 × 33 
 | --- | --- |
 | RP2040 "Pro Micro" module (×2) | One controller per half — TENSTAR RP2040 Pro Micro, **28 usable GPIO** (full pinout, flash/boot/VBUS notes, and quirks in [docs/mcu.md](docs/mcu.md)) |
 | PMW3360 / PMW3389 breakout (lens included) | Desk-mouse sensor, peripheral half, face-down, read by the peripheral MCU |
-| EVQWGD001 roller encoder (×2) | Both halves — clickable rollers: central = volume / play-pause, peripheral = scroll / middle-click |
+| Alps EC10E1220505 rotary encoder (×2) | Both halves — scroll-only rollers (no click): central = volume, peripheral = scroll. Shaft + wheel supplied separately (see [docs/open-items.md](docs/open-items.md)) |
 | TRRS tether (UART + power) | Carries the split link + power between halves — 3 conductors (5 V, UART, GND); a PJ-320A TRRS jack per half (non-USB pinout) |
 
 ### Does it fit? (feasibility)
 
-The split means each MCU only handles its own half, so **direct wiring (one GPIO per key, no diodes) fits per half** on the module's 28 usable GPIO ([docs/mcu.md](docs/mcu.md)):
+The split means each MCU only handles its own half, so **direct wiring (one GPIO per key, no diodes) fits per half** on the module's **25 edge pads**, plus one center pad (GP25) for the cosmetic LED line ([docs/mcu.md](docs/mcu.md#resolved-scoot-pin-assignment)):
 
 | Subsystem | Central pins | Peripheral pins |
 | --- | --- | --- |
 | 18 keys (3×5 + 3 thumb), direct to GPIO | 18 | 18 |
-| Roller encoder (A/B + push) | 3 | 3 |
+| Roller encoder (A/B, no click) | 2 | 2 |
 | Mouse sensor SPI (SCK/MOSI/MISO/CS) | — | 4 |
 | Inter-half UART link | 1 | 1 |
-| Addressable-LED data (WS2812 / SK6812) | 1 | 1 |
-| **Total** | **23 / 28** | **27 / 28** |
+| Addressable-LED data (SK6812, center pad GP25) | 1 | 1 |
+| **Total** | **22** (21 edge + GP25) | **26** (25/25 edge + GP25) |
 
-Both halves fit with margin. The encoder *push* is just another direct GPIO — no matrix node to share. The layout is a **single fixed 3×5+3 (18 keys per half)** — no detachable column, one board for everyone. Even *with* an addressable-LED data line, the central keeps **5 spare pins** and the peripheral **1** (27/28); the peripheral's spare pin can back a repair pad or the sensor's motion-interrupt. If a future variant wants more headroom on the peripheral, a 3-wire **PMW3610** sensor frees one pin (see *Decisions*).
+Both halves fit, the peripheral exactly: its 25 edge pads are all used, and the LED data line takes GP25. **The module's center pads are not used** (they sit under its body and are the hardest joints on the board) — the one exception is GP25, the isolated center pad next to the module's edge row, which carries the only net whose loss is cosmetic. That full budget is why the **roller has no click**: a click would be a 27th signal and would need a second center pad. It is a non-requirement — middle-click already exists as a remapped finger key in mouse mode. The layout is a **single fixed 3×5+3 (18 keys per half)** — no detachable column, one board for everyone. If a future variant wants headroom on the peripheral, a 3-wire **PMW3610** sensor frees one edge pad (see *Decisions*).
 
 ## Decisions made so far
 
 - **Pointing method: the desk-mouse.** Committed. The peripheral half moving on the desk *is* the cursor — we accept the engineering that makes it usable (see below) as the price of the concept, rather than retreating to a trackball or trackpad.
 - **Two MCUs, true split.** One RP2040 module per half. The peripheral half reads its keys, roller, and the PMW3360 over *local* SPI, and ships reports to the central over a serial link. This keeps the sensor's timing-sensitive bus off the long, flexing, roaming tether — the single biggest reliability win over the original single-controller idea.
 - **Direct wiring, no diodes.** Each key is one GPIO to GND (QMK `DIRECT_PINS`). Only possible *because* the split halves the key count per MCU. Trades GPIO headroom for ~36 fewer parts to solder and no diode-orientation footguns.
-- **Single fixed layout — 3×5+3 (18 keys per half), nothing detachable.** A straightforward Corne-style column-stagger with no breakaway — one unified board, no build-time layout choice, no repair-pads-on-a-seam scheme. Direct-wiring fits with room to spare (central **23/28**, peripheral **27/28** *including* an addressable-LED data line), so LEDs are in without giving anything up. If a future peripheral build wants more free pins, a 3-wire **PMW3610** sensor frees one.
-- **Per-board addressable LEDs (SK6812 MINI-E), wired in.** One WS2812-family data line per half drives a local chain — LEDs never cross the tether (same rule as the sensor and roller). The **SK6812 MINI-E** is the pick: RGB, WS2812 protocol, and *extended side pads* that make it the easiest addressable LED to hand-solder. It costs 1 GPIO per half and the budget absorbs it. Placement is **per-key** — one SK6812 under each of the 18 keys = **18 LEDs per half**, all on one single-wire chain (still **1 GPIO regardless of count**).
+- **Edge pads only on the MCU.** The module is soldered to the board by its 25 edge pads; the three center pads (GP18, GP24, GP25) sit under its body and are not used, to keep the module easy to solder and rework. **Single exception: GP25 carries the LED data line** — it is the isolated center pad next to the edge row, and a bad joint there costs only the RGB. Usable budget: **25 GPIO + GP25**. Details in [docs/mcu.md](docs/mcu.md#resolved-scoot-pin-assignment).
+- **Single fixed layout — 3×5+3 (18 keys per half), nothing detachable.** A straightforward Corne-style column-stagger with no breakaway — one unified board, no build-time layout choice, no repair-pads-on-a-seam scheme. Direct-wiring fits (central **22**, peripheral **26** = 25/25 edge pads + GP25 for the LED line), with the roller kept scroll-only to make the peripheral budget close. If a future peripheral build wants more free pins, a 3-wire **PMW3610** sensor frees one.
+- **Per-board addressable LEDs (SK6812 MINI-E), wired in.** One WS2812-family data line per half drives a local chain — LEDs never cross the tether (same rule as the sensor and roller). The **SK6812 MINI-E** is the pick: RGB, WS2812 protocol, and *extended side pads* that make it the easiest addressable LED to hand-solder. It costs 1 GPIO per half — **GP25**, the one center pad in use (the only exception to the edge-pads-only rule), so a bad joint under the module costs only the RGB. Placement is **per-key** — one SK6812 under each of the 18 keys = **18 LEDs per half**, all on one single-wire chain (still **1 GPIO regardless of count**).
   - **Power scales with count, not pins.** The 18-LED chain stays 1 GPIO, but 5 V current does scale: all-white at full brightness is ~55 mA × 18 ≈ **1.0 A per half**, past a plain USB-2.0 500 mA budget. So cap it with `RGB_MATRIX_MAXIMUM_BRIGHTNESS` (colored effects at moderate brightness draw a fraction of that), and size the central's USB feed **and the tether's 5 V/GND conductors** for the real draw — the peripheral's LED current crosses the tether.
   - **Effects are fully in scope — not just a static color, and the topology is set for the richest ones.** Because the LEDs are addressable, QMK drives animated effects at **zero extra GPIO cost** (the whole chain rides that one data line; count, placement, and effect complexity never change the pin budget — only 5 V current scales with LED count, the one real cost, see the power note above). Going **per-key** means **RGB Matrix** (not the simpler chain-index RGBLIGHT): it gives spatial per-key reactive effects — e.g. splash/ripple that radiates from the pressed key. Reactive effects work regardless of the chain's wiring order — RGB Matrix keys off each LED's physical X/Y in `g_led_config`, not its position in the chain — so the chain can serpentine over the keys freely, as long as the coordinates are right.
   - **Effect scope: effectively the whole QMK RGB Matrix catalog.** The per-key X/Y map unlocks *all* effect classes — non-reactive animations (breathing, cycle/rainbow, spiral, gradient…), per-key **reactive** effects (splash, solid_reactive and variants), framebuffer effects (typing heatmap, digital rain), and user-written `RGB_MATRIX_CUSTOM_USER` effects. The RP2040 has the flash/RAM to compile them all in at once. Three honest asterisks, none of which is a missing effect: (1) it's RGB Matrix's set, not RGBLIGHT's — a practical superset, only some mode *names* differ; (2) no animation spans both halves (see below) — cross-half unified sweeps aren't a thing here; (3) dense framebuffer effects (heatmap, digital rain) *run* but look coarse on just 18 per-key LEDs — an aesthetic limit, not a capability one, and it's cured only by adding LEDs to the chain (still 1 GPIO, just more 5 V current).
@@ -74,7 +75,7 @@ Typing and mousing share the same hand — the one resting on the peripheral hal
 - **Hold a thumb key on the central half** to enter mouse mode; release to return to typing. The central half stays planted, so that key is always under your thumb — no state to forget, no false triggers.
 - **While held, the peripheral half becomes the mouse.** Slide it to move the cursor. Its finger keys are **remapped** (not disabled) to Left / Right / Middle click — so resting your hand doesn't actuate, but a press does, exactly like mouse buttons.
 - **Modifiers on the central half stay live** (Ctrl / Shift / Alt) → Ctrl-click, Shift-click and click-drag work without leaving the board.
-- **Both rollers stay live** in either mode — the peripheral always scrolls (press = middle-click), the central always does volume / play-pause. They're dedicated wheels, independent of mouse mode.
+- **Both rollers stay live** in either mode — the peripheral always scrolls, the central always does volume (neither roller clicks; middle-click is a remapped key, play-pause a layer key). They're dedicated wheels, independent of mouse mode.
 
 ## Making the desk-mouse work
 

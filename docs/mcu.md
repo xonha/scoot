@@ -120,8 +120,9 @@ out GP26–GP29 at all).
 ## Resolved Scoot pin assignment
 
 The live assignment lives in the ergogen [`config.yml`](../config.yml) (`mcu` footprint params).
-Everything load-bearing fits in the module's **25 edge pads**; exactly **one center pad, GP24**, is
-taken, and it carries the addressable-LED data line:
+**Decision: the center pads are not used**, so the module solders to the board on its edges only.
+Everything functional fits in the module's **25 edge pads**. The single, deliberate exception is
+**GP25**, which carries the addressable-LED data line:
 
 | Subsystem | GPIO | Pads |
 | --- | --- | --- |
@@ -129,22 +130,29 @@ taken, and it carries the addressable-LED data line:
 | Encoder A/B (scroll only) | GP21, GP22 | 2 edge |
 | UART tether (single-wire half duplex) | GP23 | 1 edge |
 | Mouse sensor SPI (peripheral only) | GP26–GP29 | 4 edge |
-| Addressable-LED data (SK6812 chain) | **GP24** | 1 **center** |
+| Addressable-LED data (SK6812 chain) | **GP25** | 1 **center** (the exception) |
 | **Total** | | **25/25 edge + 1 center** |
 
 The peripheral build uses all 26; the central build uses 22 and leaves the 4 sensor pads idle.
-GP18 and GP25 stay unemitted (`include_gp18` / `include_gp25` are `false`), so GP24 is the only
-hole under the module's own body.
+GP18 and GP24 stay unemitted (`include_gp18` / `include_gp24` are `false`), so GP25 is the only
+hole under the module's own body. The usable budget is therefore **25 GPIO + GP25 for the LED**.
 
-**Why the LED line is the one that lives there.** A center pad sits beneath a `reverse_mount`
+**Why GP25, not GP18/GP24.** GP18 and GP24 sit side by side (~2 mm apart) in the middle of the
+module, the deepest point under its body; on the reversible footprint each becomes a ±x pair, so
+using them puts closely spaced holes in the center. GP25 is isolated and sits at the module's
+bottom end, 2.54 mm from the GP12–GP16 edge row — the easiest center pad to reach, inspect and
+rework, with no neighbouring center pad to bridge.
+
+**Why the LED line is the one that gets the exception.** A center pad sits beneath a `reverse_mount`
 module, which makes it the hardest joint on the board — see [open-items.md](open-items.md) for the
 build-order consequence. Putting the *cosmetic* net there means a bad or skipped joint costs the
 RGB and nothing else; every net whose failure would kill a key, the pointer or the split link stays
 on an edge pad. This is strictly better than the original layout, which had a **key** on a center
 pad and the LED line on the edge.
 
-One subsystem is still dropped to make the budget work: the encoder is **scroll only, with no
-click**. The middle click it would have provided already exists as a remapped finger key in mouse
+The encoder is **scroll only, with no click** — this is a settled requirement, not a pending
+compromise: a click would be a 27th signal on the peripheral and need a second center pad, which the
+edge-pads-only decision rules out. The middle click it would have provided already exists as a remapped finger key in mouse
 mode, and the central's mute / play-pause is a layer key away.
 
 The encoder is an **Alps EC10E1220505** (`xonha/encoder_alps_ec10e`), not the Panasonic EVQWGD001
@@ -167,8 +175,8 @@ JST-SH 6-pin header — `xonha/sensor_connector_jst_sh_1x06`) uses four pins:
 | NCS  | GP29 | (CS driven as a plain GPIO) |
 
 Plus VCC (3V3) and GND — 6 conductors total. SCLK/MOSI/MISO land on RP2040 **SPI1**, so QMK can
-use hardware SPI. **GP18 and GP25 are not emitted at all** — no pad, no drill — so the only copper
-under the module's body is GP24's, which is connected and deliberate. Leaving the other two out
+use hardware SPI. **GP18 and GP24 are not emitted at all** — no pad, no drill — so the only copper
+under the module's body is GP25's, which is connected and deliberate. Leaving the other two out
 removes unconnected copper pressed against the module's bottom face, at the cost of making them a
 **respin, not a solder-a-wire escape hatch**: a future revision wanting the sensor's optional
 MOT/RS lines (a sibling `1x08` footprint) or an encoder click has to flip the flags back on and
