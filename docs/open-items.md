@@ -30,20 +30,18 @@ reverses scroll direction. See the header of
 "peripheral can be either hand" for this component. The footprint does not emit the jumper field
 yet.
 
-### 4. Encoder placement and rotation
+### 4. Encoder rotation (placement done)
 
-The `where` block for the encoder was inherited from the EVQWGD001 roller, which was positioned
-to breach the board's right edge. The EC10E does not: its wheel rises above the board and exits
-through the plate. Two things follow:
+**Placement is settled.** The inherited position overlapped the sensor connector (DRC: pad A of RE1
+touching SENSOR1's mounting pad). The encoder now sits between the reset switch / TRRS jack and
+the sensor connector, shifted ~5.3 mm toward the MCU (`shift: [-6.65, KeyY + 5.6]` from
+`thumb_far`, outline blob moved by the same amount); DRC reports no copper conflicts on RE1.
 
-- The position needs visual checking once ergogen runs — the envelope changed from ~16.8 × 13.8 mm
-  (lying down, hanging off the edge) to ~13.2 × 4.2 mm of land pattern sitting inside the outline.
-  The `encoder` outline blob in `config.yml` is deliberately generous for now; resize it after
-  looking at the SVG.
-- **Rotation is now functional, not cosmetic.** The wheel rolls along the footprint's X axis (the
-  terminal row); the shaft runs along Y. `rotate:` therefore sets which way your finger scrolls.
-  The inherited value of 20° was chosen for a completely different part and should be picked
-  deliberately.
+**Rotation still needs a deliberate check.** The wheel rolls along the footprint's X axis (the
+terminal row), and the part ends up at 80° on the board — so the wheel rolls roughly
+fore-and-aft, like a mouse wheel. That is the intended feel, but the value was not chosen with a
+finger on a printout: confirm the angle against where the thumb/index actually rests before fab,
+and that the wheel (≤ 14 mm, item 9) clears the `thumb_far` keycap through the plate.
 
 ### 5. Verify GP26–GP29 on the physical module
 

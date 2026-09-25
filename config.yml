@@ -97,7 +97,7 @@ outlines:
     - what: rectangle
       where:
         - ref: thumb_far
-          shift: [-6, KeyY + 1]
+          shift: [-8.65, KeyY + 5.6]
           rotate: 20
       size: [16, 12]
   thumbs:
@@ -220,14 +220,14 @@ pcbs:
       #   3. Because of that, mirroring the board lands GND on a signal hole. Needs either
       #      solder jumpers on the two end holes or a fixed handedness for this component.
       #      `reversible` below only mirrors the silkscreen -- it does NOT fix that.
-      #   4. `rotate` is functional now, not cosmetic: the wheel rolls along the footprint's
-      #      X axis, so this sets the scroll direction. The value 20 was inherited from the
-      #      EVQWGD001 roller and needs to be chosen deliberately.
+      #   4. Placement is settled (moved clear of the sensor connector). `rotate` is
+      #      functional: the wheel rolls along the footprint's X axis, which lands at 80° on
+      #      the board (fore-and-aft, like a mouse wheel). Confirm the angle by feel.
       encoder:
         what: xonha/encoder_alps_ec10e
         where:
           - ref: thumb_far
-            shift: [-4, KeyY + 1]
+            shift: [-6.65, KeyY + 5.6]
             rotate: 110
         params:
           reversible: true
