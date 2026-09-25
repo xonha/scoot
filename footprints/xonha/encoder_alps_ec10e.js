@@ -62,9 +62,13 @@
 //      gives up the "peripheral can be either hand" property for this component.
 //
 // Option 1 is implemented (`jumpers: true`, needs `reversible: true`): the two end holes carry
-// local nets, and each one reaches {A, C} through solder jumpers. Right build (F up): bridge
-// the F-face jumpers (hole 1 -> A, hole 3 -> C). Left build (B up): bridge the B-face jumpers
-// (hole 1 -> C, hole 3 -> A). Bridge ONE face only — both faces shorts A to GND.
+// local nets, and each one reaches {A, C} through solder jumpers. The jumpers sit on the lug
+// side of the terminal row, UNDER the part's body, so the face the encoder is mounted on has
+// its jumpers covered: you can only bridge the ones on the opposite face, which are the right
+// ones. Right build (encoder on F, F up): bridge the B-face jumpers (hole 1 -> A, hole 3 -> C).
+// Left build (encoder on B, B up): bridge the F-face jumpers (hole 1 -> C, hole 3 -> A).
+// Bridge ONE face only — both faces shorts A to GND. The right jumpers end up on the same
+// face you solder the encoder pins from.
 //
 // # Notes
 //
@@ -114,7 +118,7 @@ module.exports = {
     const silk_sides = p.reversible ? ['F', 'B'] : [p.side]
 
     const jp = p.reversible && p.jumpers
-    // Solder-jumper pad (1.2 x 0.7): the pair for each end hole stacks along +Y, below the row.
+    // Solder-jumper pad (1.2 x 0.7): the pair for each end hole stacks along -Y, under the body.
     const jpad = (name, x, y, net, layer) => `
     (pad "${name}" smd rect (at ${x} ${y} ${p.r}) (size 1.2 0.7) (layers "${layer}.Cu" "${layer}.Mask") ${net})`
 
@@ -149,11 +153,12 @@ module.exports = {
         const layer = s + '.SilkS'
         silk += outline(layer)
         // terminal labels, and a marker for the scroll axis (wheel rolls along X)
-        const [l1, l3] = jp && s === 'B' ? ['C', 'A'] : ['A', 'C']
+        const [l1, l3] = jp && s === 'F' ? ['C', 'A'] : ['A', 'C']
         if (jp) {
-          // jumper labels sit left of each pad pair; the face name says which build bridges it
-          silk += text(l1, -pitch - 1.3, 2.9, layer, 0.4) + text(l3, pitch + 1.3, 2.9, layer, 0.4)
-          silk += text(s === 'F' ? 'JUMP R' : 'JUMP L', 0, 3.4, layer, 0.4)
+          // jumper labels sit beside each pad pair; the face name says which build bridges it
+          // (the face opposite the encoder: B for the right build, F for the left build)
+          silk += text(l1, -pitch - 1.3, -2.75, layer, 0.4) + text(l3, pitch + 1.3, -2.75, layer, 0.4)
+          silk += text(s === 'B' ? 'JUMP R' : 'JUMP L', 0, 1.6, layer, 0.4)
         } else {
           silk += text(l1, -pitch, 1.6, layer) + text('B', 0, 1.6, layer) + text(l3, pitch, 1.6, layer)
         }
@@ -176,11 +181,11 @@ module.exports = {
     ${'' /* 3 terminals: A / B / C across X, 2.5 mm pitch */}
     ${jp ? term('1', p.local_net(1).str, -pitch) + term('B', p.B.str, 0) + term('3', p.local_net(3).str, pitch)
          : term('A', p.A.str, -pitch) + term('B', p.B.str, 0) + term('C', p.C.str, pitch)}
-    ${'' /* jumpers: F face = right build (1->A, 3->C), B face = left build (1->C, 3->A) */}
-    ${jp ? jpad('1', -pitch, 1.9, p.local_net(1).str, 'F') + jpad('JA', -pitch, 2.9, p.A.str, 'F')
-         + jpad('3', pitch, 1.9, p.local_net(3).str, 'F') + jpad('JC', pitch, 2.9, p.C.str, 'F')
-         + jpad('1', -pitch, 1.9, p.local_net(1).str, 'B') + jpad('JC', -pitch, 2.9, p.C.str, 'B')
-         + jpad('3', pitch, 1.9, p.local_net(3).str, 'B') + jpad('JA', pitch, 2.9, p.A.str, 'B') : ''}
+    ${'' /* jumpers under the body: B face = right build (1->A, 3->C), F face = left build (1->C, 3->A) */}
+    ${jp ? jpad('1', -pitch, -1.75, p.local_net(1).str, 'B') + jpad('JA', -pitch, -2.75, p.A.str, 'B')
+         + jpad('3', pitch, -1.75, p.local_net(3).str, 'B') + jpad('JC', pitch, -2.75, p.C.str, 'B')
+         + jpad('1', -pitch, -1.75, p.local_net(1).str, 'F') + jpad('JC', -pitch, -2.75, p.C.str, 'F')
+         + jpad('3', pitch, -1.75, p.local_net(3).str, 'F') + jpad('JA', pitch, -2.75, p.A.str, 'F') : ''}
 
     ${'' /* 2 mounting-lug holes, 10.8 mm apart, on the row 2 mm from the terminals */}
     ${lug('MH1', -p.mounting_holes_position)}${lug('MH2', p.mounting_holes_position)}

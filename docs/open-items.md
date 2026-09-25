@@ -21,11 +21,19 @@ the jumper map in item 3 both change.
 Because the common is an end terminal, mirroring the board swaps the two end holes and would land
 GND on a signal hole. Fixed in the footprint (`jumpers: true` in `config.yml`): the two end holes
 carry local nets, and each reaches A or C through a solder-jumper pair (1.2 × 0.7 mm pads, 0.3 mm
-gap) just below the terminal row.
+gap) on the lug side of the terminal row — **under the part's body**. The face the encoder sits
+on has its jumpers covered, so only the jumpers on the opposite face can be bridged, and those are
+the correct ones (poka-yoke, like the MCU's GP25 key pin).
 
-- **Right build (F up):** bridge the F-face jumpers — hole 1 → A, hole 3 → C.
-- **Left build (B up):** bridge the B-face jumpers — hole 1 → C, hole 3 → A.
+- **Right build (encoder on F, F up):** bridge the **B-face** jumpers, silk `JUMP R` — hole 1 → A,
+  hole 3 → C.
+- **Left build (encoder on B, B up):** bridge the **F-face** jumpers, silk `JUMP L` — hole 1 → C,
+  hole 3 → A.
 - **Never both faces:** that shorts RE_A to GND. Meter RE_A–GND before the first plug-in.
+
+**Still to check:** that the EC10E body actually sits over the jumpers (its offset from the hole
+rows is derived, item 11) and seats flat on them — an unbridged SMD pad under the body is fine;
+confirm the body has no standoff that would leave the wrong jumpers reachable.
 
 Same land pattern, same body position on both hands, so the plate slot is unchanged. DRC reports
 no copper conflicts on RE1. Routing must still reach the B-face RE_A/GND pads (item 6).
