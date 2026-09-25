@@ -218,8 +218,8 @@ pcbs:
       #      undefined. Confirm with a meter before fab; note the common is an END terminal
       #      here, not the middle one like an EC11.
       #   3. Because of that, mirroring the board lands GND on a signal hole. Solved with
-      #      solder jumpers on the two end holes (`jumpers`): bridge the F-face pair on the
-      #      right build, the B-face pair on the left build -- never both.
+      #      a 3-pad solder jumper per end hole (`jumpers`, F face): bridge to the
+      #      OUTER pads (R) on the right build, INNER pads (L) on the left -- never both.
       #   4. Placement is settled (moved clear of the sensor connector). `rotate` is
       #      functional: the wheel rolls along the footprint's X axis, which lands at 80° on
       #      the board (fore-and-aft, like a mouse wheel). Confirm the angle by feel.

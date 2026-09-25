@@ -62,9 +62,11 @@
 //      gives up the "peripheral can be either hand" property for this component.
 //
 // Option 1 is implemented (`jumpers: true`, needs `reversible: true`): the two end holes carry
-// local nets, and each one reaches {A, C} through solder jumpers. Right build (F up): bridge
-// the F-face jumpers (hole 1 -> A, hole 3 -> C). Left build (B up): bridge the B-face jumpers
-// (hole 1 -> C, hole 3 -> A). Bridge ONE face only — both faces shorts A to GND.
+// local nets, and each one gets a 3-pad solder jumper on the F face, just below it: centre pad
+// = the hole, outer pad / inner pad = the two real nets. Hole 1: outer -> A, inner -> C.
+// Hole 3: outer -> C, inner -> A. Right build (F up): bridge both centres to the OUTER pads
+// (1 -> A, 3 -> C). Left build (B up): bridge both to the INNER pads (1 -> C, 3 -> A).
+// Bridge each jumper to ONE side only — both sides shorts A to GND.
 //
 // # Notes
 //
@@ -114,9 +116,10 @@ module.exports = {
     const silk_sides = p.reversible ? ['F', 'B'] : [p.side]
 
     const jp = p.reversible && p.jumpers
-    // Solder-jumper pad (1.2 x 0.7): the pair for each end hole stacks along +Y, below the row.
-    const jpad = (name, x, y, net, layer) => `
-    (pad "${name}" smd rect (at ${x} ${y} ${p.r}) (size 1.2 0.7) (layers "${layer}.Cu" "${layer}.Mask") ${net})`
+    // 3-pad solder jumper per end hole, on F, pads 0.7 x 1.2 at 1.0 mm pitch (0.3 mm gaps).
+    const jy = 2.2
+    const jpad = (name, x, net) => `
+    (pad "${name}" smd rect (at ${x} ${jy} ${p.r}) (size 0.7 1.2) (layers "F.Cu" "F.Mask") ${net})`
 
     const term = (name, net, x) => `
     (pad "${name}" thru_hole circle (at ${x} 0 ${p.r}) (size ${p.terminal_pad} ${p.terminal_pad}) (drill ${p.terminal_drill}) (layers "*.Cu" "*.Mask") ${net})`
@@ -151,9 +154,14 @@ module.exports = {
         // terminal labels, and a marker for the scroll axis (wheel rolls along X)
         const [l1, l3] = jp && s === 'B' ? ['C', 'A'] : ['A', 'C']
         if (jp) {
-          // jumper labels sit left of each pad pair; the face name says which build bridges it
-          silk += text(l1, -pitch - 1.3, 2.9, layer, 0.4) + text(l3, pitch + 1.3, 2.9, layer, 0.4)
-          silk += text(s === 'F' ? 'JUMP R' : 'JUMP L', 0, 3.4, layer, 0.4)
+          // jumper side marks (F only): R = outer pads (right build), L = inner pads (left build)
+          if (s === 'F') {
+            for (const sx of [-1, 1]) {
+              silk += text('R', sx * (pitch + 1), jy + 1.2, layer, 0.4)
+              silk += text('L', sx * (pitch - 1), jy + 1.2, layer, 0.4)
+            }
+          }
+          silk += text(l1, -pitch - 1.6, 0, layer, 0.4) + text(l3, pitch + 1.6, 0, layer, 0.4)
         } else {
           silk += text(l1, -pitch, 1.6, layer) + text('B', 0, 1.6, layer) + text(l3, pitch, 1.6, layer)
         }
@@ -176,11 +184,9 @@ module.exports = {
     ${'' /* 3 terminals: A / B / C across X, 2.5 mm pitch */}
     ${jp ? term('1', p.local_net(1).str, -pitch) + term('B', p.B.str, 0) + term('3', p.local_net(3).str, pitch)
          : term('A', p.A.str, -pitch) + term('B', p.B.str, 0) + term('C', p.C.str, pitch)}
-    ${'' /* jumpers: F face = right build (1->A, 3->C), B face = left build (1->C, 3->A) */}
-    ${jp ? jpad('1', -pitch, 1.9, p.local_net(1).str, 'F') + jpad('JA', -pitch, 2.9, p.A.str, 'F')
-         + jpad('3', pitch, 1.9, p.local_net(3).str, 'F') + jpad('JC', pitch, 2.9, p.C.str, 'F')
-         + jpad('1', -pitch, 1.9, p.local_net(1).str, 'B') + jpad('JC', -pitch, 2.9, p.C.str, 'B')
-         + jpad('3', pitch, 1.9, p.local_net(3).str, 'B') + jpad('JA', pitch, 2.9, p.A.str, 'B') : ''}
+    ${'' /* jumpers: outer pads = right build (1->A, 3->C), inner pads = left build (1->C, 3->A) */}
+    ${jp ? jpad('JA', -pitch - 1, p.A.str) + jpad('1', -pitch, p.local_net(1).str) + jpad('JC', -pitch + 1, p.C.str)
+         + jpad('JA', pitch - 1, p.A.str) + jpad('3', pitch, p.local_net(3).str) + jpad('JC', pitch + 1, p.C.str) : ''}
 
     ${'' /* 2 mounting-lug holes, 10.8 mm apart, on the row 2 mm from the terminals */}
     ${lug('MH1', -p.mounting_holes_position)}${lug('MH2', p.mounting_holes_position)}
