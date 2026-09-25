@@ -217,9 +217,9 @@ pcbs:
       #   2. C is the common only BY ELIMINATION -- the catalog defines A and B and leaves C
       #      undefined. Confirm with a meter before fab; note the common is an END terminal
       #      here, not the middle one like an EC11.
-      #   3. Because of that, mirroring the board lands GND on a signal hole. Needs either
-      #      solder jumpers on the two end holes or a fixed handedness for this component.
-      #      `reversible` below only mirrors the silkscreen -- it does NOT fix that.
+      #   3. Because of that, mirroring the board lands GND on a signal hole. Solved with
+      #      solder jumpers on the two end holes (`jumpers`): bridge the F-face pair on the
+      #      right build, the B-face pair on the left build -- never both.
       #   4. Placement is settled (moved clear of the sensor connector). `rotate` is
       #      functional: the wheel rolls along the footprint's X axis, which lands at 80° on
       #      the board (fore-and-aft, like a mouse wheel). Confirm the angle by feel.
@@ -231,6 +231,7 @@ pcbs:
             rotate: 110
         params:
           reversible: true
+          jumpers: true
           A: RE_A
           B: RE_B
           C: GND

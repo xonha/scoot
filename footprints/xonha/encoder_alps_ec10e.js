@@ -61,7 +61,10 @@
 //   2. Fix the encoder to one handedness and populate it on that build only — cheap, but it
 //      gives up the "peripheral can be either hand" property for this component.
 //
-// This footprint does NOT emit the jumper field yet; pick an option first.
+// Option 1 is implemented (`jumpers: true`, needs `reversible: true`): the two end holes carry
+// local nets, and each one reaches {A, C} through solder jumpers. Right build (F up): bridge
+// the F-face jumpers (hole 1 -> A, hole 3 -> C). Left build (B up): bridge the B-face jumpers
+// (hole 1 -> C, hole 3 -> A). Bridge ONE face only — both faces shorts A to GND.
 //
 // # Notes
 //
@@ -89,6 +92,7 @@ module.exports = {
     reversible: false,
     include_silkscreen: true,
     include_plated_mounting_holes: true,
+    jumpers: false,                 // solder-jumper reversibility on the two end holes
     // Land pattern — catalog Drawing No.1, "Mounting Hole Dimensions"
     terminal_pitch: 2.5,            // 5 mm across three holes
     terminal_drill: 1.0,            // o1.0 ±0.05 specified for the hole
@@ -108,6 +112,11 @@ module.exports = {
     const pitch = p.terminal_pitch
     const lug_y = -p.mounting_holes_offset
     const silk_sides = p.reversible ? ['F', 'B'] : [p.side]
+
+    const jp = p.reversible && p.jumpers
+    // Solder-jumper pad (1.2 x 0.7): the pair for each end hole stacks along +Y, below the row.
+    const jpad = (name, x, y, net, layer) => `
+    (pad "${name}" smd rect (at ${x} ${y} ${p.r}) (size 1.2 0.7) (layers "${layer}.Cu" "${layer}.Mask") ${net})`
 
     const term = (name, net, x) => `
     (pad "${name}" thru_hole circle (at ${x} 0 ${p.r}) (size ${p.terminal_pad} ${p.terminal_pad}) (drill ${p.terminal_drill}) (layers "*.Cu" "*.Mask") ${net})`
@@ -140,7 +149,14 @@ module.exports = {
         const layer = s + '.SilkS'
         silk += outline(layer)
         // terminal labels, and a marker for the scroll axis (wheel rolls along X)
-        silk += text('A', -pitch, 1.6, layer) + text('B', 0, 1.6, layer) + text('C', pitch, 1.6, layer)
+        const [l1, l3] = jp && s === 'B' ? ['C', 'A'] : ['A', 'C']
+        if (jp) {
+          // jumper labels sit left of each pad pair; the face name says which build bridges it
+          silk += text(l1, -pitch - 1.3, 2.9, layer, 0.4) + text(l3, pitch + 1.3, 2.9, layer, 0.4)
+          silk += text(s === 'F' ? 'JUMP R' : 'JUMP L', 0, 3.4, layer, 0.4)
+        } else {
+          silk += text(l1, -pitch, 1.6, layer) + text('B', 0, 1.6, layer) + text(l3, pitch, 1.6, layer)
+        }
         silk += text('scroll <->', 0, y0 - 0.9, layer, 0.4)
       }
     }
@@ -158,7 +174,13 @@ module.exports = {
     ${silk}
 
     ${'' /* 3 terminals: A / B / C across X, 2.5 mm pitch */}
-    ${term('A', p.A.str, -pitch)}${term('B', p.B.str, 0)}${term('C', p.C.str, pitch)}
+    ${jp ? term('1', p.local_net(1).str, -pitch) + term('B', p.B.str, 0) + term('3', p.local_net(3).str, pitch)
+         : term('A', p.A.str, -pitch) + term('B', p.B.str, 0) + term('C', p.C.str, pitch)}
+    ${'' /* jumpers: F face = right build (1->A, 3->C), B face = left build (1->C, 3->A) */}
+    ${jp ? jpad('1', -pitch, 1.9, p.local_net(1).str, 'F') + jpad('JA', -pitch, 2.9, p.A.str, 'F')
+         + jpad('3', pitch, 1.9, p.local_net(3).str, 'F') + jpad('JC', pitch, 2.9, p.C.str, 'F')
+         + jpad('1', -pitch, 1.9, p.local_net(1).str, 'B') + jpad('JC', -pitch, 2.9, p.C.str, 'B')
+         + jpad('3', pitch, 1.9, p.local_net(3).str, 'B') + jpad('JA', pitch, 2.9, p.A.str, 'B') : ''}
 
     ${'' /* 2 mounting-lug holes, 10.8 mm apart, on the row 2 mm from the terminals */}
     ${lug('MH1', -p.mounting_holes_position)}${lug('MH2', p.mounting_holes_position)}
