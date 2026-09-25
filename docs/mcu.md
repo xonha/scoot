@@ -205,6 +205,16 @@ What this settles:
   `_RIGHT`) differs per build. The encoder is a separate part that still mirrors — see
   [open-items.md](open-items.md) items 3 and 8.
 
+**Build rule — the GP25 key pin is mandatory.** The pad pattern does not stop a mirrored mount
+(both columns and the bottom row are symmetric), and a mirrored module is not just miswired: its
+VCC lands on the board's GND hole (3V3 shorted to GND at power-up) and its RAW on key P0's net
+(5 V shorted to GND on every press). GP25 is the one asymmetric hole, so before seating the
+module, **solder a header pin into the module's GP25 pad**. Mounted correctly the pin drops into
+the board's single GP25 hole (silk `KEY`); mirrored it hits bare board and the module will not
+seat. The pin is also the LED_DATA joint, so no wire is needed. The F silk shows the module
+outline and its USB-C end. Before the first USB plug-in, check with a meter that 3V3 and GND are
+not shorted.
+
 The cost is mechanical: on one half the module sits on the switch side of the PCB, on the other
 under it, so both the plate and the bottom cavity must clear it (tracked in
 [open-items.md](open-items.md)). The jumper scheme is still in the footprint (`reversible: true`)

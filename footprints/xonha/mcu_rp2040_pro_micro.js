@@ -43,7 +43,12 @@
 // module with it, so the two mirrors cancel and every GPIO lands on the same hole on both hands:
 // one plain hole per pad, one fixed net, no jumpers, one firmware pin map. In the world this
 // reads as "components up on one half, components down on the other". Set mount_labels: true to
-// print which face the module goes on.
+// print which face the module goes on, plus the module outline and USB-C end on that face's silk.
+//
+// The pad pattern alone does NOT prevent a mirrored mount (columns and bottom row are symmetric),
+// and a mirrored module shorts 3V3 to GND. GP25 is the key: it is the only asymmetric hole, so a
+// header pin soldered into the module's GP25 pad lands on bare board when mirrored and the module
+// will not seat. mount_labels marks that hole "KEY".
 //
 // Params: reverse_mount mirrors X (MCU faces the PCB, components protected). reversible turns
 // on the jumper scheme. include_boot / include_gp18 / include_gp24 / include_gp25 drop those pads
@@ -222,6 +227,18 @@ module.exports = {
           + instr_line('BOTH HALVES', 'BOTH HALVES', 6.5)
         : ''
 
+    // Fixed-face mount: module outline + USB-C end on the mounting face only, and the GP25 key.
+    const fline = (x1, y1, x2, y2) => `
+    (fp_line (start ${fx(x1)} ${y1}) (end ${fx(x2)} ${y2}) (layer "F.SilkS") (stroke (width 0.15) (type solid)))`
+    const mount_silk = (p.mount_labels && !p.reversible)
+      ? fline(-9, -18, 9, -18) + fline(9, -18, 9, 17) + fline(9, 17, -9, 17) + fline(-9, 17, -9, -18)
+        + fline(-4.5, -18, -4.5, -16.6) + fline(-4.5, -16.6, 4.5, -16.6) + fline(4.5, -16.6, 4.5, -18)
+        + `
+    (fp_text user "USB" (at 0 -17.3 ${p.r}) (layer "F.SilkS")
+      (effects (font (size 0.6 0.6) (thickness 0.1))))`
+        + (p.include_gp25 ? silk('KEY', -2.9, 12.7, 0.5) : '')
+      : ''
+
     const outline = `
     (fp_line (start -9 -18) (end 9 -18) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
     (fp_line (start 9 -18) (end 9 17) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
@@ -239,6 +256,7 @@ module.exports = {
     ${pads}
     ${labels}
     ${instructions}
+    ${mount_silk}
   )
   ${p.reversible && p.include_traces ? traces : ''}`
   }

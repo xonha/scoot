@@ -64,6 +64,10 @@ soldered *after* the module is seated depends on something not yet verified on a
   pre-tin the PCB pad, tack a wire, then mount. Getting the build order wrong means desoldering
   the module.
 
+GP25 now also carries the **key pin** that stops a mirrored mount (mcu.md, *Build rule*). With
+through-holes the pin passes through the module; with blind pads it has to be soldered standing
+on the pad, which is mechanically weaker — as a key it only needs to survive seating.
+
 **Verification needed:** look at the physical module. The answer becomes a line in the build
 instructions either way. This is not a fab blocker — the footprint and routing are the same — but
 it is a build blocker if discovered at the wrong moment.
@@ -137,8 +141,8 @@ With the fixed-face mount ([mcu.md](mcu.md#resolved--fixed-face-mount-hardware-s
 the module sits on the switch side of the PCB on the right half (F up) and under the PCB on the
 left half (B up), components facing away from the board in both. Check that the plate/case
 clears the module and its USB-C plug on the switch side, and that the bottom cavity clears it on
-the other. Also confirm the right orientation against the silk before soldering: a module
-soldered the wrong way round is a desolder job.
+the other. Orientation is enforced by the GP25 key pin (see mcu.md, *Build rule*); the case
+must also clear that pin's stub on the module's far face.
 
 ## Documentation debt
 
