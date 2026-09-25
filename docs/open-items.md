@@ -20,16 +20,15 @@ the jumper map in item 3 both change.
 
 Because the common is an end terminal, mirroring the board swaps the two end holes and would land
 GND on a signal hole. Fixed in the footprint (`jumpers: true` in `config.yml`): the two end holes
-carry local nets, and each gets a 3-pad solder jumper on the F face just below it (0.7 × 1.2 mm
-pads, 0.3 mm gaps): centre pad = the hole, outer/inner pads = A or GND.
+carry local nets, and each reaches A or C through a solder-jumper pair (1.2 × 0.7 mm pads, 0.3 mm
+gap) just below the terminal row.
 
-- **Right build (F up):** bridge both centres to the **outer** pads (silk `R`) — 1 → A, 3 → C.
-- **Left build (B up):** bridge both centres to the **inner** pads (silk `L`) — 1 → C, 3 → A.
-- **Never both sides of a jumper:** that shorts RE_A to GND. Meter RE_A–GND before the first
-  plug-in.
+- **Right build (F up):** bridge the F-face jumpers — hole 1 → A, hole 3 → C.
+- **Left build (B up):** bridge the B-face jumpers — hole 1 → C, hole 3 → A.
+- **Never both faces:** that shorts RE_A to GND. Meter RE_A–GND before the first plug-in.
 
 Same land pattern, same body position on both hands, so the plate slot is unchanged. DRC reports
-no copper conflicts on RE1. The jumpers are always on F, so on the left build they face the case bottom.
+no copper conflicts on RE1. Routing must still reach the B-face RE_A/GND pads (item 6).
 
 ### 4. Encoder rotation (placement done)
 
