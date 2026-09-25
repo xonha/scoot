@@ -5,17 +5,6 @@ ready to fab, a firmware is not ready to flash, or a doc is lying. Ordered by wh
 
 ## Blocks fab
 
-### 1. Hardware SPI does not survive the mirror (sensor)
-
-The reversible MCU footprint mirrors the column rows, so on the flipped build the four sensor
-nets land on GP5/GP4/GP3/GP2 instead of GP26–GP29 — SPI0 CSn/RX/TX/SCK, i.e. the wrong roles.
-No pad *pair* on this module is SPI-TX-capable at both ends, so no 4-wire assignment works in
-both orientations. Since the peripheral may be built for either hand, one of the two handedness
-options needs a fix. Full write-up and the three options in [mcu.md](mcu.md#️-open-item--hardware-spi-does-not-survive-the-mirror).
-
-**Decision needed:** solder-jumper the 4 sensor rows (wants a `jumper_rows` param on
-`xonha/mcu_rp2040_pro_micro`), or build one firmware image per peripheral handedness.
-
 ### 2. Which EC10E terminal is the common
 
 The Alps catalog labels the encoder's terminals A B C and defines only two: "A: Output signal A",
@@ -141,6 +130,15 @@ enough to route; the formal spec would also settle item 2.
 The EC10E body is 9.8 mm (X) × 4.4 mm (Y) per the catalog, but its Y position relative to the two
 hole rows is not dimensioned there, so the footprint's silkscreen rectangle is derived. Print the
 footprint 1:1 and drop the part on it — that also double-checks the land pattern before fab.
+
+### 11b. MCU clearance on both faces
+
+With the fixed-face mount ([mcu.md](mcu.md#resolved--fixed-face-mount-hardware-spi-survives-the-flip))
+the module sits on the switch side of the PCB on the right half (F up) and under the PCB on the
+left half (B up), components facing away from the board in both. Check that the plate/case
+clears the module and its USB-C plug on the switch side, and that the bottom cavity clears it on
+the other. Also confirm the right orientation against the silk before soldering: a module
+soldered the wrong way round is a desolder job.
 
 ## Documentation debt
 

@@ -163,7 +163,14 @@ pcbs:
           - ref: main_inner_home
             shift: [19.8, 15.6 - ControllerOffset]
         params:
-          reverse_mount: true
+          # Fixed-face mount: the module is soldered on the F face, components facing away
+          # from the PCB, on BOTH hands. The board flips for the other hand and the module
+          # flips with it, so each GPIO keeps the same hole: no jumpers, one pin map.
+          # In the world: RIGHT half (F up) = components up, LEFT half (B up) = components
+          # down. See docs/mcu.md.
+          reverse_mount: false
+          reversible: false
+          mount_labels: true
           include_boot: false
           include_gp18: false
           # Decision: center pads are not used, to keep the module easy to solder.
@@ -172,7 +179,6 @@ pcbs:
           # and a bad joint there costs RGB, not a key. See docs/mcu.md.
           include_gp24: false
           include_gp25: true
-          reversible: true
           GP0: P0
           GP1: P1
           GP2: P2

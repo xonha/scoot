@@ -184,22 +184,28 @@ re-route. On the central build the sensor connector is unpopulated, so GP26–GP
 bottom plate at the glide surface; the cable keeps its Z-height decoupled from the main PCB
 (~10 mm standoff) and off the crowded bottom face — see the README "Decisions".
 
-### ⚠️ Open item — hardware SPI does not survive the mirror
+### Resolved — fixed-face mount (hardware SPI survives the flip)
 
-The reversible MCU footprint mirrors the column rows (`mcu_rp2040_pro_micro.js`), so on the flipped
-build the four sensor nets land on GP5/GP4/GP3/GP2 instead of GP26–GP29 — SPI0 CSn/RX/TX/SCK, i.e.
-the wrong roles. And no pad *pair* on this module is SPI-TX-capable at both ends, so **no 4-wire
-assignment works in both orientations**. Since the peripheral may be built for either hand, one of
-the two handedness options needs a fix:
+The module is soldered on the **same PCB face (F), in the same orientation, on both hands**,
+components facing away from the PCB (`reversible: false`, `reverse_mount: false`). The board
+flips to make the other hand and the module flips with it, so the two mirrors cancel: **every
+GPIO lands on the same hole on both hands**. In the world that reads as *right half (F up) =
+components up, left half (B up) = components down*; the footprint prints `MCU ON THIS FACE` /
+`MCU ON OTHER FACE` on the silk (`mount_labels: true`).
 
-- **Solder-jumper the 4 sensor rows** so those holes keep their printed labels on both hands. The
-  footprint already implements this for all column rows via `only_required_jumpers: false`; doing
-  it for just those four rows wants a small `jumper_rows` param. Keeps one firmware image.
-- **Or build two firmware images**, one per peripheral handedness (`POINTING_DEVICE_LEFT` /
-  `_RIGHT` is compile-time anyway, so this is partly forced regardless).
-- **Or bitbang SPI**, which makes pin function irrelevant — not available in QMK core for the
-  PMW33xx driver.
+What this settles:
 
-Nothing else in the pin assignment depends on a pin's alternate function — every other net is a
-plain GPIO that a per-hand pin map handles. This item, and everything else still pending on the
-board, is tracked in [open-items.md](open-items.md).
+- **Hardware SPI works on both hands.** The sensor stays on GP26–GP29 (SPI1) whichever hand the
+  peripheral is built for. The earlier problem — the jumper-based reversible footprint landing the
+  sensor nets on GP5–GP2, the wrong SPI roles, with no 4-wire assignment valid in both
+  orientations — no longer exists.
+- **No solder jumpers, one hole per pad.** The footprint emits plain holes on fixed nets; GP25 is
+  a single hole, not a ±x pair.
+- **One MCU pin map in firmware.** Only compile-time handedness (`POINTING_DEVICE_LEFT` /
+  `_RIGHT`) differs per build. The encoder is a separate part that still mirrors — see
+  [open-items.md](open-items.md) items 3 and 8.
+
+The cost is mechanical: on one half the module sits on the switch side of the PCB, on the other
+under it, so both the plate and the bottom cavity must clear it (tracked in
+[open-items.md](open-items.md)). The jumper scheme is still in the footprint (`reversible: true`)
+for other boards; Scoot does not use it.

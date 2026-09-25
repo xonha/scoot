@@ -36,6 +36,15 @@
 // The center pads (GP18/GP24/GP25) are duplicated on both X sides (same net) when reversible;
 // the bottom row (GP12–GP16) is symmetric, so its plain holes work in both orientations.
 //
+// # Fixed-face mount (reversible: false) — what Scoot uses
+//
+// Alternative to the jumper scheme for a reversible PCB: solder the module on the SAME PCB face,
+// in the same orientation, on both hands. Flipping the board for the other hand then flips the
+// module with it, so the two mirrors cancel and every GPIO lands on the same hole on both hands:
+// one plain hole per pad, one fixed net, no jumpers, one firmware pin map. In the world this
+// reads as "components up on one half, components down on the other". Set mount_labels: true to
+// print which face the module goes on.
+//
 // Params: reverse_mount mirrors X (MCU faces the PCB, components protected). reversible turns
 // on the jumper scheme. include_boot / include_gp18 / include_gp24 / include_gp25 drop those pads
 // (Scoot drops all four: nothing lands on a center pad, so a reverse-mounted module has no hole
@@ -55,6 +64,7 @@ module.exports = {
     include_traces: true,
     only_required_jumpers: true,
     show_labels: true,
+    mount_labels: false,
     via_size: 0.8,
     via_drill: 0.4,
     GP0:  { type: 'net', value: 'GP0'  },
@@ -206,7 +216,11 @@ module.exports = {
       ? instr_line('SOLDER', 'SOLDER', 4.5)
         + instr_line('JUMPERS IF', 'JUMPERS IF', 5.5)
         + instr_line('RIGHT SIDE', 'LEFT SIDE', 6.5)
-      : ''
+      : p.mount_labels
+        ? instr_line('MCU ON', 'MCU ON', 4.5)
+          + instr_line('THIS FACE', 'OTHER FACE', 5.5)
+          + instr_line('BOTH HALVES', 'BOTH HALVES', 6.5)
+        : ''
 
     const outline = `
     (fp_line (start -9 -18) (end 9 -18) (layer "Dwgs.User") (stroke (width 0.15) (type solid)))
