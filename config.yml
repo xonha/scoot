@@ -228,7 +228,7 @@ pcbs:
         what: xonha/encoder_alps_ec10e
         where:
           - ref: thumb_far
-            shift: [-6.65, KeyY + 5.6]
+            shift: [-4, KeyY + 3]
             rotate: 110
         params:
           reversible: true
@@ -241,7 +241,7 @@ pcbs:
         what: xonha/sensor_connector_jst_sh_1x06
         where:
           - ref: main_inner_home
-            shift: [23, -34]
+            shift: [26, -34]
             rotate: 270
         params:
           reversible: true
