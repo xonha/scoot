@@ -72,11 +72,13 @@ on the pad, which is mechanically weaker — as a key it only needs to survive s
 instructions either way. This is not a fab blocker — the footprint and routing are the same — but
 it is a build blocker if discovered at the wrong moment.
 
-### 6. Regenerate `output/`
+### 6. Route and DRC the generated board
 
-The committed `output/` (KiCad, gerbers, SVG, `drc.json`) predates the LED removal, the center-pad
-removal and the encoder change. Run `npx ergogen . -o output --svg --clean` before reading
-anything from it.
+`output/` is git-ignored and builds cleanly from the current `config.yml`
+(`npx ergogen . -o output --svg --clean`, after fetching `footprints/ceoloide/` per
+[ergogen.md](ergogen.md)). What ergogen emits is placement and nets only: the board still needs
+routing in KiCad and a DRC pass, including a check that the fixed-face MCU (item 11b) does not
+collide with the reset switch and TRRS jack next to it.
 
 ## Blocks firmware
 

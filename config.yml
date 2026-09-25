@@ -152,6 +152,9 @@ pcbs:
         params:
           reversible: true
           reverse_mount: true
+          # LEDs run from 5 V (RAW), not the module's 3V3 regulator: 18 SK6812 can draw ~1 A,
+          # far past the regulator, and the SK6812 wants ~5 V. Cap brightness in firmware.
+          P1: RAW
           P4: "{{led_din}}"
           P2: "{{led_dout}}"
         adjust:
